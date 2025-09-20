@@ -1,20 +1,16 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+import AppNavbar from './components/navbar/Navbar.jsx';
+import Footer from './components/footer/Footer.jsx';
 
 function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-    </>
+    <div className="d-flex flex-column min-vh-100">
+      <AppNavbar />
+      <main className="flex-grow-1">
+        {/* Aca se van a agregar las rutas de las paginas */}
+      </main>
+      <Footer />
+    </div>
   );
 }
 
