@@ -8,7 +8,7 @@ import './navbar.css';
 function AppNavbar() {
   const expand = "md";
   return (
-    <Navbar key={expand} expand={expand} className="py-0 custom-navbar">
+    <Navbar key={expand} expand={expand} variant="dark" className="py-0 custom-navbar">
       <Container fluid>
         <Navbar.Brand href="#">
           <img
