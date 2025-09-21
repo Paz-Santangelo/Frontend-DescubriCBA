@@ -1,0 +1,109 @@
+import React, { useState } from 'react';
+import './RegistroForm.css';
+
+const initialState = {
+  nombre: '',
+  apellido: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
+
+const RegistroForm = ({ onSuccess }) => {
+  const [form, setForm] = useState(initialState);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+
+  const validate = () => {
+    const newErrors = {};
+    if (!form.nombre) newErrors.nombre = 'El nombre es obligatorio.';
+    if (!form.apellido) newErrors.apellido = 'El apellido es obligatorio.';
+    if (!form.email) newErrors.email = 'El correo es obligatorio.';
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) newErrors.email = 'Correo inválido.';
+    if (!form.password) newErrors.password = 'La contraseña es obligatoria.';
+    else if (form.password.length < 8) newErrors.password = 'Mínimo 8 caracteres.';
+    else if (!/[A-Z]/.test(form.password)) newErrors.password = 'Debe tener una mayúscula.';
+    else if (!/[0-9]/.test(form.password)) newErrors.password = 'Debe tener un número.';
+    if (!form.confirmPassword) newErrors.confirmPassword = 'Confirme la contraseña.';
+    else if (form.password !== form.confirmPassword) newErrors.confirmPassword = 'Las contraseñas no coinciden.';
+    return newErrors;
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: undefined });
+    setMessage(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch('/registro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: form.nombre,
+          apellido: form.apellido,
+          email: form.email,
+          password: form.password,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage({ type: 'success', text: '¡Registro exitoso! Redirigiendo...' });
+        setTimeout(() => {
+          onSuccess();
+        }, 1500);
+      } else {
+        setMessage({ type: 'error', text: data.message || 'Error en el registro.' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: 'Error de conexión.' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form className="registro-form" onSubmit={handleSubmit}>
+      <h2>Crear cuenta</h2>
+      <div className="form-group">
+        <label>Nombre</label>
+        <input name="nombre" value={form.nombre} onChange={handleChange} />
+        {errors.nombre && <span className="error">{errors.nombre}</span>}
+      </div>
+      <div className="form-group">
+        <label>Apellido</label>
+        <input name="apellido" value={form.apellido} onChange={handleChange} />
+        {errors.apellido && <span className="error">{errors.apellido}</span>}
+      </div>
+      <div className="form-group">
+        <label>Correo electrónico</label>
+        <input name="email" value={form.email} onChange={handleChange} />
+        {errors.email && <span className="error">{errors.email}</span>}
+      </div>
+      <div className="form-group">
+        <label>Contraseña</label>
+        <input type="password" name="password" value={form.password} onChange={handleChange} />
+        {errors.password && <span className="error">{errors.password}</span>}
+      </div>
+      <div className="form-group">
+        <label>Confirmar contraseña</label>
+        <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} />
+        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+      </div>
+      <button type="submit" disabled={loading}>{loading ? 'Registrando...' : 'Registrarse'}</button>
+      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+    </form>
+  );
+};
+
+export default RegistroForm;

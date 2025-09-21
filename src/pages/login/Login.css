@@ -1,0 +1,25 @@
+.login-bg {
+  min-height: 100vh;
+  background: url('../../assets/Fondo_Login.png') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center;   /* Center horizontally */
+  padding-top: 6rem; /* Adjust for navbar height */
+  padding-bottom: 4rem; /* Adjust for footer height */
+}
+
+.login-main {
+  width: 100%;
+  max-width: 500px; /* Or whatever max-width you prefer for the form */
+  padding: 1rem;
+}
+
+/* You might not need this media query anymore, but if you do, keep it simple */
+@media (max-width: 600px) {
+  .login-bg {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+  }
+}

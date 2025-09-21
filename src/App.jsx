@@ -1,20 +1,26 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+import AppNavbar from "./components/navbar/Navbar.jsx";
+import Footer from "./components/footer/Footer.jsx";
+import Home from "./pages/home/Home.jsx";
+import Login from "./pages/login/Login.jsx";
+import Registro from "./pages/registro/Registro.jsx";
 
 function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="d-flex flex-column min-vh-100">
+        <AppNavbar />
+        <main className="flex-grow-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<Registro />} />
+          </Routes>
+        </main>
+        <Footer />
       </div>
-      <h1>Vite + React</h1>
-    </>
+    </Router>
   );
 }
 
