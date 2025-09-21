@@ -11,14 +11,17 @@ function AppNavbar() {
   return (
     <Navbar key={expand} expand={expand} variant="dark" className="py-0 custom-navbar">
       <Container fluid>
-        <Navbar.Brand as={NavLink} to="/">
+        <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
           <img
             src={logo}
-            width="60"
-            height="60"
+            width="80"
+            height="80"
             className="d-inline-block align-top"
             alt="DescubriCBA logo"
           />
+          <span className="navbar-brand-text">
+            Descubrí<span className="brand-highlight">CBA</span>
+          </span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
         <Navbar.Offcanvas

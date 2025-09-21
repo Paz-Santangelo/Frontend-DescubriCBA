@@ -5,6 +5,17 @@
   background: linear-gradient(to bottom, rgba(36, 49, 47, 0.9) 0%, rgba(36, 49, 47, 0) 100%);
 }
 
+.navbar-brand-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 10px;
+  color: white;
+}
+
+.brand-highlight {
+  color: #39d8a8;
+}
+
 .custom-navbar .nav-link {
   position: relative;
   color: white !important;

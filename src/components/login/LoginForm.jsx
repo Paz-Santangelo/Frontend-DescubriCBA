@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import './LoginForm.css';
 
 const initialState = {
@@ -12,6 +14,17 @@ const LoginForm = ({ onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+
+  const formVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -63,7 +76,13 @@ const LoginForm = ({ onSuccess }) => {
   };
 
   return (
-    <form className="login-form" onSubmit={handleSubmit}>
+    <motion.form
+      className="login-form"
+      variants={formVariants}
+      initial="hidden"
+      animate="visible"
+      onSubmit={handleSubmit}
+    >
       <h2>Iniciar sesión</h2>
       <div className="form-group">
         <label>Correo electrónico</label>
@@ -81,7 +100,7 @@ const LoginForm = ({ onSuccess }) => {
         ¿No tenés cuenta?{' '}
         <Link to="/registro" className="link-btn">Registrate</Link>
       </div>
-    </form>
+    </motion.form>
   );
 };
 
