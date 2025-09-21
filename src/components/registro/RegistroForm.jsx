@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import './RegistroForm.css';
 
 const initialState = {
@@ -14,6 +16,17 @@ const RegistroForm = ({ onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+
+  const formVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -73,7 +86,13 @@ const RegistroForm = ({ onSuccess }) => {
   };
 
   return (
-    <form className="registro-form" onSubmit={handleSubmit}>
+    <motion.form
+      className="registro-form"
+      variants={formVariants}
+      initial="hidden"
+      animate="visible"
+      onSubmit={handleSubmit}
+    >
       <h2>Crear cuenta</h2>
       <div className="form-group">
         <label>Nombre</label>
@@ -102,7 +121,7 @@ const RegistroForm = ({ onSuccess }) => {
       </div>
       <button type="submit" disabled={loading}>{loading ? 'Registrando...' : 'Registrarse'}</button>
       {message && <div className={`message ${message.type}`}>{message.text}</div>}
-    </form>
+    </motion.form>
   );
 };
 
