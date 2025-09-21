@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Container, Row, Col, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import "./home.css";
 import Champaqui from "../../assets/Cerro-Champaqui.jpg";
 import Calamuchita from "../../assets/Valle-Calamuchita.jpg";
@@ -7,6 +8,7 @@ import Uritorco from "../../assets/Cerro-Uritorco.jpg";
 import IconoMapa from "../../assets/icono-mapa.png";
 import IconoEstrellas from "../../assets/icono-estrellas.png";
 import IconoCalendario from "../../assets/icono-calendario.png";
+import Testimonials from "../../components/testimonials/Testimonials";
 
 const Home = () => {
   return (
@@ -37,6 +39,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+
       <section className="destinos-destacados-section">
         <Container>
           <h1 className="text-center my-4 fw-semibold section-title">Destinos destacados</h1>
@@ -107,6 +110,15 @@ const Home = () => {
               </Card>
             </Col>
           </Row>
+        </Container>
+      </section>
+
+      <Testimonials />
+
+      <section className="cta-section text-center">
+        <Container>
+          <h2 className="cta-title">Creá tu cuenta y empezá a planificar tu viaje</h2>
+          <Button as={Link} to="/registro" variant="primary" size="lg" className="cta-button">Regístrate gratis</Button>
         </Container>
       </section>
     </>

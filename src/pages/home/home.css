@@ -1,3 +1,7 @@
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+
 .hero-container {
   height: 100vh;
   width: 100%;
@@ -56,6 +60,10 @@
   color: #fff;
 }
 
+/* ==========================================================================
+   Destinos Destacados Section
+   ========================================================================== */
+
 .destinos-destacados-section {
   padding: 40px 0;
 }
@@ -82,19 +90,19 @@
 }
 
 .destinos-destacados-section .card:hover .card-img-top {
-  transform: scale(1.1); /* Scale up on hover */
+  transform: scale(1.1);
 }
 
 .destinos-destacados-section .card-img-overlay {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%); /* Gradient from bottom to top */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  display: flex; /* Use flexbox for positioning */
-  flex-direction: column; /* Stack items vertically */
-  justify-content: flex-end; /* Align content to the bottom */
-  padding: 15px; /* Add padding to the overlay */
-  border-radius: 15px; /* Match card border-radius */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 15px;
+  border-radius: 15px;
 }
 
 .destinos-destacados-section .card:hover .card-img-overlay {
@@ -106,8 +114,8 @@
   font-size: 1.8rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  margin-bottom: 0; /* Remove default margin from h5 */
-  text-align: left; /* Align text to the left */
+  margin-bottom: 0;
+  text-align: left;
 }
 
 .destinos-destacados-section .btn-primary {
@@ -120,9 +128,13 @@
   border-color: #2dbd9b;
 }
 
+/* ==========================================================================
+   Beneficios Section
+   ========================================================================== */
+
 .beneficios-section {
   padding: 40px 0;
-  background-color: #f8f9fa; /* Light background for contrast */
+  background-color: #f8f9fa;
 }
 
 .beneficios-section .card {
@@ -130,8 +142,8 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
-  max-width: 300px; /* Make cards smaller */
-  margin: 0 auto; /* Center the cards */
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .beneficios-section .card:hover {
@@ -140,7 +152,7 @@
 }
 
 .beneficios-section .benefit-icon {
-  width: 80px; /* Adjust icon size */
+  width: 80px;
   height: 80px;
   margin-bottom: 20px;
   margin-top: 20px;
@@ -148,14 +160,47 @@
 
 .beneficios-section .card-title {
   font-weight: bold;
-  color: #343a40; /* Darker color for title */
-  font-size: 1.1rem; /* Smaller font size for title */
+  color: #343a40;
+  font-size: 1.1rem;
 }
 
 .beneficios-section .card-text {
-  color: #6c757d; /* Grey color for text */
-  font-size: 0.9rem; /* Smaller font size for text */
+  color: #6c757d;
+  font-size: 0.9rem;
 }
+
+/* ==========================================================================
+   CTA Section
+   ========================================================================== */
+
+.cta-section {
+  padding: 60px 0;
+  background: linear-gradient(to bottom, #4a5e5a, #344944);
+  color: white;
+}
+
+.cta-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background-color: #39d8a8;
+  border-color: #39d8a8;
+  font-weight: bold;
+  padding: 0.8rem 2rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #2dbd9b;
+  border-color: #2dbd9b;
+}
+
+/* ==========================================================================
+   General / Shared Styles
+   ========================================================================== */
 
 .section-title {
   font-size: 3rem;
@@ -163,7 +208,7 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   position: relative;
   padding-bottom: 10px;
-  margin-bottom: 30px !important; /* Override Bootstrap's mb-5 */
+  margin-bottom: 30px !important;
 }
 
 .section-title::after {
@@ -174,12 +219,14 @@
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background-color: #39d8a8; /* Highlight color */
+  background-color: #39d8a8;
   border-radius: 2px;
 }
 
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
 
-/* Responsive styles */
 @media (max-width: 768px) {
   .hero-content h1 {
     font-size: 3rem;
@@ -188,12 +235,20 @@
   .hero-content p {
     font-size: 1.2rem;
   }
+
   .section-title {
     font-size: 2.5rem;
   }
-}
 
-@media (max-width: 767px) { /* For small screens, always show overlay */
+  .cta-title {
+    font-size: 2rem;
+  }
+
+  .cta-button {
+    font-size: 1rem;
+    padding: 0.7rem 1.8rem;
+  }
+
   .destinos-destacados-section .card-img-overlay {
     opacity: 1;
     visibility: visible;
@@ -214,12 +269,15 @@
   .hero-content p {
     font-size: 1rem;
   }
+
   .destinos-destacados-section .card-img-overlay .card-title {
     font-size: 1.2rem;
   }
+
   .destinos-destacados-section .card-img-top {
     height: 150px;
   }
+
   .destinos-destacados-section .card {
     width: 90%;
     margin: 0 auto;
@@ -228,18 +286,29 @@
   .beneficios-section .card {
     max-width: 250px;
   }
+  
   .section-title {
     font-size: 2rem;
   }
+
   .section-title::after {
     width: 60px;
+  }
+
+  .cta-title {
+    font-size: 1.5rem !important;
+  }
+
+  .cta-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
   }
 }
 
 @media (min-width: 768px) {
   .destinos-destacados-section .card-img-overlay {
-    background-color: rgba(0, 0, 0, 0.6); /* Darken image on hover */
-    background: none; /* Remove gradient for large screens */
+    background-color: rgba(0, 0, 0, 0.6);
+    background: none;
     display: flex;
     align-items: center;
     justify-content: center;

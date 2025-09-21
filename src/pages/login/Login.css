@@ -1,63 +1,25 @@
-@media (max-width: 600px) {
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: none !important;
-  }
-  .login-bg {
-    min-height: 130vh !important;
-    width: 100vw !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    box-sizing: border-box;
-    background-size: cover !important;
-    background-position: center top !important;
-  }
-  .custom-navbar {
-    background: transparent !important;
-    box-shadow: none !important;
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    z-index: 10;
-  }
-}
 .login-bg {
   min-height: 100vh;
-  background: url('../../assets/Fondo_Login.png') no-repeat center center fixed;
+  background: url('../../assets/Fondo_Login.png') no-repeat center center;
   background-size: cover;
   display: flex;
   flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center;   /* Center horizontally */
+  padding-top: 6rem; /* Adjust for navbar height */
+  padding-bottom: 4rem; /* Adjust for footer height */
 }
 
 .login-main {
-  flex: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 1.2rem;
-  padding-bottom: 0.5rem;
-  margin-top: 6rem;
+  width: 100%;
+  max-width: 500px; /* Or whatever max-width you prefer for the form */
+  padding: 1rem;
 }
+
+/* You might not need this media query anymore, but if you do, keep it simple */
 @media (max-width: 600px) {
-  .login-main {
-    padding-bottom: 0.1rem;
-  }
-}
-@media (max-width: 500px) {
-  .login-main {
-    display: block !important;
-    height: auto !important;
-    min-height: unset !important;
-    padding-bottom: 1rem !important;
-  }
   .login-bg {
-    min-height: unset !important;
-    display: block !important;
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    background-position: top center !important;
+    padding-top: 5rem;
+    padding-bottom: 3rem;
   }
 }

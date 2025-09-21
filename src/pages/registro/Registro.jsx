@@ -1,6 +1,5 @@
-import React from 'react';
 import RegistroForm from '../../components/registro/RegistroForm';
-import './Registro.css';
+import './registro.css';
 
 const Registro = () => {
   //const navigate = useNavigate();
@@ -11,7 +10,7 @@ const Registro = () => {
 
   return (
     <div className="registro-bg">
-      <main className="registro-main">
+      <main className="registro-main d-flex justify-content-center align-items-center">
         <RegistroForm onSuccess={handleSuccess} />
       </main>
     </div>
