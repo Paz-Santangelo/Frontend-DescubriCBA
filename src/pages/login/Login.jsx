@@ -1,4 +1,3 @@
-import React from 'react';
 import LoginForm from '../../components/login/LoginForm';
 import './Login.css';
 
@@ -11,7 +10,7 @@ const Login = () => {
 
   return (
     <div className="login-bg">
-      <main className="login-main">
+      <main className="login-main d-flex justify-content-center align-items-center">
         <LoginForm onSuccess={handleSuccess} />
       </main>
     </div>

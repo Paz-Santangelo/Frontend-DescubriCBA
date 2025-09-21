@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './LoginForm.css';
 
 const initialState = {
@@ -6,7 +7,7 @@ const initialState = {
   password: '',
 };
 
-const LoginForm = ({ onSuccess, onGoToRegister }) => {
+const LoginForm = ({ onSuccess }) => {
   const [form, setForm] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -78,7 +79,7 @@ const LoginForm = ({ onSuccess, onGoToRegister }) => {
       {message && <div className={`message ${message.type}`}>{message.text}</div>}
       <div className="login-link">
         ¿No tenés cuenta?{' '}
-        <button type="button" className="link-btn" onClick={onGoToRegister}>Registrate</button>
+        <Link to="/registro" className="link-btn">Registrate</Link>
       </div>
     </form>
   );
