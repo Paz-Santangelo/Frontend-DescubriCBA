@@ -1,0 +1,19 @@
+
+.faq-container {
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+}
+
+.faq-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.faq-answer {
+  font-size: 17px;
+  color: #333;
+  line-height: 1.6;
+}
+
