@@ -1,83 +1,73 @@
-/* Contenedor principal */
-.quienes-container {
-  padding: 120px 20px 80px;
-  max-width: 1200px;
-  margin: 0 auto;
+
+body, h1, h2, h3, h4, p, span, a, div {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Títulos */
-.quienes-title {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 28px;
-  font-weight:#057e62;
-}
-.quienes-subtitle {
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 30px;
-  font-weight: 500;
-  color: #fff;
+
+.quienes-container {
+  padding-top: 120px;
+  max-width: 1200px;
+  margin: 20px auto;
 }
 
-/* Sección Instituto */
+
+.quienes-title,
+.equipo-title {
+  display: block;
+  margin: 20px auto 40px auto;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #064635;
+}
+
 .descripcion-instituto {
   position: relative;
   background: center center/cover no-repeat;
-  height: 320px;
+  height: 500px;
   border-radius: 10px;
-  margin: 90px auto 40px auto;
-  max-width: 1200px;
+  margin: 40px auto 60px auto;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  padding-top: 30px;
-}
-.descripcion-instituto .overlay {
-  position: relative;
-  z-index: 1;
-  width: calc(100% - 40px);
-  max-width: 1100px;
-  background-color: rgba(62, 67, 62, 0.55);
-  padding: 30px 40px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-.descripcion-instituto .overlay p {
-  margin: 0;
-  color: #fff;
-  font-size: 17px;
-  line-height: 1.6;
-  padding: 0 10px;
+  padding-top: 20px;
+  font-size: 18px;
 }
 
-/* Sección Equipo */
+.descripcion-instituto .overlay {
+  background-color: rgba(62, 67, 62, 0.55);
+  padding: 40px 60px;
+  border-radius: 10px;
+  max-width: 900px;
+  color: #fff;
+  text-align: center;
+}
+
+
 .equipo-foto-fondo {
   position: relative;
   background: center center/cover no-repeat;
-  padding: 60px 20px;
+  height: 500px;
   border-radius: 10px;
   margin-bottom: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  font-size: 18px;
 }
+
 .equipo-foto-fondo .overlay {
   background-color: rgba(0,0,0,0.55);
   padding: 40px;
   border-radius: 10px;
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
+  max-width: 900px;
+  text-align: center;
 }
 
-/* Tarjetas del equipo */
+
 .equipo-card {
   padding: 20px;
   display: flex;
@@ -87,50 +77,43 @@
   max-width: 420px;
   margin: 0 auto;
 }
+
 .equipo-card img {
   width: 200px;
   height: 200px;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 15px;
   border: 2px solid rgba(255,255,255,0.08);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.55);
 }
+
 .equipo-card .nombre {
   font-size: 17px;
   font-weight: 600;
   margin-top: 10px;
   color: #fff;
 }
+
 .equipo-card .descripcion {
   font-size: 17px;
   color: #ddd;
   margin-bottom: 6px;
 }
 
-/* Carousel centrado */
-.carousel-inner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.carousel-item {
-  width: 100%;
+.equipo-carousel .carousel-inner {
   display: flex !important;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-  min-height: 300px;
-}
-.carousel-item.active {
-  opacity: 1;
-}
-.carousel-item .equipo-card {
-  margin: 0 auto;
-  flex: 0 0 auto;
 }
 
-/* Indicadores */
+.equipo-carousel .carousel-item {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+
 .carousel-indicators {
   bottom: -25px;
   left: 50%;
@@ -155,11 +138,26 @@
   box-shadow: 0 0 8px rgba(183,108,248,0.28);
 }
 
-/* Flechas del carousel */
-.carousel-control-prev, .carousel-control-next {
-  width: 5%;
+.carousel-control-prev,
+.carousel-control-next {
+  display: none;
 }
-.carousel-control-prev-icon, .carousel-control-next-icon {
-  background-color: rgba(255,255,255,0.8);
-  opacity: 0.95;
+
+
+@media (max-width: 768px) {
+  .descripcion-instituto,
+  .equipo-foto-fondo {
+    height: 400px;
+  }
+
+  .quienes-title,
+  .equipo-title {
+    font-size: 24px;
+    padding: 8px 15px;
+  }
+
+  .equipo-card img {
+    width: 180px;
+    height: 180px;
+  }
 }
