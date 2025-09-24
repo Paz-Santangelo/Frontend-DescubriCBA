@@ -112,15 +112,16 @@ body, h1, h2, h3, h4, p, span, a, div {
   align-items: center;
   width: 100%;
 }
-
-
 .carousel-indicators {
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
   position: absolute;
+  bottom: -25px;
+  left: 0;                
+  right: 0;               
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;         
   z-index: 10;
 }
 .carousel-indicators button {
@@ -161,3 +162,15 @@ body, h1, h2, h3, h4, p, span, a, div {
     height: 180px;
   }
 }
+.quienes-title::after,
+.equipo-title::after
+{
+  content: "";
+  display: block;
+  width: 50px;        /* ancho de la rayita */
+  height: 3px;        /* grosor */
+  background-color: #05a081; /* color de la rayita */
+  margin: 8px auto 0 auto;  /* centrado y separación */
+  border-radius: 2px;       /* opcional redondeado */
+}
+

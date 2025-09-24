@@ -39,3 +39,14 @@
   box-shadow: none;
 }
 
+  .faq-title:after {
+  content: "";
+  display: block;
+  width: 50px;        /* ancho de la rayita */
+  height: 3px;        /* grosor */
+  background-color: #05a081; /* color de la rayita */
+  margin: 8px auto 0 auto;  /* centrado y separación */
+  border-radius: 2px;       /* opcional redondeado */
+}
+
+
