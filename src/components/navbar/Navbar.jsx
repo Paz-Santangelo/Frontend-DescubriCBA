@@ -3,7 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/Logo-Transparente.png";
+import logo from "../../assets/LogotipoOvalado.png";
 import './navbar.css';
 
 function AppNavbar() {
