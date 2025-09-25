@@ -5,7 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../assets/LogoTransparenteVerde.png";
+import logo from "../../assets/LogotipoOvalado.png";
 import userAvatar from "../../assets/Alejandro.jpg"; // Import user avatar
 import "./navbar.css";
 

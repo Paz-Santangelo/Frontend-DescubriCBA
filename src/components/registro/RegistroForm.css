@@ -1,3 +1,47 @@
+/* Floating label effect */
+.floating-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.floating-group input {
+  width: 100%;
+  padding: 1.2rem 1rem 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  color: #222;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.floating-group input:focus {
+  border-color: #007bff;
+}
+
+.floating-group label.floating {
+  position: absolute;
+  left: 1rem;
+  top: 1.1rem;
+  color: #888;
+  background: transparent;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+  font-size: 1rem;
+}
+
+.floating-group input:focus + label.floating,
+.floating-group label.floating.active {
+  top: -0.7rem;
+  left: 0.8rem;
+  background: #f7f7f7;
+  padding: 0 0.3rem;
+  font-size: 0.85rem;
+  color: #024635;
+  border-radius: 4px;
+  z-index: 2;
+}
 .registro-form {
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);

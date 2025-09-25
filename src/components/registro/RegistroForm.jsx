@@ -94,29 +94,29 @@ const RegistroForm = ({ onSuccess }) => {
       onSubmit={handleSubmit}
     >
       <h2>Crear cuenta</h2>
-      <div className="form-group">
-        <label>Nombre</label>
-        <input name="nombre" value={form.nombre} onChange={handleChange} />
+      <div className="form-group floating-group">
+        <input name="nombre" value={form.nombre} onChange={handleChange} required />
+        <label className={form.nombre ? 'floating active' : 'floating'}>Nombre</label>
         {errors.nombre && <span className="error">{errors.nombre}</span>}
       </div>
-      <div className="form-group">
-        <label>Apellido</label>
-        <input name="apellido" value={form.apellido} onChange={handleChange} />
+      <div className="form-group floating-group">
+        <input name="apellido" value={form.apellido} onChange={handleChange} required />
+        <label className={form.apellido ? 'floating active' : 'floating'}>Apellido</label>
         {errors.apellido && <span className="error">{errors.apellido}</span>}
       </div>
-      <div className="form-group">
-        <label>Correo electrónico</label>
-        <input name="email" value={form.email} onChange={handleChange} />
+      <div className="form-group floating-group">
+        <input name="email" value={form.email} onChange={handleChange} required />
+        <label className={form.email ? 'floating active' : 'floating'}>Correo electrónico</label>
         {errors.email && <span className="error">{errors.email}</span>}
       </div>
-      <div className="form-group">
-        <label>Contraseña</label>
-        <input type="password" name="password" value={form.password} onChange={handleChange} />
+      <div className="form-group floating-group">
+        <input type="password" name="password" value={form.password} onChange={handleChange} required />
+        <label className={form.password ? 'floating active' : 'floating'}>Contraseña</label>
         {errors.password && <span className="error">{errors.password}</span>}
       </div>
-      <div className="form-group">
-        <label>Confirmar contraseña</label>
-        <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} />
+      <div className="form-group floating-group">
+        <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required />
+        <label className={form.confirmPassword ? 'floating active' : 'floating'}>Confirmar contraseña</label>
         {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
       </div>
       <button type="submit" disabled={loading}>{loading ? 'Registrando...' : 'Registrarse'}</button>

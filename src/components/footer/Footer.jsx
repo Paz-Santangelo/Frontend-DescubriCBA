@@ -19,9 +19,9 @@ const Footer = () => {
           </Col>
           <Col xs={12} md={4} className="text-center text-md-end">
             <h6>Redes Sociales</h6>
-            <a href="#" className="social-link"><Facebook /></a>
-            <a href="#" className="social-link"><Instagram /></a>
-            <a href="#" className="social-link me-0"><Twitter /></a>
+            <a href="https://www.facebook.com/turismocba/?locale=es_LA" className="social-link" target="_blank" rel="noopener noreferrer"><Facebook /></a>
+            <a href="https://www.instagram.com/turismocba/?hl=es" className="social-link" target="_blank" rel="noopener noreferrer"><Instagram /></a>
+            <a href="https://x.com/turismocba/highlights" className="social-link me-0" target="_blank" rel="noopener noreferrer"><Twitter /></a>
           </Col>
         </Row>
         <Row className="mt-4">

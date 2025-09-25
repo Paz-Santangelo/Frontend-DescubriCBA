@@ -84,14 +84,14 @@ const LoginForm = ({ onSuccess }) => {
       onSubmit={handleSubmit}
     >
       <h2>Iniciar sesión</h2>
-      <div className="form-group">
-        <label>Correo electrónico</label>
-        <input name="email" value={form.email} onChange={handleChange} />
+      <div className="form-group floating-group">
+        <input name="email" value={form.email} onChange={handleChange} required />
+        <label className={form.email ? 'floating active' : 'floating'}>Correo electrónico</label>
         {errors.email && <span className="error">{errors.email}</span>}
       </div>
-      <div className="form-group">
-        <label>Contraseña</label>
-        <input type="password" name="password" value={form.password} onChange={handleChange} />
+      <div className="form-group floating-group">
+        <input type="password" name="password" value={form.password} onChange={handleChange} required />
+        <label className={form.password ? 'floating active' : 'floating'}>Contraseña</label>
         {errors.password && <span className="error">{errors.password}</span>}
       </div>
       <button type="submit" disabled={loading}>{loading ? 'Ingresando...' : 'Ingresar'}</button>
