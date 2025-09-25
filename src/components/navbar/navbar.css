@@ -3,6 +3,13 @@
   width: 100%;
   z-index: 10;
   background: linear-gradient(to bottom, rgba(36, 49, 47, 0.9) 0%, rgba(36, 49, 47, 0) 100%);
+  transition: background 0.3s ease-in-out;
+}
+
+.custom-navbar.navbar-solid {
+  background: #24312f;
+  position: static; /* Or sticky, depending on desired scroll behavior */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .navbar-brand-text {
@@ -47,6 +54,54 @@
 .custom-navbar .nav-link.active {
   color: #39d8a8 !important;
 }
+
+/* Remove underline and adjust padding for the user dropdown */
+.custom-navbar .nav-link.dropdown-toggle::after {
+  display: none;
+}
+
+.custom-navbar .nav-link.dropdown-toggle {
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+}
+
 .custom-navbar .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(218, 112, 13, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Add margin to user profile dropdown on medium screens and up */
+@media (min-width: 768px) {
+  .user-profile-dropdown {
+    margin-left: 15px;
+  }
+}
+
+/* Style for dropdown items on hover/focus and when active */
+.user-profile-dropdown .dropdown-item:hover,
+.user-profile-dropdown .dropdown-item:focus,
+.user-profile-dropdown .dropdown-item.active {
+  background-color: #24312f;
+  color: white !important;
+}
+
+/* Custom Dropdown Animation for All Screens */
+.user-profile-dropdown .dropdown-menu {
+  display: block; /* Override Bootstrap's display: none to allow animations */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px); /* Start from top */
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  
+  /* Styling */
+  border-radius: 0.5rem; 
+  border: none; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-top: 10px !important;
+}
+
+.user-profile-dropdown.show .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0); /* End at final position */
 }

@@ -1,15 +1,31 @@
+import { useState } from "react";
+import { useLocation, NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { NavLink } from "react-router-dom";
-import logo from "../../assets/LogotipoOvalado.png";
-import './navbar.css';
+import NavDropdown from "react-bootstrap/NavDropdown";
+import logo from "../../assets/LogoTransparenteVerde.png";
+import userAvatar from "../../assets/Alejandro.jpg"; // Import user avatar
+import "./navbar.css";
 
 function AppNavbar() {
   const expand = "md";
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  // Se puede cambiar a false para modificar la visualizacion de los links del navbar, segun si el usuario esta autenticado o no.
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navbarClasses = `py-0 custom-navbar ${!isHomePage ? 'navbar-solid' : ''}`;
+
   return (
-    <Navbar key={expand} expand={expand} variant="dark" className="py-0 custom-navbar">
+    <Navbar
+      key={expand}
+      expand={expand}
+      variant="dark"
+      className={navbarClasses}
+    >
       <Container fluid>
         <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
           <img
@@ -42,11 +58,44 @@ function AppNavbar() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3 fw-semibold">
-              <Nav.Link href="#action1">Destinos</Nav.Link>
-              <Nav.Link href="#action2">Quiénes somos</Nav.Link>
-              <Nav.Link href="#action2">Preguntas</Nav.Link>
-              <Nav.Link as={NavLink} to="/registro">Regístrate</Nav.Link>
-              <Nav.Link as={NavLink} to="/login">Iniciar Sesión</Nav.Link>
+              <Nav.Link as={NavLink} to="/destinos">Destinos</Nav.Link>
+              <Nav.Link as={NavLink} to="/quienes">
+                Quiénes somos
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/preguntas">
+                Preguntas
+              </Nav.Link>
+
+              {isLoggedIn ? (
+                <NavDropdown
+                  className="user-profile-dropdown"
+                  title={
+                    <img
+                      src={userAvatar}
+                      alt="User avatar"
+                      className="rounded-circle"
+                      style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                    />
+                  }
+                  id="user-nav-dropdown"
+                  align="end"
+                >
+                  <NavDropdown.Item as={NavLink} to="/mi-perfil">
+                    Mi Perfil
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item>Cerrar Sesión</NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <>
+                  <Nav.Link as={NavLink} to="/registro">
+                    Regístrate
+                  </Nav.Link>
+                  <Nav.Link as={NavLink} to="/login">
+                    Iniciar Sesión
+                  </Nav.Link>
+                </>
+              )}
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
