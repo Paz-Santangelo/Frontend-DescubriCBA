@@ -43,8 +43,8 @@ function AppNavbar() {
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3 fw-semibold">
               <Nav.Link href="#action1">Destinos</Nav.Link>
-              <Nav.Link href="#action2">Quiénes somos</Nav.Link>
-              <Nav.Link href="#action2">Preguntas</Nav.Link>
+              <Nav.Link as={NavLink} to="/quienes">Quiénes somos</Nav.Link>
+              <Nav.Link as={NavLink} to="/preguntas">Preguntas</Nav.Link>
               <Nav.Link as={NavLink} to="/registro">Regístrate</Nav.Link>
               <Nav.Link as={NavLink} to="/login">Iniciar Sesión</Nav.Link>
             </Nav>
