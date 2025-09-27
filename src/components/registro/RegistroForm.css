@@ -1,46 +1,6 @@
-/* Floating label effect */
-.floating-group {
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.floating-group input {
-  width: 100%;
-  padding: 1.2rem 1rem 0.6rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.15);
-  color: #222;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.floating-group input:focus {
-  border-color: #007bff;
-}
-
-.floating-group label.floating {
-  position: absolute;
-  left: 1rem;
-  top: 1.1rem;
-  color: #888;
-  background: transparent;
-  pointer-events: none;
-  transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
-  font-size: 1rem;
-}
-
-.floating-group input:focus + label.floating,
-.floating-group label.floating.active {
-  top: -0.7rem;
-  left: 0.8rem;
-  background: #f7f7f7;
-  padding: 0 0.3rem;
-  font-size: 0.85rem;
-  color: #024635;
-  border-radius: 4px;
-  z-index: 2;
+.registro-form h2 {
+  margin-top: 0.5rem;
+  margin-bottom: 2.2rem;
 }
 .registro-form {
   background: rgba(255, 255, 255, 0.25);
@@ -52,8 +12,8 @@
   width: 40%;
   min-width: 320px;
   max-width: 700px;
-  margin: 0 auto;
-  padding: 2.2rem 2.2rem 2rem 2.2rem;
+  margin: -3rem 0 auto;
+  padding: 1.2rem 2.2rem 4rem 2.2rem !important;
   font-family: 'Poppins', sans-serif;
   transition: box-shadow 0.3s;
 }
@@ -69,14 +29,15 @@
 }
 
 .form-group {
-  margin-bottom: 0.7rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.18rem;
+  margin-top: -0.6rem; 
+  margin-bottom: 0.7rem;
   color: #222;
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.1px;
 }

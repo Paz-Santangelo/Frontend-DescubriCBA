@@ -1,3 +1,20 @@
+@media (max-width: 768px) {
+  .navbar-brand-text {
+    font-size: 1.1rem !important;
+  }
+  .brand-highlight {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar-brand-text {
+    font-size: 0.95rem !important;
+  }
+  .brand-highlight {
+    font-size: 0.95rem !important;
+  }
+}
 .navbar-nav .nav-link:not(:last-child) {
   margin-right: 1.2rem;
 }
