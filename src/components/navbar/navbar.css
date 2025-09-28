@@ -53,6 +53,7 @@
   color: white !important;
   transition: color 0.3s ease;
   padding-bottom: 5px;
+  transform: scaleY(1.2);
 }
 
 .custom-navbar .nav-link::after {
