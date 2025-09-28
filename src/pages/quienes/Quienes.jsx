@@ -27,7 +27,7 @@ function Quienes() {
       <section className="descripcion-instituto" style={{ backgroundImage: `url(${Instituto})` }}>
         <div className="overlay">
           <p>
-            Somos estudiantes del Instituto Superior Dr. Bernardo Houssay, desarrollando la página web de turismo <strong>“Descubrí Córdoba”</strong>.
+            Somos estudiantes del Instituto Superior Dr. Bernardo Houssay, desarrolladores de la página web de turismo <strong>“Descubrí Córdoba”</strong>.
           </p>
         </div>
       </section>

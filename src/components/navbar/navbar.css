@@ -1,3 +1,28 @@
+@media (max-width: 768px) {
+  .navbar-brand-text {
+    font-size: 1.1rem !important;
+  }
+  .brand-highlight {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar-brand-text {
+    font-size: 0.95rem !important;
+  }
+  .brand-highlight {
+    font-size: 0.95rem !important;
+  }
+}
+.navbar-nav .nav-link:not(:last-child) {
+  margin-right: 1.2rem;
+}
+/* Mejorar separación y altura de los links del navbar */
+.navbar-nav .nav-link {
+  letter-spacing: 0.13em;
+  font-size: 1.08rem;
+}
 .custom-navbar {
   position: absolute;
   width: 100%;

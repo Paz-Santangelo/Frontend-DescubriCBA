@@ -5,7 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../assets/Logo-Transparente.png";
+import logo from "../../assets/LogoCircularSinNombre.png";
 import userAvatar from "../../assets/Alejandro.jpg"; // Import user avatar
 import "./navbar.css";
 
@@ -15,7 +15,7 @@ function AppNavbar() {
   const isHomePage = location.pathname === '/';
 
   // Se puede cambiar a false para modificar la visualizacion de los links del navbar, segun si el usuario esta autenticado o no.
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navbarClasses = `py-0 custom-navbar ${!isHomePage ? 'navbar-solid' : ''}`;
 

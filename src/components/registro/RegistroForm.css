@@ -1,3 +1,7 @@
+.registro-form h2 {
+  margin-top: 0.5rem;
+  margin-bottom: 2.2rem;
+}
 .registro-form {
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
@@ -8,8 +12,8 @@
   width: 40%;
   min-width: 320px;
   max-width: 700px;
-  margin: 0 auto;
-  padding: 2.2rem 2.2rem 2rem 2.2rem;
+  margin: -3rem 0 auto;
+  padding: 1.2rem 2.2rem 4rem 2.2rem !important;
   font-family: 'Poppins', sans-serif;
   transition: box-shadow 0.3s;
 }
@@ -25,14 +29,15 @@
 }
 
 .form-group {
-  margin-bottom: 0.7rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.18rem;
+  margin-top: -0.6rem; 
+  margin-bottom: 0.7rem;
   color: #222;
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.1px;
 }
