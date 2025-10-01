@@ -4,7 +4,7 @@ import "./preguntas.css";
 
 const Preguntas = () => {
   return (
-    <Container className="faq-container my-5">
+    <Container className="faq-container">
       <h1 className="faq-title text-center mb-4">Preguntas Frecuentes</h1>
 
       <Accordion defaultActiveKey="0">

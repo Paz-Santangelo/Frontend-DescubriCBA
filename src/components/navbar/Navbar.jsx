@@ -5,19 +5,18 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../assets/LogoCircularSinNombre.png";
+import logo from "../../assets/Logo-DescubriCBA.png";
 import userAvatar from "../../assets/Alejandro.jpg"; // Import user avatar
 import "./navbar.css";
 
 function AppNavbar() {
   const expand = "md";
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
 
   // Se puede cambiar a false para modificar la visualizacion de los links del navbar, segun si el usuario esta autenticado o no.
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const navbarClasses = `py-0 custom-navbar ${!isHomePage ? 'navbar-solid' : ''}`;
+  const navbarClasses = `py-2 custom-navbar`;
 
   return (
     <Navbar
@@ -26,12 +25,12 @@ function AppNavbar() {
       variant="dark"
       className={navbarClasses}
     >
-      <Container fluid>
+      <Container fluid className="px-4">
         <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
           <img
             src={logo}
-            width="80"
-            height="80"
+            width="50"
+            height="50"
             className="d-inline-block align-top"
             alt="DescubriCBA logo"
           />
@@ -49,9 +48,9 @@ function AppNavbar() {
             <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
               <img
                 src={logo}
-                width="80"
-                height="80"
-                className="d-inline-block align-top"
+                width="60"
+                height="60"
+                className="d-inline-block align-top ms-4"
                 alt="DescubriCBA logo"
               />
             </Offcanvas.Title>
