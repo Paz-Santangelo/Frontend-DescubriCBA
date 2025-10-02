@@ -1,3 +1,6 @@
+/* =============================
+   Estilos base
+============================= */
 body,
 .quienes-bg {
   background-color: #f8f9fa;
@@ -7,26 +10,29 @@ body,
   padding-top: 100px;
   max-width: 1200px;
   margin: 20px auto;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
+/* =============================
+   Títulos principales
+============================= */
 .quienes-title,
 .equipo-title {
   display: block;
   font-size: 3rem;
   letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  position: relative;
-  padding-bottom: 10px;
-  margin-bottom: 30px !important;
-  margin-top: 20px;
-  text-align: center;
-  color: #111;
   font-weight: 700;
+  color: #111;
+  text-align: center;
+  margin-top: 20px;
+  position: relative;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .quienes-title::after,
 .equipo-title::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   bottom: 0;
@@ -37,61 +43,56 @@ body,
   border-radius: 2px;
 }
 
-.descripcion-instituto {
+/* =============================
+   Sección Instituto / Equipo Fondo
+============================= */
+.descripcion-instituto,
+.equipo-foto-fondo {
   position: relative;
-  background: center center/cover no-repeat;
-  height: 500px;
+  background: center center / cover no-repeat;
+  min-height: 400px; /* dinámico */
+  height: auto;      /* se adapta al contenido */
   border-radius: 10px;
   margin: 40px auto 60px auto;
   display: flex;
-  align-items: flex-start;
   justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  padding-top: 20px;
+  align-items: center;
   font-size: 18px;
+  overflow: hidden;
+  padding: 40px 20px; /* aire interno */
+}
+
+.descripcion-instituto .overlay,
+.equipo-foto-fondo .overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+  padding: 40px 20px;
+  border-radius: 10px;
+  color: #fff;
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .descripcion-instituto .overlay {
-  background-color: rgba(62, 67, 62, 0.55);
-  padding: 40px 60px;
-  border-radius: 10px;
-  max-width: 900px;
-  color: #fff;
-  text-align: center;
+  background-color: rgba(62, 67, 62, 0.55); /* tono gris propio */
 }
 
-
-.equipo-foto-fondo {
-  position: relative;
-  background: center center/cover no-repeat;
-  height: 500px;
-  border-radius: 10px;
-  margin-bottom: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
-
-.equipo-foto-fondo .overlay {
-  background-color: rgba(0, 0, 0, 0.55);
-  padding: 40px;
-  border-radius: 10px;
-  color: #fff;
-  max-width: 900px;
-  text-align: center;
-}
-
-
+/* =============================
+   Equipo: tarjetas y carrusel
+============================= */
 .equipo-card {
   padding: 20px;
+  max-width: 420px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 420px;
-  margin: 0 auto;
 }
 
 .equipo-card img {
@@ -116,12 +117,7 @@ body,
   margin-bottom: 6px;
 }
 
-.equipo-carousel .carousel-inner {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-}
-
+.equipo-carousel .carousel-inner,
 .equipo-carousel .carousel-item {
   display: flex !important;
   justify-content: center;
@@ -129,6 +125,9 @@ body,
   width: 100%;
 }
 
+/* =============================
+   Carrusel: indicadores
+============================= */
 .carousel-indicators {
   position: absolute;
   bottom: -25px;
@@ -148,15 +147,7 @@ body,
   border-radius: 50% !important;
   background: #064420 !important;
   border: 2px solid #b0b0b0 !important;
-  box-shadow: none !important;
-  outline: none !important;
-  padding: 0 !important;
   margin: 0 4px !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  max-width: 14px !important;
-  max-height: 14px !important;
-  display: inline-block !important;
 }
 
 .carousel-indicators button.active {
@@ -171,33 +162,37 @@ body,
   display: none;
 }
 
-
+/* =============================
+   Responsividad
+============================= */
 @media (max-width: 768px) {
-
-  .descripcion-instituto,
-  .equipo-foto-fondo {
-    height: 400px;
-  }
-
   .quienes-title,
   .equipo-title {
     font-size: 24px;
     padding: 8px 15px;
   }
 
+  .equipo-title {
+    margin-bottom: 2rem; /* corregido */
+  }
+
   .equipo-card img {
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
+  }
+
+  .quienes-title::after,
+  .equipo-title::after {
+    width: 50px;
+    height: 3px;
+    background-color: #05a081;
+    margin: 8px auto 0 auto;
   }
 }
 
-.quienes-title::after,
-.equipo-title::after {
-  content: "";
-  display: block;
-  width: 50px;
-  height: 3px;
-  background-color: #05a081;
-  margin: 8px auto 0 auto;
-  border-radius: 2px;
+@media (max-width: 935px) {
+  .overlay {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }

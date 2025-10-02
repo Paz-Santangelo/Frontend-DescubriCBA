@@ -15,7 +15,8 @@
 }
 
 .navbar-brand-text {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   font-weight: bold;
   margin-left: 10px;
   color: white;
@@ -31,12 +32,13 @@
 
 /* Mejorar separación y altura de los links del navbar */
 .navbar-nav .nav-link {
-  letter-spacing: 0.13em;
-  font-size: 1.08rem;
+  letter-spacing: clamp(0.05em, 1vw, 0.13em);
+  /* font-size: 1.08rem; */
+  font-size: clamp(0.9rem, 1.8vw, 1.08rem);
 }
 
 .navbar-nav .nav-link:not(:last-child) {
-  margin-right: 1.2rem;
+  margin-right: 1rem;
 }
 
 /* Estilos para los links del NAV PRINCIPAL (pantallas grandes) */
@@ -138,26 +140,6 @@
 .offcanvas-body .nav-link:hover::after,
 .offcanvas-body .nav-link.active::after {
     width: 60%;
-}
-
-@media (max-width: 768px) {
-  .navbar-brand-text {
-    font-size: 1.1rem !important;
-  }
-
-  .brand-highlight {
-    font-size: 1.1rem !important;
-  }
-}
-
-@media (max-width: 500px) {
-  .navbar-brand-text {
-    font-size: 0.95rem !important;
-  }
-
-  .brand-highlight {
-    font-size: 0.95rem !important;
-  }
 }
 
 @media (min-width: 768px) {

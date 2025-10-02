@@ -61,7 +61,7 @@
 
 .login-form h2 {
   text-align: center;
-  margin-bottom: 1.1rem;
+  margin-bottom: 2rem;
   color: #024635;
   font-size: 2rem;
   letter-spacing: 0.5px;
@@ -205,10 +205,5 @@ button[disabled] {
   .login-form {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
-  }
-
-  .form-group input {
-    padding-left: 2.7rem !important;
-    padding-right: 2.7rem !important;
   }
 }

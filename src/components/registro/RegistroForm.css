@@ -1,7 +1,3 @@
-.registro-form h2 {
-  margin-top: 0.5rem;
-  margin-bottom: 2.2rem;
-}
 .registro-form {
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
@@ -10,17 +6,15 @@
   border-radius: 20px;
   border: 1.5px solid rgba(255, 255, 255, 0.25);
   width: 40%;
-  min-width: 320px;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 1.2rem 2.2rem 4rem 2.2rem !important;
-  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  max-width: 600px;
+  padding: 1.2rem 2rem;
   transition: box-shadow 0.3s;
 }
 
 .registro-form h2 {
+  margin-bottom: 2rem;
   text-align: center;
-  margin-bottom: 1.1rem;
   color: #024635;
   font-size: 2rem;
   letter-spacing: 0.5px;
@@ -29,29 +23,32 @@
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.9rem;
 }
 
 .form-group label {
   display: block;
-  margin-top: -0.6rem; 
-  margin-bottom: 0.7rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.6rem;
   color: #222;
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 0.1px;
+  font-size: 0.9rem;
+  /* antes 1rem */
+  font-weight: 600;
+  /* un poquito menos cargado */
+  letter-spacing: 0.2px;
 }
 
+/* Reducimos un poco los inputs */
 .form-group input {
   width: 100%;
-  padding: 0.7rem 1.1rem;
+  padding: 0.6rem 1rem;
+  /* antes 0.7rem 1.1rem */
   border: 1.5px solid #e0e7ef;
   border-radius: 10px;
-  font-size: 0.98rem;
-  font-family: inherit;
+  font-size: 0.7rem;
+  /* antes 0.98rem */
   background: rgba(255, 255, 255, 0.85);
   transition: border 0.2s, box-shadow 0.2s;
-  outline: none;
   box-shadow: 0 1px 4px rgba(59, 130, 246, 0.04);
 }
 
@@ -69,14 +66,15 @@
   letter-spacing: 0.1px;
 }
 
+/* Botón un poco más compacto */
 button[type="submit"] {
   width: 100%;
-  padding: 0.6rem;
+  padding: 0.5rem;
   background: #40a189;
   color: #fff;
   border: none;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -121,33 +119,22 @@ button[disabled] {
 @media (max-width: 500px) {
 
   .registro-form {
-    margin-top: 1rem !important;
-    margin-bottom: 1rem !important;
     padding: 0 0.5rem;
-  }
-
-  .form-group input {
-    padding-left: 2.7rem !important;
-    padding-right: 2.7rem !important;
   }
 }
 
 @media (max-width: 900px) {
   .registro-form {
-    width: 90vw;
-    max-width: 99vw;
-    min-width: unset;
     padding: 1.2rem 0.7rem 1.2rem 0.7rem;
   }
 
   .registro-form h2 {
-    font-size: 1.1rem;
-    margin-bottom: 0.7rem;
+    font-size: 1.5rem;
+    margin-bottom: 1.7rem;
   }
 
   .form-group input {
-    font-size: 0.93rem;
-    padding: 0.4rem 0.5rem;
+    font-size: 0.85rem;
   }
 
   button[type="submit"] {

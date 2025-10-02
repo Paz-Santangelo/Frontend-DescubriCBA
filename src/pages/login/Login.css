@@ -1,24 +1,15 @@
 .login-bg {
-  min-height: 100vh;
+  height: 100vh;
   background: url('../../assets/Fondo_Login.png') no-repeat center center;
   background-size: cover;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;  
-  padding-top: 6rem;
-  padding-bottom: 4rem;
+  padding-top: 80px;
+  box-sizing: border-box;
 }
 
 .login-main {
   width: 100%;
   padding: 1rem;
-}
-
-/* Media Queries */
-@media (max-width: 600px) {
-  .login-bg {
-    padding-top: 5rem;
-    padding-bottom: 3rem;
-  }
 }

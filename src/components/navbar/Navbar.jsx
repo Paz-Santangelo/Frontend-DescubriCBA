@@ -10,7 +10,7 @@ import userAvatar from "../../assets/Alejandro.jpg"; // Import user avatar
 import "./navbar.css";
 
 function AppNavbar() {
-  const expand = "md";
+  const expand = "lg";
   const location = useLocation();
 
   // Se puede cambiar a false para modificar la visualizacion de los links del navbar, segun si el usuario esta autenticado o no.
@@ -56,7 +56,7 @@ function AppNavbar() {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3 fw-semibold">
+            <Nav className="justify-content-end flex-grow-1 fw-semibold">
               <Nav.Link as={NavLink} to="/destinos">Destinos</Nav.Link>
               <Nav.Link as={NavLink} to="/quienes">
                 Quiénes somos

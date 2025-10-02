@@ -88,6 +88,7 @@ const RegistroForm = ({ onSuccess }) => {
   return (
     <motion.form
       className="registro-form"
+      style={{ maxWidth: '550px' }}
       variants={formVariants}
       initial="hidden"
       animate="visible"
