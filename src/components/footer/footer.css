@@ -4,6 +4,7 @@
   padding: 20px 0;
   margin-top: auto;
   font-size: 0.8rem;
+  z-index: 100;
 }
 
 .footer h5 {

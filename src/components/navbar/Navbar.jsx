@@ -6,15 +6,16 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../assets/Logo-DescubriCBA.png";
-import userAvatar from "../../assets/Alejandro.jpg"; // Import user avatar
+import userAvatar from "../../assets/Alejandro.jpg";
 import "./navbar.css";
+import { LayoutSidebar } from "react-bootstrap-icons";
 
-function AppNavbar() {
+function AppNavbar({ setToggled }) {
   const expand = "lg";
   const location = useLocation();
 
   // Se puede cambiar a false para modificar la visualizacion de los links del navbar, segun si el usuario esta autenticado o no.
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const navbarClasses = `py-2 custom-navbar`;
 
@@ -26,6 +27,9 @@ function AppNavbar() {
       className={navbarClasses}
     >
       <Container fluid className="px-4">
+        <button className="sidebar-toggle-button" onClick={setToggled}>
+          <LayoutSidebar size={20} />
+        </button>
         <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
           <img
             src={logo}

@@ -1,18 +1,13 @@
 import './myprofile.css';
+import { useUser } from "../../context/UserContext";
 
 const MyProfile = () => {
 
-  const user = {
-    name: "",
-    lastname: "",
-    email: "",
-    role: "USER",
-    image: null,
-  };
+  const { user, setUser } = useUser();
 
   return (
     <div className="profile-container">
-      <h2 className="profile-title">Mi Perfil</h2>
+      <h2 className="profile-title fw-semibold">Mi Perfil</h2>
 
       <div className="profile-image-container">
         {user.image ? (
