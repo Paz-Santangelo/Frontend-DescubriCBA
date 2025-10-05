@@ -2,6 +2,10 @@
 	padding-top: 7rem;
 }
 
+.destinations-container.logged-in {
+	padding-top: 2rem;
+}
+
 .destinations-title {
 	font-size: 2.5rem;
 	letter-spacing: 2px;

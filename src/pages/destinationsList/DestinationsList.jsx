@@ -1,11 +1,17 @@
+import { useUser } from "../../context/UserContext";
 import "./destinationsList.css";
 
-const destinationList = () => {
+const DestinationsList = () => {
+  const { user } = useUser();
+  const isLoggedIn = user && user.role;
+
   return (
-    <div className="destinations-container">
+    <div
+      className={`destinations-container ${isLoggedIn ? "logged-in" : ""}`}
+    >
       <h2 className="destinations-title">Seleccione un Destino</h2>
     </div>
   );
 };
 
-export default destinationList;
+export default DestinationsList;

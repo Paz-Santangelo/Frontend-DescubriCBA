@@ -12,39 +12,58 @@ import Preguntas from "./pages/preguntas/Preguntas";
 import MyProfile from "./pages/myProfile/MyProfile.jsx";
 import DestinationsList from "./pages/destinationsList/DestinationsList.jsx";
 import LayoutPrivado from "./layouts/LayoutPrivado.jsx";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider, useUser } from "./context/UserContext";
 import { useState } from "react";
 
-function App() {
+// Componente que contiene la lógica de las rutas y puede acceder al contexto
+function AppContent() {
   const [toggled, setToggled] = useState(false);
+  const { user } = useUser();
+  const isLoggedIn = user && user.role;
 
   return (
-    <UserProvider>
-      <Router>
-        <div className="d-flex flex-column min-vh-100">
-          <AppNavbar setToggled={() => setToggled(!toggled)} />
-          <main className="flex-grow-1">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Registro />} />
-              <Route path="/quienes" element={<Quienes />} />
-              <Route path="/preguntas" element={<Preguntas />} />
-              <Route path="/destinos" element={<DestinationsList />} />
+    <Router>
+      <div className="d-flex flex-column min-vh-100">
+        <AppNavbar setToggled={() => setToggled(!toggled)} />
+        <main className="flex-grow-1">
+          <Routes>
+            {/* Rutas Públicas */}
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<Registro />} />
+            <Route path="/quienes" element={<Quienes />} />
+            <Route path="/preguntas" element={<Preguntas />} />
 
-              {/* Rutas privadas (con sidebar) */}
+            {/* Si el usuario NO está logueado, /destinos es pública y sin sidebar */}
+            {!isLoggedIn && (
+              <Route path="/destinos" element={<DestinationsList />} />
+            )}
+
+            {/* Rutas Privadas: Si el usuario SÍ está logueado, se renderizan dentro del LayoutPrivado */}
+            {isLoggedIn && (
               <Route
                 element={
                   <LayoutPrivado toggled={toggled} setToggled={setToggled} />
                 }
               >
+                <Route path="/destinos" element={<DestinationsList />} />
                 <Route path="/mi-perfil" element={<MyProfile />} />
+                {/* Agrega aquí cualquier otra ruta privada que necesites */}
               </Route>
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
+            )}
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
+  );
+}
+
+// Componente principal que provee el contexto
+function App() {
+  return (
+    <UserProvider>
+      <AppContent />
     </UserProvider>
   );
 }
