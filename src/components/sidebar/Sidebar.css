@@ -1,10 +1,3 @@
-/*
- * Sidebar.css
- * Estilos para el componente Sidebar, incluyendo animaciones y estados.
- */
-
-/* --- Contenedores y Estructura Base --- */
-
 .sidebar-container {
   position: fixed;
   top: 76px;
@@ -82,6 +75,31 @@
   right: 15px;
   transform: translateY(-50%);
 }
+
+/* Tooltip específico para el sidebar (usa className en el Tooltip) */
+.sidebar-tooltip .tooltip-inner {
+  background-color: #344944;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 6px 10px;
+}
+
+/* Flecha (variantes por colocación) */
+.sidebar-tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-right-color: #344944;
+}
+.sidebar-tooltip.bs-tooltip-start .tooltip-arrow::before {
+  border-left-color: #344944;
+}
+.sidebar-tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-top-color: #344944;
+}
+.sidebar-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+  border-bottom-color: #344944;
+}
+
 
 /* --- COMPORTAMIENTO RESPONSIVE --- */
 

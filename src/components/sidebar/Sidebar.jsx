@@ -10,10 +10,47 @@ import {
 } from "react-bootstrap-icons";
 import { useUser } from "../../context/UserContext";
 import "./Sidebar.css";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useRef } from "react";
 
 function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
   const { user } = useUser();
   const location = useLocation();
+  const sidebarContainerRef = useRef(null);
+
+  const TooltipMenuItem = ({ collapsed, tooltipText, children }) => {
+    if (collapsed) {
+      return (
+        <OverlayTrigger
+          placement="right"
+          delay={{ show: 250, hide: 400 }}
+          container={sidebarContainerRef.current}
+          popperConfig={{
+            strategy: "fixed",
+            modifiers: [
+              {
+                name: "offset",
+                options: {
+                  offset: [0, -160], // distancia lateral reducida
+                },
+              },
+            ],
+          }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${tooltipText.replace(/\s/g, "")}`}
+              className="sidebar-tooltip"
+            >
+              {tooltipText}
+            </Tooltip>
+          }
+        >
+          <span>{children}</span>
+        </OverlayTrigger>
+      );
+    }
+    return <>{children}</>;
+  };
 
   const commonMenuButtonStyle = ({ active }) => ({
     color: active ? "#ffffff" : "#f8f9fa",
@@ -25,7 +62,7 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
   });
 
   return (
-    <div className="sidebar-container">
+    <div className="sidebar-container" ref={sidebarContainerRef}>
       <Sidebar
         collapsed={collapsed}
         toggled={toggled}
@@ -38,49 +75,67 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
           iconShape="circle"
           menuItemStyles={{ button: commonMenuButtonStyle }}
         >
-          <MenuItem
-            active={location.pathname === "/mi-perfil"}
-            icon={<Person size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
-            component={<Link to="/mi-perfil" />}
-          >
-            Mi Perfil
-          </MenuItem>
+          <TooltipMenuItem collapsed={collapsed} tooltipText="Mi Perfil">
+            <MenuItem
+              active={location.pathname === "/mi-perfil"}
+              icon={<Person size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
+              component={<Link to="/mi-perfil" />}
+            >
+              Mi Perfil
+            </MenuItem>
+          </TooltipMenuItem>
 
-          <MenuItem
-            active={location.pathname === "/destinos"}
-            icon={<House size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
-            component={<Link to="/destinos" />}
+          <TooltipMenuItem
+            collapsed={collapsed}
+            tooltipText="Todos los Destinos"
           >
-            Todos los Destinos
-          </MenuItem>
+            <MenuItem
+              active={location.pathname === "/destinos"}
+              icon={<House size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
+              component={<Link to="/destinos" />}
+            >
+              Todos los Destinos
+            </MenuItem>
+          </TooltipMenuItem>
 
           {user.role === "OWNER" && (
-            <MenuItem
-              active={location.pathname === "/mis-propiedades"}
-              icon={<Building size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
-              component={<Link to="/mis-propiedades" />}
+            <TooltipMenuItem
+              collapsed={collapsed}
+              tooltipText="Mis Propiedades"
             >
-              Mis Propiedades
-            </MenuItem>
+              <MenuItem
+                active={location.pathname === "/mis-propiedades"}
+                icon={<Building size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
+                component={<Link to="/mis-propiedades" />}
+              >
+                Mis Propiedades
+              </MenuItem>
+            </TooltipMenuItem>
           )}
 
           {user.role === "ADMIN" && (
-            <MenuItem
-              active={location.pathname === "/usuarios"}
-              icon={<Person size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
-              component={<Link to="/usuarios" />}
-            >
-              Usuarios
-            </MenuItem>
+            <TooltipMenuItem collapsed={collapsed} tooltipText="Usuarios">
+              <MenuItem
+                active={location.pathname === "/usuarios"}
+                icon={<Person size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
+                component={<Link to="/usuarios" />}
+              >
+                Usuarios
+              </MenuItem>
+            </TooltipMenuItem>
           )}
 
-          <MenuItem
-            active={location.pathname === "/"}
-            icon={<BoxArrowRight size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
-            component={<Link to="/" />}
-          >
-            Cerrar Sesión
-          </MenuItem>
+          <TooltipMenuItem collapsed={collapsed} tooltipText="Cerrar Sesión">
+            <MenuItem
+              active={location.pathname === "/"}
+              icon={
+                <BoxArrowRight size={22} stroke="#f8f9fa" strokeWidth={0.5} />
+              }
+              component={<Link to="/" />}
+            >
+              Cerrar Sesión
+            </MenuItem>
+          </TooltipMenuItem>
         </Menu>
       </Sidebar>
 
