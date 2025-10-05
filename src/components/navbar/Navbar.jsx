@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -6,16 +5,21 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../assets/Logo-DescubriCBA.png";
-import userAvatar from "../../assets/Alejandro.jpg";
 import "./navbar.css";
 import { LayoutSidebar } from "react-bootstrap-icons";
+import { useUser } from "../../context/UserContext"; // 1. Importar el hook
 
 function AppNavbar({ setToggled }) {
   const expand = "lg";
+  const { user } = useUser(); // 2. Usar el contexto para obtener el usuario
   const location = useLocation();
 
-  // Se puede cambiar a false para modificar la visualizacion de los links del navbar, segun si el usuario esta autenticado o no.
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  // 3. Determinar si el usuario está logueado basándose en si el rol existe
+  const isLoggedIn = user && user.role;
+
+  // El botón del sidebar solo debe aparecer en las rutas que usan LayoutPrivado
+  const privatePaths = ["/mi-perfil"];
+  const showSidebarToggle = privatePaths.includes(location.pathname);
 
   const navbarClasses = `py-2 custom-navbar`;
 
@@ -27,9 +31,11 @@ function AppNavbar({ setToggled }) {
       className={navbarClasses}
     >
       <Container fluid className="px-4">
-        <button className="sidebar-toggle-button" onClick={setToggled}>
-          <LayoutSidebar size={20} />
-        </button>
+        {showSidebarToggle && (
+          <button className="sidebar-toggle-button" onClick={setToggled}>
+            <LayoutSidebar size={20} />
+          </button>
+        )}
         <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
           <img
             src={logo}
@@ -74,7 +80,7 @@ function AppNavbar({ setToggled }) {
                   className="user-profile-dropdown"
                   title={
                     <img
-                      src={userAvatar}
+                      src={user.image} // 4. Usar la imagen del contexto
                       alt="User avatar"
                       className="rounded-circle"
                       style={{ width: '40px', height: '40px', objectFit: 'cover' }}

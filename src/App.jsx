@@ -16,32 +16,35 @@ import { UserProvider } from "./context/UserContext";
 import { useState } from "react";
 
 function App() {
-
   const [toggled, setToggled] = useState(false);
 
   return (
-     <UserProvider>
-    <Router>
-      <div className="d-flex flex-column min-vh-100">
-        <AppNavbar setToggled={() => setToggled(!toggled)} />
-        <main className="flex-grow-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registro" element={<Registro />} />
-            <Route path="/quienes" element={<Quienes />} />
-            <Route path="/preguntas" element={<Preguntas />} />
-
-            {/* Rutas privadas (con sidebar) */}
-            <Route element={<LayoutPrivado toggled={toggled} setToggled={setToggled}/>}>
-              <Route path="/mi-perfil" element={<MyProfile />} />
+    <UserProvider>
+      <Router>
+        <div className="d-flex flex-column min-vh-100">
+          <AppNavbar setToggled={() => setToggled(!toggled)} />
+          <main className="flex-grow-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registro" element={<Registro />} />
+              <Route path="/quienes" element={<Quienes />} />
+              <Route path="/preguntas" element={<Preguntas />} />
               <Route path="/destinos" element={<DestinationsList />} />
-            </Route>
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+
+              {/* Rutas privadas (con sidebar) */}
+              <Route
+                element={
+                  <LayoutPrivado toggled={toggled} setToggled={setToggled} />
+                }
+              >
+                <Route path="/mi-perfil" element={<MyProfile />} />
+              </Route>
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
     </UserProvider>
   );
 }
