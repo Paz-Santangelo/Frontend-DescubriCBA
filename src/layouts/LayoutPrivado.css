@@ -2,8 +2,6 @@
   margin-top: 4rem;
 }
 
-
-/* On small screens, remove the margin-left that makes space for the desktop sidebar */
 @media (max-width: 991px) {
   .main-content {
     margin-left: 0px !important;

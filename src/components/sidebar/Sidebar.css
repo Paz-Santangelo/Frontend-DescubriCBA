@@ -1,64 +1,186 @@
-/* ===== Contenedor general ===== */
+/*
+ * Sidebar.css
+ * Estilos para el componente Sidebar, incluyendo animaciones y estados.
+ */
+
+/* --- Contenedores y Estructura Base --- */
+
 .sidebar-container {
   position: fixed;
-  top: 76px; /* siempre debajo del navbar */
-  height: calc(100vh - 76px);
+  top: 76px;
   left: 0;
   z-index: 10 !important;
-  transition: transform 0.3s ease-in-out;
 }
 
-/* ===== Ajustes del menú ===== */
 .menu {
   margin-top: 4rem;
 }
 
-/* ===== Botón de colapso en escritorio ===== */
-.desktop-sidebar-toggle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ===== Sidebar general ===== */
 .ps-sidebar-root {
   position: fixed !important;
   top: 76px !important;
   height: calc(100vh - 76px) !important;
   left: 0 !important;
   background-color: #344944 !important;
-  transition: transform 0.3s ease-in-out !important;
+  width: 250px !important;
+  transition: transform 420ms cubic-bezier(.2, .8, .2, 1) !important;
+  will-change: transform;
 }
 
-/* ======== MOBILE MODE (usa .ps-toggled) ======== */
+/* Asegurar que el puntito verde nunca sea recortado */
+.ps-sidebar-root,
+.ps-sidebar-root .ps-menu-root,
+.ps-sidebar-root .ps-menu-button {
+  overflow: visible !important;
+}
+
+.ps-sidebar-root .ps-menu-button {
+  position: relative !important;
+}
+
+/* --- Botón de Colapso (Desktop) --- */
+
+.desktop-sidebar-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 20px;
+  transform: translateX(-50%);
+  left: 250px;
+  transition: left 420ms cubic-bezier(.2, .8, .2, 1);
+  z-index: 11;
+  background-color: #39d8a8;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: white;
+}
+
+/* --- Estilos de Item Activo --- */
+
+.ps-sidebar-root .ps-menu-button.ps-active,
+.ps-sidebar-root .ps-menu-button.active {
+  color: #ffffff !important;
+  transition: background-color 0.25s ease;
+}
+
+/* Puntito Verde Indicador */
+.ps-sidebar-root .ps-menu-button.ps-active::after,
+.ps-sidebar-root .ps-menu-button.active::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #39d8a8;
+  box-shadow: 0 0 8px rgba(57, 216, 168, 0.18);
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+}
+
+/* --- COMPORTAMIENTO RESPONSIVE --- */
+
+/* Mobile (menos de 992px) */
 @media (max-width: 991px) {
-  /* Sidebar visible (abierto) */
   .ps-sidebar-root.ps-toggled {
     transform: translateX(0) !important;
+    transition: transform 380ms cubic-bezier(.2, .8, .2, 1) !important;
   }
 
-  /* Sidebar oculto (cerrado) */
   .ps-sidebar-root:not(.ps-toggled) {
     transform: translateX(-100%) !important;
+    transition: transform 380ms cubic-bezier(.2, .8, .2, 1) !important;
   }
 
-  /* Ocultar botón flotante de escritorio */
   .desktop-sidebar-toggle {
     display: none;
   }
 }
 
-/* ======== DESKTOP MODE (usa collapsed) ======== */
+/* Desktop (992px y más) */
 @media (min-width: 992px) {
-  /* Sidebar expandido */
-  .ps-sidebar-root.ps-collapsed {
-    width: 80px !important;
-    transition: width 0.3s ease-in-out !important;
+
+  /* --- Comportamiento General --- */
+  .ps-sidebar-root {
+    transform: translateX(0) !important;
   }
 
-  /* Sidebar normal (abierto) */
-  .ps-sidebar-root:not(.ps-collapsed) {
-    width: 250px !important;
-    transition: width 0.3s ease-in-out !important;
+  .ps-sidebar-root:not(.ps-collapsed) + .desktop-sidebar-toggle {
+    left: 250px;
+  }
+
+  .ps-sidebar-root .ps-menu-label,
+  .ps-sidebar-root .ps-menu-icon,
+  .ps-sidebar-root .ps-menu-button {
+    will-change: opacity, transform;
+  }
+
+  .ps-sidebar-root:not(.ps-collapsed) .ps-menu-label {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    transition: opacity 260ms ease 120ms, transform 260ms ease 120ms;
+  }
+
+  .ps-sidebar-root:not(.ps-collapsed) .ps-menu-icon {
+    transform: translateX(0);
+    transition: transform 320ms cubic-bezier(.2, .8, .2, 1) 100ms;
+  }
+
+  .ps-sidebar-root:not(.ps-collapsed) .ps-menu-root {
+    transform: translateX(0);
+  }
+
+  /* --- Estado Colapsado (.ps-collapsed) --- */
+  .ps-sidebar-root.ps-collapsed {
+    transform: translateX(-170px) !important;
+  }
+
+  .ps-sidebar-root.ps-collapsed + .desktop-sidebar-toggle {
+    left: 80px;
+  }
+
+  .ps-sidebar-root.ps-collapsed .ps-menu-label {
+    opacity: 0;
+    transform: translateX(-10px);
+    pointer-events: none;
+    transition: opacity 180ms ease 0ms, transform 180ms ease 0ms;
+  }
+
+  .ps-sidebar-root.ps-collapsed .ps-menu-icon {
+    transform: translateX(-4px);
+    transition: transform 200ms ease 0ms;
+  }
+
+  .ps-sidebar-root.ps-collapsed .ps-menu-root {
+    transform: translateX(170px);
+    transition: transform 420ms cubic-bezier(.2, .8, .2, 1);
+    will-change: transform;
+  }
+
+  .ps-sidebar-root.ps-collapsed .ps-menu-button {
+    justify-content: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .ps-sidebar-root.ps-collapsed .ps-menu-prefix,
+  .ps-sidebar-root.ps-collapsed .ps-menu-icon {
+    display: block;
+    margin: 0 auto;
+    transform: translateX(0);
+  }
+
+  /* Puntito verde en modo colapsado */
+  .ps-sidebar-root.ps-collapsed .ps-menu-button.ps-active::after,
+  .ps-sidebar-root.ps-collapsed .ps-menu-button.active::after {
+    right: 182px !important; /* 170px (transform) + 12px (margen) */
+    opacity: 1;
+    visibility: visible;
   }
 }

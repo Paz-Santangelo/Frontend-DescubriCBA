@@ -1,15 +1,24 @@
-import { useState } from "react";
-import AppNavbar from "../components/navbar/Navbar";
+import { useState, useEffect } from "react";
 import AppSidebar from "../components/sidebar/Sidebar.jsx";
 import { Outlet } from "react-router-dom";
 import "./LayoutPrivado.css";
 
-function LayoutPrivado({toggled, setToggled}) {
+function LayoutPrivado({ toggled, setToggled }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [layoutMarginLeft, setLayoutMarginLeft] = useState(250);
+
+  useEffect(() => {
+    if (collapsed) {
+      setLayoutMarginLeft(80);
+    } else {
+      const timer = setTimeout(() => setLayoutMarginLeft(250), 140);
+      return () => clearTimeout(timer);
+    }
+  }, [collapsed]);
 
   const mainStyle = {
-    marginLeft: collapsed ? "80px" : "250px",
-    transition: "margin-left 0.3s ease",
+    marginLeft: `${layoutMarginLeft}px`,
+    transition: "margin-left 420ms cubic-bezier(.2,.8,.2,1)",
   };
 
   return (
@@ -21,7 +30,10 @@ function LayoutPrivado({toggled, setToggled}) {
           toggled={toggled}
           setToggled={setToggled}
         />
-        <main className="flex-grow-1 p-3 main-content mainLayout" style={mainStyle}>
+        <main
+          className="flex-grow-1 p-3 main-content mainLayout"
+          style={mainStyle}
+        >
           <Outlet />
         </main>
       </div>
