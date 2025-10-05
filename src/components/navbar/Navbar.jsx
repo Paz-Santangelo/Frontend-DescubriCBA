@@ -1,23 +1,27 @@
-import { useState } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../assets/LogoCircularSinNombre.png";
-import userAvatar from "../../assets/Alejandro.jpg"; // Import user avatar
+import logo from "../../assets/Logo-DescubriCBA.png";
 import "./navbar.css";
+import { LayoutSidebar } from "react-bootstrap-icons";
+import { useUser } from "../../context/UserContext"; // 1. Importar el hook
 
-function AppNavbar() {
-  const expand = "md";
+function AppNavbar({ setToggled }) {
+  const expand = "lg";
+  const { user } = useUser(); // 2. Usar el contexto para obtener el usuario
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
 
-  // Se puede cambiar a false para modificar la visualizacion de los links del navbar, segun si el usuario esta autenticado o no.
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // 3. Determinar si el usuario está logueado basándose en si el rol existe
+  const isLoggedIn = user && user.role;
 
-  const navbarClasses = `py-0 custom-navbar ${!isHomePage ? 'navbar-solid' : ''}`;
+  // El botón del sidebar solo debe aparecer en las rutas que usan LayoutPrivado
+  const privatePaths = ["/mi-perfil", "/destinos"];
+  const showSidebarToggle = privatePaths.includes(location.pathname);
+
+  const navbarClasses = `py-2 custom-navbar`;
 
   return (
     <Navbar
@@ -26,12 +30,17 @@ function AppNavbar() {
       variant="dark"
       className={navbarClasses}
     >
-      <Container fluid>
+      <Container fluid className="px-4">
+        {showSidebarToggle && (
+          <button className="sidebar-toggle-button" onClick={setToggled}>
+            <LayoutSidebar size={20} />
+          </button>
+        )}
         <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
           <img
             src={logo}
-            width="80"
-            height="80"
+            width="50"
+            height="50"
             className="d-inline-block align-top"
             alt="DescubriCBA logo"
           />
@@ -49,15 +58,15 @@ function AppNavbar() {
             <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
               <img
                 src={logo}
-                width="80"
-                height="80"
-                className="d-inline-block align-top"
+                width="60"
+                height="60"
+                className="d-inline-block align-top ms-4"
                 alt="DescubriCBA logo"
               />
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3 fw-semibold">
+            <Nav className="justify-content-end flex-grow-1 fw-semibold">
               <Nav.Link as={NavLink} to="/destinos">Destinos</Nav.Link>
               <Nav.Link as={NavLink} to="/quienes">
                 Quiénes somos
@@ -71,7 +80,7 @@ function AppNavbar() {
                   className="user-profile-dropdown"
                   title={
                     <img
-                      src={userAvatar}
+                      src={user.image} // 4. Usar la imagen del contexto
                       alt="User avatar"
                       className="rounded-circle"
                       style={{ width: '40px', height: '40px', objectFit: 'cover' }}

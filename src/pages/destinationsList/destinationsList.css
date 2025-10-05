@@ -1,5 +1,13 @@
-.destinations-container h2 {
-	font-size: 3rem;
+.destinations-container {
+	padding-top: 7rem;
+}
+
+.destinations-container.logged-in {
+	padding-top: 2rem;
+}
+
+.destinations-title {
+	font-size: 2.5rem;
 	letter-spacing: 2px;
 	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	position: relative;
@@ -9,7 +17,8 @@
 	color: #111;
 	font-weight: 700;
 }
-.destinations-container h2::after {
+
+.destinations-title::after {
 	content: '';
 	position: absolute;
 	left: 50%;
@@ -20,4 +29,3 @@
 	background-color: #39d8a8;
 	border-radius: 2px;
 }
-

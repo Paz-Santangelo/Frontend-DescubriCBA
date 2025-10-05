@@ -1,20 +1,13 @@
-body, .preguntas-bg {
+body,
+.preguntas-bg {
   min-height: 100vh;
   background-color: #f8f9fa;
 }
+
 .faq-container {
   font-family: 'Poppins', sans-serif;
-  padding: 20px;
-  margin-top:100px auto 40px auto;
+  padding: 8rem 3rem 6rem 3rem;
   max-width: 1200px;
-}
-
-.faq-title {
-  font-size: 20px;
-  font-weight: 600;
-  text-align: center;
-  margin: 20px auto 40px auto;
-  color: #064420;
 }
 
 .faq-title {
@@ -28,6 +21,7 @@ body, .preguntas-bg {
   color: #111;
   font-weight: 700;
 }
+
 .faq-title::after {
   content: '';
   position: absolute;
@@ -41,7 +35,7 @@ body, .preguntas-bg {
 }
 
 .accordion-button:hover {
-  background-color: rgba(64, 64, 64, 0.5); 
+  background-color: rgba(64, 64, 64, 0.5);
   color: #fff;
 }
 
@@ -49,14 +43,9 @@ body, .preguntas-bg {
   box-shadow: none;
 }
 
-  .faq-title:after {
-  content: "";
-  display: block;
-  width: 50px;        /* ancho de la rayita */
-  height: 3px;        /* grosor */
-  background-color: #05a081; /* color de la rayita */
-  margin: 8px auto 0 auto;  /* centrado y separación */
-  border-radius: 2px;       /* opcional redondeado */
+@media (max-width: 768px) {
+  .faq-title {
+    font-size: 2.5rem; /* Tamaño de fuente más apropiado para móviles */
+    text-align: center;
+  }
 }
-
-

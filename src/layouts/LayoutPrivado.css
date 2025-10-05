@@ -1,0 +1,9 @@
+.mainLayout {
+  margin-top: 4rem;
+}
+
+@media (max-width: 991px) {
+  .main-content {
+    margin-left: 0px !important;
+  }
+}

@@ -1,44 +1,21 @@
-@media (max-width: 768px) {
-  .navbar-brand-text {
-    font-size: 1.1rem !important;
-  }
-  .brand-highlight {
-    font-size: 1.1rem !important;
-  }
-}
-
-@media (max-width: 500px) {
-  .navbar-brand-text {
-    font-size: 0.95rem !important;
-  }
-  .brand-highlight {
-    font-size: 0.95rem !important;
-  }
-}
-.navbar-nav .nav-link:not(:last-child) {
-  margin-right: 1.2rem;
-}
-/* Mejorar separación y altura de los links del navbar */
-.navbar-nav .nav-link {
-  letter-spacing: 0.13em;
-  font-size: 1.08rem;
-}
+/* Estilos de la barra de navegación personalizada */
 .custom-navbar {
-  position: absolute;
+  position: fixed;
   width: 100%;
-  z-index: 10;
-  background: linear-gradient(to bottom, rgba(36, 49, 47, 0.9) 0%, rgba(36, 49, 47, 0) 100%);
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(36, 49, 47, 1) 0%, rgba(36, 49, 47, 0.85) 50%, rgba(36, 49, 47, 0.7) 100%);
   transition: background 0.3s ease-in-out;
+  padding-bottom: 1rem;
 }
 
 .custom-navbar.navbar-solid {
   background: #24312f;
-  position: static; /* Or sticky, depending on desired scroll behavior */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: static;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand-text {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   font-weight: bold;
   margin-left: 10px;
   color: white;
@@ -48,15 +25,29 @@
   color: #39d8a8;
 }
 
-.custom-navbar .nav-link {
+.custom-navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(218, 112, 13, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-nav .nav-link {
+  letter-spacing: clamp(0.05em, 1vw, 0.13em);
+  /* font-size: 1.08rem; */
+  font-size: clamp(0.9rem, 1.8vw, 1.08rem);
+}
+
+.navbar-nav .nav-link:not(:last-child) {
+  margin-right: 1rem;
+}
+
+/* Estilos para los links del NAV PRINCIPAL (pantallas grandes) */
+.custom-navbar .navbar-nav .nav-link {
   position: relative;
   color: white !important;
   transition: color 0.3s ease;
   padding-bottom: 5px;
-  transform: scaleY(1.2);
 }
 
-.custom-navbar .nav-link::after {
+.custom-navbar .navbar-nav .nav-link::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -68,22 +59,17 @@
   transition: width 0.3s ease-in-out;
 }
 
-.custom-navbar .nav-link:hover::after,
-.custom-navbar .nav-link.active::after {
+.custom-navbar .navbar-nav .nav-link:hover::after,
+.custom-navbar .navbar-nav .nav-link.active::after {
   width: 80%;
 }
 
-.custom-navbar .nav-link:hover {
+.custom-navbar .navbar-nav .nav-link:hover {
   color: #39d8a8 !important;
 }
 
-.custom-navbar .nav-link.active {
+.custom-navbar .navbar-nav .nav-link.active {
   color: #39d8a8 !important;
-}
-
-/* Remove underline and adjust padding for the user dropdown */
-.custom-navbar .nav-link.dropdown-toggle::after {
-  display: none;
 }
 
 .custom-navbar .nav-link.dropdown-toggle {
@@ -92,18 +78,10 @@
   align-items: center;
 }
 
-.custom-navbar .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(218, 112, 13, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+.custom-navbar .nav-link.dropdown-toggle::after {
+  display: none;
 }
 
-/* Add margin to user profile dropdown on medium screens and up */
-@media (min-width: 768px) {
-  .user-profile-dropdown {
-    margin-left: 15px;
-  }
-}
-
-/* Style for dropdown items on hover/focus and when active */
 .user-profile-dropdown .dropdown-item:hover,
 .user-profile-dropdown .dropdown-item:focus,
 .user-profile-dropdown .dropdown-item.active {
@@ -111,23 +89,73 @@
   color: white !important;
 }
 
-/* Custom Dropdown Animation for All Screens */
 .user-profile-dropdown .dropdown-menu {
-  display: block; /* Override Bootstrap's display: none to allow animations */
+  display: block;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px); /* Start from top */
+  transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-  
-  /* Styling */
-  border-radius: 0.5rem; 
-  border: none; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin-top: 10px !important;
 }
 
 .user-profile-dropdown.show .dropdown-menu {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0); /* End at final position */
+  transform: translateY(0);
+}
+
+/* Estilos para el menú Offcanvas */
+.offcanvas-body .nav-link {
+    color: #212529; /* Color oscuro para el fondo claro */
+    position: relative;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.offcanvas-body .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: #344944;
+    transition: width 0.3s ease-in-out;
+}
+
+.offcanvas-body .nav-link:hover {
+    color: #344944 !important;
+}
+
+.offcanvas-body .nav-link.active {
+    color: #344944 !important;
+}
+
+.offcanvas-body .nav-link:hover::after,
+.offcanvas-body .nav-link.active::after {
+    width: 60%;
+}
+
+.sidebar-toggle-button {
+  display: none; /* Hidden by default */
+  background: none;
+  border: none;
+  color: white;
+  margin-right: 15px;
+}
+
+@media (min-width: 768px) {
+  .user-profile-dropdown {
+    margin-left: 15px;
+  }
+}
+
+@media (max-width: 991px) {
+  .sidebar-toggle-button {
+    display: block; /* Shown on mobile */
+  }
 }
