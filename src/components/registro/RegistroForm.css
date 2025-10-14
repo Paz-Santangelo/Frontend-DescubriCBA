@@ -66,6 +66,15 @@
   letter-spacing: 0.1px;
 }
 
+.help-text {
+  display: block;
+  color: #666;
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
 /* Botón un poco más compacto */
 button[type="submit"] {
   width: 100%;

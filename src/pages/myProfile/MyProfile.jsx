@@ -1,5 +1,5 @@
 import './myprofile.css';
-import { useUser } from "../../context/UserContext";
+import { useUser } from "../../hooks/useUser";
 
 const MyProfile = () => {
 

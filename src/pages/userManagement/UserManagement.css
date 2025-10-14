@@ -1,0 +1,109 @@
+/* Estilos para la página de gestión de usuarios */
+
+.user-management-container {
+  padding: 20px 0;
+}
+
+.user-management-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 10px;
+}
+
+.user-management-header {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border-radius: 10px 10px 0 0;
+  padding: 20px;
+}
+
+.user-management-header h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.user-table {
+  margin-bottom: 0;
+}
+
+.user-table th {
+  background-color: #f8f9fa;
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+  padding: 15px 12px;
+}
+
+.user-table td {
+  padding: 15px 12px;
+  vertical-align: middle;
+}
+
+.role-badge {
+  font-size: 0.85em;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.edit-role-btn {
+  padding: 6px 15px;
+  font-size: 0.875em;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.edit-role-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.user-info {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.alert-container {
+  margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .user-management-container {
+    padding: 10px 0;
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 10px 8px;
+    font-size: 0.9em;
+  }
+  
+  .role-badge {
+    font-size: 0.8em;
+    padding: 4px 8px;
+  }
+  
+  .edit-role-btn {
+    padding: 4px 10px;
+    font-size: 0.8em;
+  }
+}
