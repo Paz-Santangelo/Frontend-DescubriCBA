@@ -7,8 +7,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Building,
+  Shield,
 } from "react-bootstrap-icons";
-import { useUser } from "../../context/UserContext";
+import { useUser } from "../../hooks/useUser";
+import { useLogout } from "../../hooks/useLogout";
+import RoleBasedComponent from "../auth/RoleBasedComponent";
 import "./Sidebar.css";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useRef } from "react";
@@ -17,6 +20,12 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
   const { user } = useUser();
   const location = useLocation();
   const sidebarContainerRef = useRef(null);
+  const logout = useLogout(); // Hook personalizado para logout
+  
+  // Función para manejar el logout
+  const handleLogout = () => {
+    logout(); // Usar el hook personalizado
+  };
 
   const TooltipMenuItem = ({ collapsed, tooltipText, children }) => {
     if (collapsed) {
@@ -131,7 +140,7 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
               icon={
                 <BoxArrowRight size={22} stroke="#f8f9fa" strokeWidth={0.5} />
               }
-              component={<Link to="/" />}
+              onClick={handleLogout}
             >
               Cerrar Sesión
             </MenuItem>

@@ -7,15 +7,26 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../assets/Logo-DescubriCBA.png";
 import "./navbar.css";
 import { LayoutSidebar } from "react-bootstrap-icons";
-import { useUser } from "../../context/UserContext"; // 1. Importar el hook
+import { useUser } from "../../hooks/useUser";
+import { useLogout } from "../../hooks/useLogout";
+import authService from "../../services/authService"; // Importar servicio JWT
 
 function AppNavbar({ setToggled }) {
   const expand = "lg";
-  const { user } = useUser(); // 2. Usar el contexto para obtener el usuario
+  const { user, hasRole } = useUser(); // Agregar hasRole para verificar permisos
   const location = useLocation();
+  const logout = useLogout(); // Hook personalizado para logout
 
-  // 3. Determinar si el usuario está logueado basándose en si el rol existe
+  // Determinar si el usuario está logueado en el sistema existente
   const isLoggedIn = user && user.role;
+  
+  // Verificar si hay usuario autenticado con JWT
+  const isJWTAuthenticated = authService.isAuthenticated();
+  
+  // Función para manejar el logout
+  const handleLogout = () => {
+    logout(); // Usar el hook personalizado
+  };
 
   // El botón del sidebar solo debe aparecer en las rutas que usan LayoutPrivado
   const privatePaths = ["/mi-perfil", "/destinos"];
@@ -80,7 +91,7 @@ function AppNavbar({ setToggled }) {
                   className="user-profile-dropdown"
                   title={
                     <img
-                      src={user.image} // 4. Usar la imagen del contexto
+                      src={user.image} // Usar la imagen del contexto
                       alt="User avatar"
                       className="rounded-circle"
                       style={{ width: '40px', height: '40px', objectFit: 'cover' }}
@@ -92,8 +103,15 @@ function AppNavbar({ setToggled }) {
                   <NavDropdown.Item as={NavLink} to="/mi-perfil">
                     Mi Perfil
                   </NavDropdown.Item>
+                  {(hasRole('MANAGEMENT') || hasRole('ADMIN')) && (
+                    <NavDropdown.Item as={NavLink} to="/gestion-usuarios">
+                      Gestión de Usuarios
+                    </NavDropdown.Item>
+                  )}
                   <NavDropdown.Divider />
-                  <NavDropdown.Item>Cerrar Sesión</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Cerrar Sesión
+                  </NavDropdown.Item>
                 </NavDropdown>
               ) : (
                 <>

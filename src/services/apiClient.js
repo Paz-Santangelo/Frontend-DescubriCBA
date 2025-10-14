@@ -1,39 +1,54 @@
+import axios from 'axios';
+
+// Configuración base de la API
 const API_URL = "http://localhost:8080"; 
 
-async function apiClient(endpoint, { method = "GET", body, headers = {} } = {}) {
-  const config = {
-    method,
-    headers: {
-      ...headers,
-    },
-  };
+// Crear instancia de axios con configuración base
+const apiClient = axios.create({
+  baseURL: API_URL,
+  timeout: 10000, // 10 segundos de timeout
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-  // Si es un JSON
-  if (body && !(body instanceof FormData)) {
-    config.headers["Content-Type"] = "application/json";
-    config.body = JSON.stringify(body);
-  } else if (body instanceof FormData) {
-    config.body = body; // fetch maneja automáticamente FormData
-  }
-
-  try {
-    const response = await fetch(`${API_URL}${endpoint}`, config);
-
-    // Si la respuesta es JSON (ok o error)
-    const contentType = response.headers.get("content-type");
-    const isJson = contentType && contentType.includes("application/json");
-
-    if (!response.ok) {
-      const errorData = isJson ? await response.json() : { message: response.statusText };
-      return { data: null, error: errorData };
+// Interceptor para agregar token JWT automáticamente a las peticiones
+apiClient.interceptors.request.use(
+  (config) => {
+    // Obtener token del localStorage
+    const token = localStorage.getItem('jwt_token');
+    
+    if (token) {
+      // Agregar token al header Authorization
+      config.headers.Authorization = `Bearer ${token}`;
     }
-
-    return { data: isJson ? await response.json() : null, error: null };
-
-  } catch (err) {
-    // Error de red o de conexión
-    return { data: null, error: { message: "No se pudo conectar al servidor." } };
+    
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-}
+);
+
+// Interceptor para manejar respuestas y errores
+apiClient.interceptors.response.use(
+  (response) => {
+    // Si la respuesta es exitosa, retornar los datos
+    return response;
+  },
+  (error) => {
+    // Manejar errores de autenticación
+    if (error.response?.status === 401) {
+      // Token inválido o expirado, limpiar localStorage
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('user_data');
+      
+      // Opcional: redirigir al login
+      window.location.href = '/login';
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 export default apiClient;
