@@ -1,6 +1,6 @@
 /* Contenedor principal */
 .destination-detail-container {
-  padding-top: 7rem;
+  padding-top: 3rem;
   padding-bottom: 3rem;
   min-height: 100vh;
 }
@@ -144,17 +144,31 @@
   font-weight: 600;
   padding: 0.5rem 1.5rem;
   border-radius: 25px;
+  background-color: transparent;
+  /* Usamos la variable CSS para el color del borde y del texto */
+  border-color: var(--service-color);
+  color: var(--service-color);
 }
 
-.service-button:hover {
+.service-button:hover,
+.service-button:active {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: var(--service-color) !important;
+  color: white !important; 
+  border-color: var(--service-color) !important; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Eliminamos el anillo de foco azul de Bootstrap */
+.service-button:focus {
+  box-shadow: none !important;
 }
 
 /* Responsivo */
 @media (max-width: 768px) {
   .destination-detail-container {
-    padding-top: 5rem;
+    padding-top: 2rem;
   }
   
   .section-title {
@@ -195,6 +209,6 @@
   }
   
   .destination-hero-overlay {
-    padding: 1rem;
+    padding: .5rem;
   }
 }

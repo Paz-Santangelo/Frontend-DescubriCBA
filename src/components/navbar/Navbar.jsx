@@ -9,23 +9,19 @@ import "./navbar.css";
 import { LayoutSidebar } from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
 import { useLogout } from "../../hooks/useLogout";
-import authService from "../../services/authService"; // Importar servicio JWT
 
 function AppNavbar({ setToggled }) {
   const expand = "lg";
-  const { user, hasRole } = useUser(); // Agregar hasRole para verificar permisos
+  const { user, canManageUsers } = useUser();
   const location = useLocation();
-  const logout = useLogout(); // Hook personalizado para logout
+  const logout = useLogout();
 
   // Determinar si el usuario está logueado en el sistema existente
   const isLoggedIn = user && user.role;
   
-  // Verificar si hay usuario autenticado con JWT
-  const isJWTAuthenticated = authService.isAuthenticated();
-  
   // Función para manejar el logout
   const handleLogout = () => {
-    logout(); // Usar el hook personalizado
+    logout();
   };
 
   // El botón del sidebar solo debe aparecer en las rutas que usan LayoutPrivado
@@ -90,12 +86,17 @@ function AppNavbar({ setToggled }) {
                 <NavDropdown
                   className="user-profile-dropdown"
                   title={
-                    <img
-                      src={user.image} // Usar la imagen del contexto
-                      alt="User avatar"
-                      className="rounded-circle"
-                      style={{ width: '40px', height: '40px', objectFit: 'cover' }}
-                    />
+                    // Si el usuario tiene una imagen, la mostramos. Si no, un ícono de Bootstrap.
+                    user.imageUser && user.imageUser.urlImage ? (
+                      <img
+                        src={user.imageUser.urlImage}
+                        alt={user.name || "User avatar"}
+                        className="rounded-circle"
+                        style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <i className="bi bi-person-circle" style={{ fontSize: '2rem' }}></i>
+                    )
                   }
                   id="user-nav-dropdown"
                   align="end"
@@ -103,7 +104,7 @@ function AppNavbar({ setToggled }) {
                   <NavDropdown.Item as={NavLink} to="/mi-perfil">
                     Mi Perfil
                   </NavDropdown.Item>
-                  {(hasRole('MANAGEMENT') || hasRole('ADMIN')) && (
+                  {canManageUsers() && (
                     <NavDropdown.Item as={NavLink} to="/gestion-usuarios">
                       Gestión de Usuarios
                     </NavDropdown.Item>

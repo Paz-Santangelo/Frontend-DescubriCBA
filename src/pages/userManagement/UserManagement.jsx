@@ -49,35 +49,26 @@ const UserManagement = () => {
         console.log('🔄 Cargando usuarios desde el backend...');
         console.log('🔄 Usuario actual:', user);
         console.log('🔄 Token presente:', localStorage.getItem('jwt_token') ? '✅' : '❌');
-        
-        const result = await userService.getAllUsers();
-        
-        console.log('📥 Resultado completo del servicio:', result);
-        
-        if (result.success) {
-          console.log('✅ Usuarios cargados exitosamente:', result.data);
-          console.log('✅ Cantidad de usuarios:', result.data?.length || 0);
-          
-          if (result.data && result.data.length > 0) {
-            setUsers(result.data);
-            setSuccess(`Se cargaron ${result.data.length} usuarios correctamente`);
-          } else {
-            setUsers([]);
-            setError('No se encontraron usuarios en la base de datos');
-          }
+
+        // Ahora userService.getAllUsers() devuelve el array de usuarios directamente.
+        const usersData = await userService.getAllUsers();
+
+        console.log('✅ Usuarios cargados exitosamente:', usersData);
+        console.log('✅ Cantidad de usuarios:', usersData?.length || 0);
+
+        if (usersData && usersData.length > 0) {
+          setUsers(usersData);
+          setSuccess(`Se cargaron ${usersData.length} usuarios correctamente`);
         } else {
-          setError(result.message || 'Error al cargar usuarios');
-          console.error('❌ Error al cargar usuarios:', result);
-          
-          // Mostrar información de debug si está disponible
-          if (result.debug) {
-            console.error('🔍 Info de debug:', result.debug);
-          }
+          setUsers([]);
+          setError('No se encontraron usuarios en la base de datos.');
         }
-        
+
       } catch (error) {
-        console.error('❌ Error al cargar usuarios:', error);
-        setError('Error de conexión al cargar usuarios');
+        // El error es lanzado por el servicio y capturado aquí.
+        const errorMessage = error.response?.data?.message || 'Error de conexión al cargar usuarios.';
+        console.error('❌ Error al cargar usuarios:', error.response || error);
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -94,39 +85,20 @@ const UserManagement = () => {
       setSuccess('');
       
       console.log('🔄 Recargando usuarios...');
-      const result = await userService.getAllUsers();
+      const usersData = await userService.getAllUsers();
       
-      if (result.success) {
-        setUsers(result.data);
-        setSuccess(`Usuarios recargados exitosamente. Total: ${result.data?.length || 0}`);
-        console.log('✅ Usuarios recargados:', result.data);
-      } else {
-        setError(result.message || 'Error al recargar usuarios');
-        console.error('❌ Error al recargar usuarios:', result);
-      }
+      setUsers(usersData);
+      setSuccess(`Usuarios recargados exitosamente. Total: ${usersData?.length || 0}`);
+      console.log('✅ Usuarios recargados:', usersData);
       
     } catch (error) {
-      console.error('❌ Error al recargar usuarios:', error);
-      setError('Error de conexión al recargar usuarios');
+      const errorMessage = error.response?.data?.message || 'Error de conexión al recargar usuarios.';
+      console.error('❌ Error al recargar usuarios:', error.response || error);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
-  // Verificar permisos
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (!hasRole('MANAGEMENT') && !hasRole('ADMIN')) {
-    return (
-      <Container className="mt-5 text-center">
-        <h2>Acceso Denegado</h2>
-        <p>No tienes permisos para acceder a esta página.</p>
-        <Button href="/" variant="primary">Volver al inicio</Button>
-      </Container>
-    );
-  }
 
   // Manejar edición de rol
   const handleEditRole = (userData) => {
@@ -149,46 +121,29 @@ const UserManagement = () => {
       
       console.log(`🔄 Actualizando rol de ${selectedUser.email} de ${selectedUser.role} a ${newRole}`);
       
-      const result = await userService.updateUserRole(selectedUser.id, newRole);
+      // El servicio ahora devuelve el usuario actualizado directamente o lanza un error.
+      const updatedUser = await userService.updateUserRole(selectedUser.id, newRole);
       
-      console.log('📥 Resultado de actualización:', result);
+      console.log('📥 Resultado de actualización:', updatedUser);
       
-      // Verificar si result existe y tiene la estructura esperada
-      if (result && result.success === true) {
-        // Actualizar en la lista local inmediatamente
-        setUsers(prevUsers => 
-          prevUsers.map(u => 
-            u.id === selectedUser.id 
-              ? { ...u, role: newRole }
-              : u
-          )
-        );
-        
-        setSuccess(`Rol actualizado exitosamente para ${selectedUser.name} ${selectedUser.lastname}`);
-        console.log('✅ Rol actualizado exitosamente');
-        
-        // Cerrar modal y limpiar estado
-        setShowEditModal(false);
-        setSelectedUser(null);
-        setNewRole('');
-        
-        // Limpiar mensaje de éxito después de 3 segundos
-        setTimeout(() => setSuccess(''), 3000);
-      } else {
-        // Manejar caso donde result.success es false o result es undefined
-        const errorMessage = result?.message || 'Error al actualizar rol - respuesta inválida del servidor';
-        setError(errorMessage);
-        console.error('❌ Error al actualizar rol:', errorMessage);
-        console.error('📄 Resultado completo:', result);
-      }
+      // Actualizar en la lista local inmediatamente
+      setUsers(prevUsers => 
+        prevUsers.map(u => 
+          u.id === selectedUser.id 
+            ? { ...u, role: newRole } // O usar directamente updatedUser si el backend lo devuelve completo
+            : u
+        )
+      );
+      
+      setSuccess(`Rol actualizado exitosamente para ${selectedUser.name} ${selectedUser.lastname}`);
+      setShowEditModal(false);
+      
+      setTimeout(() => setSuccess(''), 3000);
       
     } catch (error) {
-      console.error('❌ Error crítico al actualizar rol:', error);
-      setError('Error de conexión al actualizar rol: ' + error.message);
-      
-      // Log adicional para debugging
-      console.error('📄 Stack trace:', error.stack);
-      console.error('📄 Error completo:', error);
+      const errorMessage = error.response?.data?.message || 'Error de conexión al actualizar el rol.';
+      console.error('❌ Error crítico al actualizar rol:', error.response || error);
+      setError(errorMessage);
     } finally {
       setUpdateLoading(false);
     }
@@ -198,7 +153,8 @@ const UserManagement = () => {
   const getRoleBadgeVariant = (role) => {
     switch (role) {
       case 'ADMIN': return 'danger';
-      case 'MANAGEMENT': return 'warning';
+      case 'OWNER': return 'success'; // Color verde para dueños
+      case 'MANAGEMENT': return 'warning'; // Color amarillo para gestores
       case 'CLIENTE': return 'info';
       case 'USER': return 'secondary';
       default: return 'light';

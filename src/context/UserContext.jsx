@@ -40,9 +40,22 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   // Función para hacer login en el sistema
-  const login = (userData) => {
-    console.log('🔐 Login exitoso, actualizando contexto:', userData);
-    setUser(userData);
+  const login = (userDto) => {
+    // Imprimimos el DTO completo que llega del backend, como solicitaste.
+    console.log('✅ Login exitoso. DTO del usuario recibido del backend:', userDto);
+
+    // Tu backend devuelve 'token', no 'accessToken'. Hacemos la desestructuración correcta.
+    const { token, ...userData } = userDto;
+
+    if (token) {
+      // Guardar el token y los datos del usuario en localStorage
+      localStorage.setItem('jwt_token', token);
+      localStorage.setItem('user_data', JSON.stringify(userData));
+      // Actualizar el estado global de la aplicación
+      setUser(userData);
+    } else {
+      console.error('❌ No se encontró el token en la respuesta del login:', userDto);
+    }
   };
 
   // Función para hacer logout en el sistema
@@ -72,64 +85,74 @@ export const UserProvider = ({ children }) => {
 
   // Definir los roles disponibles en el sistema
   const ROLES = {
-    USER: 'USER',
-    MANAGEMENT: 'MANAGEMENT', 
-    ADMIN: 'ADMIN',
-    CLIENTE: 'CLIENTE'
+    USER: "USER",
+    OWNER: "OWNER", // Añadido para consistencia
+    MANAGEMENT: "MANAGEMENT",
+    ADMIN: "ADMIN",
   };
 
   // Función para verificar roles
   const hasRole = (requiredRole) => {
     if (!user) return false;
-    
-    // Si no hay rol específico requerido, solo verificar que esté logueado
-    if (!requiredRole) return true;
-    
+
     const userRole = user.role?.toUpperCase();
-    const required = requiredRole.toUpperCase();
-    
-    // Admin tiene acceso a todo
+
+    // 1. El rol ADMIN tiene acceso a todo.
     if (userRole === ROLES.ADMIN) return true;
-    
-    // Management puede acceder a funciones de USER y CLIENTE
-    if (userRole === ROLES.MANAGEMENT && 
-        (required === ROLES.USER || required === ROLES.CLIENTE || required === ROLES.MANAGEMENT)) {
-      return true;
+
+    // 2. El rol MANAGEMENT tiene acceso a sus permisos y a los de OWNER y USER.
+    if (userRole === ROLES.MANAGEMENT) {
+      return [ROLES.MANAGEMENT, ROLES.OWNER, ROLES.USER].includes(requiredRole.toUpperCase());
     }
-    
-    // Verificar rol específico
-    return userRole === required;
+
+    // 3. El rol OWNER tiene acceso a sus permisos y a los de USER.
+    if (userRole === ROLES.OWNER) {
+      return [ROLES.OWNER, ROLES.USER].includes(requiredRole.toUpperCase());
+    }
+
+    // 4. Para el resto, se comprueba la coincidencia exacta.
+    return userRole === requiredRole.toUpperCase();
   };
 
   // Función para verificar si el usuario tiene al menos uno de varios roles
   const hasAnyRole = (roles) => {
-    if (!user) return false;
-    return roles.some(role => hasRole(role));
+    if (!user || !user.role) return false;
+    // La función some se detiene en cuanto encuentra una coincidencia.
+    return roles.some(role => user.role.toUpperCase() === role.toUpperCase());
   };
 
-  // Funciones específicas para cada rol
-  const isAdmin = () => hasRole(ROLES.ADMIN);
-  const isManagement = () => hasRole(ROLES.MANAGEMENT);
-  const isUser = () => hasRole(ROLES.USER);
-  const isCliente = () => hasRole(ROLES.CLIENTE);
-  
-  // Función para verificar si puede gestionar roles (ADMIN o MANAGEMENT)
-  const canManageRoles = () => isAdmin() || isManagement();
+  // Funciones específicas para cada rol (más claras que hasRole)
+  const isAdmin = () => user?.role?.toUpperCase() === ROLES.ADMIN;
+  const isManagement = () => user?.role?.toUpperCase() === ROLES.MANAGEMENT;
+  const isOwner = () => user?.role?.toUpperCase() === ROLES.OWNER;
+  const isUser = () => user?.role?.toUpperCase() === ROLES.USER;
+
+  // Función para verificar si puede gestionar usuarios (solo un lugar para esta lógica)
+  const canManageUsers = () => {
+    if (!user || !user.role) return false;
+    const userRole = user.role.toUpperCase();
+    return userRole === ROLES.ADMIN || userRole === ROLES.MANAGEMENT;
+  };
 
   return (
-    <UserContext.Provider value={{ 
-      user, 
-      setUser, 
-      changeRole, 
-      login, 
-      logout, 
-      loginAsAdmin,
-      isLoading,
-      hasRole,
-      hasAnyRole,
-      isAdmin,
-      isUser
-    }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        changeRole,
+        login,
+        logout,
+        loginAsAdmin,
+        isLoading,
+        hasRole, // Aún disponible para lógica jerárquica compleja
+        hasAnyRole, // Mejor para comprobaciones de "es uno de estos"
+        isAdmin,
+        isManagement,
+        isOwner,
+        isUser,
+        canManageUsers, // Lógica de negocio encapsulada
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

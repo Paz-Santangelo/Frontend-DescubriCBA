@@ -12,8 +12,6 @@ import Preguntas from "./pages/preguntas/Preguntas";
 import MyProfile from "./pages/myProfile/MyProfile.jsx";
 import DestinationsList from "./pages/destinationsList/DestinationsList.jsx";
 import DestinationDetail from "./pages/destinationDetail/DestinationDetail.jsx";
-import DashboardPage from "./pages/dashboard/DashboardPage.jsx";
-import ExamplePage from "./pages/example/ExamplePage.jsx";
 import UserManagement from "./pages/userManagement/UserManagement.jsx";
 import LayoutPrivado from "./layouts/LayoutPrivado.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
@@ -36,12 +34,7 @@ function AppContent() {
   
   // Verificar si el usuario está autenticado de manera más flexible
   const isLoggedIn = user && (user.role || user.email || user.id);
-  
-  console.log('🔍 Estado de autenticación:', {
-    user,
-    isLoggedIn,
-    isLoading
-  });
+
 
   // Mostrar loading mientras se verifica la sesión
   if (isLoading) {
@@ -67,26 +60,6 @@ function AppContent() {
             <Route path="/quienes" element={<Quienes />} />
             <Route path="/preguntas" element={<Preguntas />} />
             
-            {/* Ruta del Dashboard - Solo para usuarios autenticados */}
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              } 
-            />
-            
-            {/* Ruta del Ejemplo Completo - Solo para admins */}
-            <Route 
-              path="/ejemplo" 
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <ExamplePage />
-                </ProtectedRoute>
-              } 
-            />
-
             {/* Si el usuario NO está logueado, /destinos es pública y sin sidebar */}
             {!isLoggedIn && (
               <>
