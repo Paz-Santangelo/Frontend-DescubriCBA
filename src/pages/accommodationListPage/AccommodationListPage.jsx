@@ -1,39 +1,41 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
-import bodyOfWaterService from "../../services/bodyOfWaterService";
+import accommodationService from "../../services/accommodationService"; // Asumo que este servicio existe
 import { motion } from "framer-motion";
 import { ArrowLeft, StarFill, StarHalf, Star } from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
-import "./BodyOfWaterListPage.css";
+import "./accommodationListPage.css";
 
-const BodyOfWaterListPage = () => {
+const AccommodationListPage = () => {
   const { locality } = useParams();
-  const [bodiesOfWater, setBodiesOfWater] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [accommodations, setAccommodations] = useState([]);
   const { user } = useUser();
   const isLoggedIn = user && user.role;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchBodiesOfWater = async () => {
+    const fetchAccommodations = async () => {
       if (!locality) return;
 
       try {
         setLoading(true);
         setError(null);
-        // Usamos la función de filtro dinámico, pasando solo la localidad
-        const data = await bodyOfWaterService.filterBodies({ locality });
-        setBodiesOfWater(data);
+        // Asumo que el servicio tiene un método de filtro dinámico similar
+        const data = await accommodationService.filterAccommodations({
+          locality,
+        });
+        setAccommodations(data);
       } catch (err) {
-        setError("No se pudieron cargar los lugares para esta localidad.");
-        console.error(`Error fetching bodies of water for ${locality}:`, err);
+        setError("No se pudieron cargar los alojamientos para esta localidad.");
+        console.error(`Error fetching accommodations for ${locality}:`, err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBodiesOfWater();
+    fetchAccommodations();
   }, [locality]);
 
   // Variantes de animación para las tarjetas
@@ -52,7 +54,7 @@ const BodyOfWaterListPage = () => {
   const renderStars = (score) => {
     const stars = [];
     const totalStars = 5;
-    const roundedScore = Math.round(score * 2) / 2; // Redondea al 0.5 más cercano
+    const roundedScore = Math.round(score * 2) / 2;
 
     for (let i = 1; i <= totalStars; i++) {
       if (roundedScore >= i) {
@@ -72,15 +74,15 @@ const BodyOfWaterListPage = () => {
     return text
       .toString()
       .toLowerCase()
-      .replace(/\s+/g, "-") // Reemplaza espacios con -
-      .replace(/[^\w\-]+/g, ""); // Elimina caracteres no válidos
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "");
   };
 
   const destinationSlug = createSlug(locality);
 
   return (
     <div
-      className={`body-of-water-list-container ${
+      className={`accommodation-list-container ${
         isLoggedIn ? "logged-in" : ""
       }`}
     >
@@ -93,31 +95,31 @@ const BodyOfWaterListPage = () => {
         </div>
 
         <h1 className="text-center mb-5 section-title">
-          Paseos en <span className="highlight">{locality}</span>
+          Alojamientos en <span className="highlight">{locality}</span>
         </h1>
 
         {loading && (
           <div className="text-center">
             <Spinner
               animation="border"
-              style={{ color: "#4ecdc4", width: "3rem", height: "3rem" }}
+              style={{ color: "#39d8a8", width: "3rem", height: "3rem" }}
             />
           </div>
         )}
 
         {error && <Alert variant="danger">{error}</Alert>}
 
-        {!loading && !error && bodiesOfWater.length === 0 && (
+        {!loading && !error && accommodations.length === 0 && (
           <div className="text-center">
             <Alert variant="info" className="d-inline-block">
-              No se encontraron paseos para esta localidad.
+              No se encontraron alojamientos para esta localidad.
             </Alert>
           </div>
         )}
 
         <Row>
-          {bodiesOfWater.map((bodyOfWater) => (
-            <Col md={4} key={bodyOfWater.id} className="mb-4">
+          {accommodations.map((accommodation) => (
+            <Col md={4} key={accommodation.id} className="mb-4">
               <motion.div
                 variants={cardVariants}
                 initial="hidden"
@@ -125,24 +127,23 @@ const BodyOfWaterListPage = () => {
                 viewport={{ once: true, amount: 0.5 }}
               >
                 <Link to="#" className="text-decoration-none">
-                  <Card className="body-of-water-card h-100">
+                  <Card className="accommodation-card h-100">
                     <Card.Img
                       variant="top"
                       src={
-                        bodyOfWater.imagesDestinations &&
-                        bodyOfWater.imagesDestinations.length > 0
-                          ? bodyOfWater.imagesDestinations[0].urlImage
+                        accommodation.imagesDestinations &&
+                        accommodation.imagesDestinations.length > 0
+                          ? accommodation.imagesDestinations[0].urlImage
                           : "https://via.placeholder.com/400x250"
                       }
-                      className="body-of-water-card-img"
+                      className="accommodation-card-img"
                     />
                     <div className="card-img-overlay">
                       <div className="card-overlay-content">
                         <h5 className="card-title text-white">
-                          {bodyOfWater.name}
+                          {accommodation.name}
                         </h5>
-                        {/* Asumimos que el objeto bodyOfWater tiene una propiedad 'averageScore' */}
-                        {renderStars(bodyOfWater.averageScore)}
+                        {renderStars(accommodation.averageScore)}
                       </div>
                     </div>
                   </Card>
@@ -156,4 +157,4 @@ const BodyOfWaterListPage = () => {
   );
 };
 
-export default BodyOfWaterListPage;
+export default AccommodationListPage;

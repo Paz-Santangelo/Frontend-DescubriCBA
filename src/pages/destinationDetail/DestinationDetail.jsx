@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { motion } from "framer-motion";
-import { ArrowLeft, House, Star, Camera, HeartPulse } from "react-bootstrap-icons";
+import {
+  ArrowLeft,
+  House,
+  Star,
+  Camera,
+  HeartPulse,
+} from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
 import destinationService from "../../services/DestinationService";
 import "./DestinationDetail.css";
@@ -18,19 +24,25 @@ const DestinationDetail = () => {
   useEffect(() => {
     const fetchDestinationDetail = async () => {
       // Convertimos el slug de la URL de nuevo a un formato legible (ej. "la-cumbre" -> "La Cumbre")
-      const locality = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      const locality = slug
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (l) => l.toUpperCase());
 
       try {
         setLoading(true);
         // Usamos el servicio que busca por localidad. Asumimos que devuelve un array.
-        const data = await destinationService.getDestinationsByLocality(locality);
+        const data = await destinationService.getDestinationsByLocality(
+          locality
+        );
         if (data && data.length > 0) {
           setDestino(data[0]); // Tomamos el primer resultado para la página de detalle
         } else {
           throw new Error("No se encontró un destino para esta localidad.");
         }
       } catch (err) {
-        setError(err.response?.data?.message || "No se pudo cargar el destino.");
+        setError(
+          err.response?.data?.message || "No se pudo cargar el destino."
+        );
         console.error(`Error fetching destination for slug ${slug}:`, err);
       } finally {
         setLoading(false);
@@ -42,8 +54,15 @@ const DestinationDetail = () => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
-        <div className="spinner-border" style={{ color: '#39d8a8', width: '3rem', height: '3rem' }} role="status">
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "80vh" }}
+      >
+        <div
+          className="spinner-border"
+          style={{ color: "#39d8a8", width: "3rem", height: "3rem" }}
+          role="status"
+        >
           <span className="visually-hidden">Cargando...</span>
         </div>
       </div>
@@ -85,26 +104,26 @@ const DestinationDetail = () => {
       tipo: "Dónde dormir",
       icono: <House size={48} className="service-icon" />,
       descripcion: "Hoteles, cabañas y hospedajes en la zona",
-      color: "#39d8a8"
+      color: "#39d8a8",
     },
     {
       tipo: "Dónde comer",
       icono: <Star size={48} className="service-icon" />,
       descripcion: "Gastronomía y restaurantes locales",
-      color: "#ff6b6b"
+      color: "#ff6b6b",
     },
     {
       tipo: "Dónde pasear",
       icono: <Camera size={48} className="service-icon" />,
       descripcion: "Actividades y lugares para visitar",
-      color: "#4ecdc4"
+      color: "#4ecdc4",
     },
     {
       tipo: "Emergencias",
       icono: <HeartPulse size={48} className="service-icon" />,
       descripcion: "Contactos y servicios de emergencia",
-      color: "#54a0ff"
-    }
+      color: "#54a0ff",
+    },
   ];
 
   // Variantes de animación
@@ -120,7 +139,11 @@ const DestinationDetail = () => {
   };
 
   return (
-    <div className={`destination-detail-container ${isLoggedIn ? "logged-in" : ""}`}>
+    <div
+      className={`destination-detail-container ${
+        isLoggedIn ? "logged-in" : ""
+      }`}
+    >
       <Container>
         {/* Botón de volver */}
         <div className="back-button-container">
@@ -137,7 +160,8 @@ const DestinationDetail = () => {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-center mb-5 section-title">
-            Tu destino seleccionado es <span className="highlight">{destino.locality}</span>
+            Tu destino seleccionado es{" "}
+            <span className="highlight">{destino.locality}</span>
           </h1>
         </motion.div>
 
@@ -154,7 +178,7 @@ const DestinationDetail = () => {
               >
                 <Card className="service-card h-100 text-center">
                   <Card.Body className="d-flex flex-column align-items-center p-4">
-                    <div 
+                    <div
                       className="service-icon-container mb-3"
                       style={{ color: servicio.color }}
                     >
@@ -167,11 +191,20 @@ const DestinationDetail = () => {
                       {servicio.descripcion}
                     </Card.Text>
                     {/* Hacemos que el botón sea un Link dinámico */}
+                    {servicio.tipo === "Dónde dormir" && (
+                      <Link
+                        to={`/alojamientos/${destino.locality}`}
+                        className="btn mt-auto service-button"
+                        style={{ "--service-color": servicio.color }}
+                      >
+                        Ver opciones
+                      </Link>
+                    )}
                     {servicio.tipo === "Dónde comer" && (
                       <Link
                         to={`/restaurantes/${destino.locality}`}
                         className="btn mt-auto service-button"
-                        style={{ '--service-color': servicio.color }}
+                        style={{ "--service-color": servicio.color }}
                       >
                         Ver opciones
                       </Link>
@@ -180,19 +213,34 @@ const DestinationDetail = () => {
                       <Link
                         to={`/cuerpos-de-agua/${destino.locality}`}
                         className="btn mt-auto service-button"
-                        style={{ '--service-color': servicio.color }}
+                        style={{ "--service-color": servicio.color }}
                       >
                         Ver opciones
                       </Link>
                     )}
-                    {servicio.tipo !== "Dónde comer" && servicio.tipo !== "Dónde pasear" && (
-                      <Button 
-                        className="mt-auto service-button"
-                        style={{ '--service-color': servicio.color }}
+                    {servicio.tipo === "Emergencias" && (
+                      <Link
+                        to={`/emergencias/${destino.locality}`}
+                        className="btn mt-auto service-button"
+                        style={{ "--service-color": servicio.color }}
                       >
                         Ver opciones
-                      </Button>
+                      </Link>
                     )}
+                    {
+                      /* Botón genérico para cualquier otro servicio futuro */
+                      servicio.tipo !== "Dónde dormir" &&
+                        servicio.tipo !== "Dónde comer" &&
+                        servicio.tipo !== "Dónde pasear" &&
+                        servicio.tipo !== "Emergencias" && (
+                          <Button
+                            className="mt-auto service-button disabled"
+                            style={{ "--service-color": servicio.color }}
+                          >
+                            Ver opciones
+                          </Button>
+                        )
+                    }
                   </Card.Body>
                 </Card>
               </motion.div>

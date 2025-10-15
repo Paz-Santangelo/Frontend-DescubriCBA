@@ -13,24 +13,32 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const checkStoredUser = () => {
       try {
-        const token = localStorage.getItem('jwt_token');
-        const userData = localStorage.getItem('user_data');
-        
-        console.log('🔍 Verificando localStorage:', { token: token ? '✅ Presente' : '❌ No encontrado', userData });
-        
-        if (token && userData && userData !== 'undefined' && userData !== 'null') {
+        const token = localStorage.getItem("jwt_token");
+        const userData = localStorage.getItem("user_data");
+
+        console.log("🔍 Verificando localStorage:", {
+          token: token ? "✅ Presente" : "❌ No encontrado",
+          userData,
+        });
+
+        if (
+          token &&
+          userData &&
+          userData !== "undefined" &&
+          userData !== "null"
+        ) {
           const parsedUser = JSON.parse(userData);
           //console.log('🔄 Restaurando sesión:', parsedUser);
           setUser(parsedUser);
         } else {
-          console.log('🚫 No hay sesión válida para restaurar');
+          console.log("🚫 No hay sesión válida para restaurar");
         }
       } catch (error) {
-        console.error('❌ Error al restaurar sesión:', error);
-        console.log('🧹 Limpiando localStorage corrupto');
+        console.error("❌ Error al restaurar sesión:", error);
+        console.log("🧹 Limpiando localStorage corrupto");
         // Limpiar datos corruptos
-        localStorage.removeItem('jwt_token');
-        localStorage.removeItem('user_data');
+        localStorage.removeItem("jwt_token");
+        localStorage.removeItem("user_data");
       } finally {
         setIsLoading(false);
       }
@@ -49,12 +57,15 @@ export const UserProvider = ({ children }) => {
 
     if (token) {
       // Guardar el token y los datos del usuario en localStorage
-      localStorage.setItem('jwt_token', token);
-      localStorage.setItem('user_data', JSON.stringify(userData));
+      localStorage.setItem("jwt_token", token);
+      localStorage.setItem("user_data", JSON.stringify(userData));
       // Actualizar el estado global de la aplicación
       setUser(userData);
     } else {
-      console.error('❌ No se encontró el token en la respuesta del login:', userDto);
+      console.error(
+        "❌ No se encontró el token en la respuesta del login:",
+        userDto
+      );
     }
   };
 
@@ -63,8 +74,8 @@ export const UserProvider = ({ children }) => {
     //console.log('🚪 Cerrando sesión');
     setUser(null);
     // Limpiar localStorage
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('user_data');
+    localStorage.removeItem("jwt_token");
+    localStorage.removeItem("user_data");
   };
 
   // Función opcional para cambiar el rol manualmente (ejemplo para pruebas)
@@ -76,7 +87,7 @@ export const UserProvider = ({ children }) => {
   const loginAsAdmin = () => {
     setUser({
       name: "Alejandro",
-      lastname: "Santangelo", 
+      lastname: "Santangelo",
       email: "alejandro@example.com",
       role: "",
       image: ProfilePhoto,
@@ -102,7 +113,9 @@ export const UserProvider = ({ children }) => {
 
     // 2. El rol MANAGEMENT tiene acceso a sus permisos y a los de OWNER y USER.
     if (userRole === ROLES.MANAGEMENT) {
-      return [ROLES.MANAGEMENT, ROLES.OWNER, ROLES.USER].includes(requiredRole.toUpperCase());
+      return [ROLES.MANAGEMENT, ROLES.OWNER, ROLES.USER].includes(
+        requiredRole.toUpperCase()
+      );
     }
 
     // 3. El rol OWNER tiene acceso a sus permisos y a los de USER.
@@ -118,7 +131,7 @@ export const UserProvider = ({ children }) => {
   const hasAnyRole = (roles) => {
     if (!user || !user.role) return false;
     // La función some se detiene en cuanto encuentra una coincidencia.
-    return roles.some(role => user.role.toUpperCase() === role.toUpperCase());
+    return roles.some((role) => user.role.toUpperCase() === role.toUpperCase());
   };
 
   // Funciones específicas para cada rol (más claras que hasRole)

@@ -14,12 +14,12 @@
 
 .restaurant-list-container .back-button {
   border-color: #ff6b6b;
-  color: #ff6b6b;
+  color: #ff6b6b !important;
 }
 
 .restaurant-list-container .back-button:hover {
   background-color: #ff6b6b;
-  color: white;
+  color: white !important;
 }
 
 /* Estilos de Card (para replicar el diseño de DestinationsList) */
@@ -54,29 +54,36 @@
       rgba(0, 0, 0, 0.4) 30%,
       transparent 100%);
   display: flex;
-  align-items: flex-end;
-  /* Alinea el contenido en la parte inferior */
+  flex-direction: column;
+  /* Apila los elementos verticalmente */
+  justify-content: flex-end;
+  /* Empuja todo el contenido hacia abajo */
   padding: 1.5rem;
 }
 
 .restaurant-card .card-overlay-content {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  /* Alinea el texto y las estrellas a la izquierda */
 }
 
 .restaurant-card .card-overlay-content .card-title {
   font-size: 1.5rem;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  margin-bottom: 0.25rem; /* Espacio entre el nombre y las estrellas */
+  margin-bottom: 0.25rem;
+  /* Espacio entre el nombre y las estrellas */
 }
 
 .star-rating {
-  color: #ffc107; /* Color amarillo para las estrellas */
+  color: #ffc107;
+  /* Color amarillo para las estrellas */
   font-size: 1rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .star-rating svg {
-  margin-right: 5px; /* Añade un pequeño espacio a la derecha de cada estrella */
+  margin-right: 5px;
+  /* Añade un pequeño espacio a la derecha de cada estrella */
 }

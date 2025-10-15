@@ -8,7 +8,10 @@ const emergencyService = {
       const response = await apiClient.get(`${BASE}/all`);
       return response.data;
     } catch (error) {
-      console.error("Error al obtener todos los servicios de emergencia:", error.response || error);
+      console.error(
+        "Error al obtener todos los servicios de emergencia:",
+        error.response || error
+      );
       throw error;
     }
   },
@@ -18,7 +21,10 @@ const emergencyService = {
       const response = await apiClient.get(`${BASE}/${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Error al obtener el servicio de emergencia con ID ${id}:`, error.response || error);
+      console.error(
+        `Error al obtener el servicio de emergencia con ID ${id}:`,
+        error.response || error
+      );
       throw error;
     }
   },
@@ -30,7 +36,10 @@ const emergencyService = {
       });
       return response.data;
     } catch (error) {
-      console.error("Error al crear el servicio de emergencia:", error.response || error);
+      console.error(
+        "Error al crear el servicio de emergencia:",
+        error.response || error
+      );
       throw error;
     }
   },
@@ -42,7 +51,10 @@ const emergencyService = {
       });
       return response.data;
     } catch (error) {
-      console.error(`Error al actualizar el servicio de emergencia con ID ${id}:`, error.response || error);
+      console.error(
+        `Error al actualizar el servicio de emergencia con ID ${id}:`,
+        error.response || error
+      );
       throw error;
     }
   },
@@ -52,7 +64,10 @@ const emergencyService = {
       const response = await apiClient.delete(`${BASE}/delete/${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Error al eliminar el servicio de emergencia con ID ${id}:`, error.response || error);
+      console.error(
+        `Error al eliminar el servicio de emergencia con ID ${id}:`,
+        error.response || error
+      );
       throw error;
     }
   },
@@ -62,17 +77,23 @@ const emergencyService = {
       const response = await apiClient.get(`${BASE}/allByOrderDescendent`);
       return response.data;
     } catch (error) {
-      console.error("Error al obtener servicios de emergencia ordenados:", error.response || error);
+      console.error(
+        "Error al obtener servicios de emergencia ordenados:",
+        error.response || error
+      );
       throw error;
     }
   },
 
-  getByDynamicFilter: async (params) => {
+  dynamicFilterEmergencyServices: async (params) => {
     try {
       const response = await apiClient.get(`${BASE}/dinamicFilter`, { params });
       return response.data;
     } catch (error) {
-      console.error("Error al filtrar servicios de emergencia:", error.response || error);
+      console.error(
+        "Error al filtrar servicios de emergencia:",
+        error.response || error
+      );
       throw error;
     }
   },

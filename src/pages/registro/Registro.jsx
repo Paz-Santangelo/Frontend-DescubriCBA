@@ -1,13 +1,13 @@
-import { useNavigate } from 'react-router-dom';
-import RegistroForm from '../../components/registro/RegistroForm';
-import './registro.css';
+import { useNavigate } from "react-router-dom";
+import RegistroForm from "../../components/registro/RegistroForm";
+import "./registro.css";
 
 const Registro = () => {
   const navigate = useNavigate();
 
   const handleSuccess = () => {
     // Redirigir al login después del registro exitoso
-    navigate('/login');
+    navigate("/login");
   };
 
   return (

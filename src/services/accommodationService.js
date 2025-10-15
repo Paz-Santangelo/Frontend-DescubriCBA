@@ -12,7 +12,10 @@ const accommodationService = {
       const response = await apiClient.get(`${BASE}/all`);
       return response.data;
     } catch (error) {
-      console.error("Error al obtener todos los alojamientos:", error.response || error);
+      console.error(
+        "Error al obtener todos los alojamientos:",
+        error.response || error
+      );
       throw error;
     }
   },
@@ -27,7 +30,10 @@ const accommodationService = {
       const response = await apiClient.get(`${BASE}/${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Error al obtener el alojamiento con ID ${id}:`, error.response || error);
+      console.error(
+        `Error al obtener el alojamiento con ID ${id}:`,
+        error.response || error
+      );
       throw error;
     }
   },
@@ -62,7 +68,10 @@ const accommodationService = {
       });
       return response.data;
     } catch (error) {
-      console.error(`Error al actualizar el alojamiento con ID ${id}:`, error.response || error);
+      console.error(
+        `Error al actualizar el alojamiento con ID ${id}:`,
+        error.response || error
+      );
       throw error;
     }
   },
@@ -77,7 +86,10 @@ const accommodationService = {
       const response = await apiClient.delete(`${BASE}/delete/${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Error al eliminar el alojamiento con ID ${id}:`, error.response || error);
+      console.error(
+        `Error al eliminar el alojamiento con ID ${id}:`,
+        error.response || error
+      );
       throw error;
     }
   },
@@ -91,7 +103,10 @@ const accommodationService = {
       const response = await apiClient.get(`${BASE}/allByOrderDescendent`);
       return response.data;
     } catch (error) {
-      console.error("Error al obtener alojamientos ordenados:", error.response || error);
+      console.error(
+        "Error al obtener alojamientos ordenados:",
+        error.response || error
+      );
       throw error;
     }
   },

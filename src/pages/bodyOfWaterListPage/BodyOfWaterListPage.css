@@ -13,12 +13,12 @@
 
 .body-of-water-list-container .back-button {
   border-color: #4ecdc4;
-  color: #4ecdc4;
+  color: #4ecdc4 !important;
 }
 
 .body-of-water-list-container .back-button:hover {
   background-color: #4ecdc4;
-  color: white;
+  color: white !important;
 }
 
 /* Estilos de Card (idénticos a los de las otras listas) */
@@ -53,7 +53,8 @@
       rgba(0, 0, 0, 0.4) 30%,
       transparent 100%);
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
   padding: 1.5rem;
 }
 
@@ -70,11 +71,13 @@
 }
 
 .star-rating {
-  color: #ffc107; /* Color amarillo para las estrellas */
+  color: #ffc107;
+  /* Color amarillo para las estrellas */
   font-size: 1rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .star-rating svg {
-  margin-right: 5px; /* Añade un pequeño espacio a la derecha de cada estrella */
+  margin-right: 5px;
+  /* Añade un pequeño espacio a la derecha de cada estrella */
 }

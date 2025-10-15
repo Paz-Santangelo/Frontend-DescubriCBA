@@ -18,7 +18,7 @@ function AppNavbar({ setToggled }) {
 
   // Determinar si el usuario está logueado en el sistema existente
   const isLoggedIn = user && user.role;
-  
+
   // Función para manejar el logout
   const handleLogout = () => {
     logout();
@@ -74,7 +74,9 @@ function AppNavbar({ setToggled }) {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 fw-semibold">
-              <Nav.Link as={NavLink} to="/destinos">Destinos</Nav.Link>
+              <Nav.Link as={NavLink} to="/destinos">
+                Destinos
+              </Nav.Link>
               <Nav.Link as={NavLink} to="/quienes">
                 Quiénes somos
               </Nav.Link>
@@ -92,10 +94,17 @@ function AppNavbar({ setToggled }) {
                         src={user.imageUser.urlImage}
                         alt={user.name || "User avatar"}
                         className="rounded-circle"
-                        style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          objectFit: "cover",
+                        }}
                       />
                     ) : (
-                      <i className="bi bi-person-circle" style={{ fontSize: '2rem' }}></i>
+                      <i
+                        className="bi bi-person-circle"
+                        style={{ fontSize: "2rem" }}
+                      ></i>
                     )
                   }
                   id="user-nav-dropdown"

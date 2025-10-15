@@ -13,6 +13,7 @@ import MyProfile from "./pages/myProfile/MyProfile.jsx";
 import DestinationsList from "./pages/destinationsList/DestinationsList.jsx";
 import DestinationDetail from "./pages/destinationDetail/DestinationDetail.jsx";
 import RestaurantListPage from "./pages/restaurantListPage/RestaurantListPage.jsx";
+import AccommodationListPage from "./pages/accommodationListPage/AccommodationListPage.jsx";
 
 import UserManagement from "./pages/userManagement/UserManagement.jsx";
 import LayoutPrivado from "./layouts/LayoutPrivado.jsx";
@@ -21,6 +22,7 @@ import UserProvider from "./context/UserContext";
 import { useUser } from "./hooks/useUser";
 import { useState } from "react";
 import BodyOfWaterListPage from "./pages/bodyOfWaterListPage/BodyOfWaterListPage.jsx";
+import EmergencyListPage from "./pages/emergencyListPage/EmergencyListPage.jsx";
 
 // Componente que contiene la lógica de las rutas y puede acceder al contexto
 function AppContent() {
@@ -75,6 +77,14 @@ function AppContent() {
                   path="/cuerpos-de-agua/:locality"
                   element={<BodyOfWaterListPage />}
                 />
+                <Route
+                  path="/alojamientos/:locality"
+                  element={<AccommodationListPage />}
+                />
+                <Route
+                  path="/emergencias/:locality"
+                  element={<EmergencyListPage />}
+                />
               </>
             )}
 
@@ -94,6 +104,14 @@ function AppContent() {
                 <Route
                   path="/cuerpos-de-agua/:locality"
                   element={<BodyOfWaterListPage />}
+                />
+                <Route
+                  path="/alojamientos/:locality"
+                  element={<AccommodationListPage />}
+                />
+                <Route
+                  path="/emergencias/:locality"
+                  element={<EmergencyListPage />}
                 />
                 <Route
                   path="/mi-perfil"
