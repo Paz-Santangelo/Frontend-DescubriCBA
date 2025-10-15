@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import authService from "../../services/authService";
 import "./RegistroForm.css";
 
 const initialState = {
   nombre: "",
+  apellido: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -16,6 +17,7 @@ const RegistroForm = ({ onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -37,6 +39,13 @@ const RegistroForm = ({ onSuccess }) => {
       newErrors.nombre = "El nombre es obligatorio.";
     } else if (form.nombre.trim().length < 2) {
       newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
+    }
+
+    // Validar apellido
+    if (!form.apellido.trim()) {
+      newErrors.apellido = "El apellido es obligatorio.";
+    } else if (form.apellido.trim().length < 2) {
+      newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
     }
 
     // Validar email
@@ -70,10 +79,16 @@ const RegistroForm = ({ onSuccess }) => {
   // Manejar cambios en los inputs
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    // Limpiar error del campo cuando el usuario empiece a escribir
     setErrors({ ...errors, [e.target.name]: undefined });
     setMessage(null);
   };
+
+  // Efecto para validar el formulario en tiempo real y actualizar el estado del botón
+  useEffect(() => {
+    const validationErrors = validate();
+    const allFieldsFilled = Object.values(form).every(field => field.trim() !== '');
+    setIsFormValid(Object.keys(validationErrors).length === 0 && allFieldsFilled);
+  }, [form]);
 
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
@@ -93,6 +108,7 @@ const RegistroForm = ({ onSuccess }) => {
       // Preparar datos para enviar al backend
       const userData = {
         nombre: form.nombre.trim(),
+        apellido: form.apellido.trim(),
         email: form.email.trim().toLowerCase(),
         password: form.password,
       };
@@ -162,10 +178,23 @@ const RegistroForm = ({ onSuccess }) => {
           required
         />
         <label className={form.nombre ? "floating active" : "floating"}>
-          Nombre y apellido
+          Nombre
         </label>
         {errors.nombre && <span className="error">{errors.nombre}</span>}
-        <small className="help-text">Ejemplo: Juan Pérez</small>
+      </div>
+
+      {/* Campo Apellido */}
+      <div className="form-group floating-group">
+        <input
+          name="apellido"
+          value={form.apellido}
+          onChange={handleChange}
+          required
+        />
+        <label className={form.apellido ? "floating active" : "floating"}>
+          Apellido
+        </label>
+        {errors.apellido && <span className="error">{errors.apellido}</span>}
       </div>
 
       {/* Campo Email */}
@@ -218,7 +247,7 @@ const RegistroForm = ({ onSuccess }) => {
       </div>
 
       {/* Botón de envío */}
-      <button type="submit" disabled={loading}>
+      <button type="submit" disabled={!isFormValid || loading}>
         {loading ? "Registrando..." : "Registrarse"}
       </button>
 

@@ -1,9 +1,12 @@
 .destinations-container {
-	padding-top: 7rem;
+	/* Espaciado para la vista pública (no logueado) */
+	padding-top: 8rem;
+	padding-bottom: 5rem;
 }
 
 .destinations-container.logged-in {
-	padding-top: 2rem;
+	/* Mantenemos el espaciado original para la vista privada (logueado) */
+	padding-top: 3rem;
 }
 
 /* Título principal */

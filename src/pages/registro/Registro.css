@@ -1,18 +1,15 @@
 .registro-bg {
-	height: 100vh;
+	min-height: 100vh;
 	background: url('../../assets/Fondo_Registro.jpg') no-repeat center center;
 	background-size: cover;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	overflow: hidden;
-	padding-top: 80px;
 	box-sizing: border-box;
 }
 
 .registro-main {
 	width: 100%;
-	margin: 1.5rem 0;
 	max-width: 600px;
 	display: flex;
 	justify-content: center;

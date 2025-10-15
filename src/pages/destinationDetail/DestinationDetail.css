@@ -1,8 +1,13 @@
 /* Contenedor principal */
 .destination-detail-container {
+  padding-top: 8rem;
+  padding-bottom: 5rem;
+  min-height: 100vh;
+}
+
+.destination-detail-container.logged-in {
   padding-top: 3rem;
   padding-bottom: 3rem;
-  min-height: 100vh;
 }
 
 /* Botón de volver */
@@ -51,6 +56,11 @@
   height: 4px;
   background-color: #39d8a8;
   border-radius: 2px;
+}
+
+.section-title .highlight {
+  color: #39d8a8;
+  text-shadow: none;
 }
 
 .destination-name {

@@ -20,7 +20,7 @@ export const UserProvider = ({ children }) => {
         
         if (token && userData && userData !== 'undefined' && userData !== 'null') {
           const parsedUser = JSON.parse(userData);
-          console.log('🔄 Restaurando sesión:', parsedUser);
+          //console.log('🔄 Restaurando sesión:', parsedUser);
           setUser(parsedUser);
         } else {
           console.log('🚫 No hay sesión válida para restaurar');
@@ -42,7 +42,7 @@ export const UserProvider = ({ children }) => {
   // Función para hacer login en el sistema
   const login = (userDto) => {
     // Imprimimos el DTO completo que llega del backend, como solicitaste.
-    console.log('✅ Login exitoso. DTO del usuario recibido del backend:', userDto);
+    //console.log('✅ Login exitoso. DTO del usuario recibido del backend:', userDto);
 
     // Tu backend devuelve 'token', no 'accessToken'. Hacemos la desestructuración correcta.
     const { token, ...userData } = userDto;
@@ -60,7 +60,7 @@ export const UserProvider = ({ children }) => {
 
   // Función para hacer logout en el sistema
   const logout = () => {
-    console.log('🚪 Cerrando sesión');
+    //console.log('🚪 Cerrando sesión');
     setUser(null);
     // Limpiar localStorage
     localStorage.removeItem('jwt_token');

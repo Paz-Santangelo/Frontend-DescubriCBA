@@ -3,31 +3,42 @@ import { useParams, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { ArrowLeft, House, Star, Camera, HeartPulse } from "react-bootstrap-icons";
+import { useUser } from "../../hooks/useUser";
 import destinationService from "../../services/DestinationService";
 import "./DestinationDetail.css";
 
 const DestinationDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams(); // Ahora obtenemos el 'slug' de la URL
+  const { user } = useUser();
+  const isLoggedIn = user && user.role;
   const [destino, setDestino] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchDestinationDetail = async () => {
+      // Convertimos el slug de la URL de nuevo a un formato legible (ej. "la-cumbre" -> "La Cumbre")
+      const locality = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
       try {
         setLoading(true);
-        const data = await destinationService.getDestinationById(id);
-        setDestino(data);
+        // Usamos el servicio que busca por localidad. Asumimos que devuelve un array.
+        const data = await destinationService.getDestinationsByLocality(locality);
+        if (data && data.length > 0) {
+          setDestino(data[0]); // Tomamos el primer resultado para la página de detalle
+        } else {
+          throw new Error("No se encontró un destino para esta localidad.");
+        }
       } catch (err) {
         setError(err.response?.data?.message || "No se pudo cargar el destino.");
-        console.error(`Error fetching destination ${id}:`, err);
+        console.error(`Error fetching destination for slug ${slug}:`, err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchDestinationDetail();
-  }, [id]); // Se ejecuta cada vez que el 'id' de la URL cambia
+  }, [slug]); // Se ejecuta cada vez que el 'slug' de la URL cambia
 
   if (loading) {
     return (
@@ -79,7 +90,7 @@ const DestinationDetail = () => {
     {
       tipo: "Dónde comer",
       icono: <Star size={48} className="service-icon" />,
-      descripcion: "Gastronomía local y restaurantes recomendados",
+      descripcion: "Gastronomía y restaurantes locales",
       color: "#ff6b6b"
     },
     {
@@ -89,9 +100,9 @@ const DestinationDetail = () => {
       color: "#4ecdc4"
     },
     {
-      tipo: "Servicios de Emergencia",
+      tipo: "Emergencias",
       icono: <HeartPulse size={48} className="service-icon" />,
-      descripcion: "Información de contacto para emergencias",
+      descripcion: "Contactos y servicios de emergencia",
       color: "#54a0ff"
     }
   ];
@@ -109,7 +120,7 @@ const DestinationDetail = () => {
   };
 
   return (
-    <div className="destination-detail-container">
+    <div className={`destination-detail-container ${isLoggedIn ? "logged-in" : ""}`}>
       <Container>
         {/* Botón de volver */}
         <div className="back-button-container">
@@ -126,7 +137,7 @@ const DestinationDetail = () => {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-center mb-5 section-title">
-            Tu destino seleccionado es "{destino.locality}"
+            Tu destino seleccionado es <span className="highlight">{destino.locality}</span>
           </h1>
         </motion.div>
 
@@ -155,12 +166,33 @@ const DestinationDetail = () => {
                     <Card.Text className="service-description flex-grow-1">
                       {servicio.descripcion}
                     </Card.Text>
-                    <Button 
-                      className="mt-auto service-button"
-                      style={{ '--service-color': servicio.color }}
-                    >
-                      Ver opciones
-                    </Button>
+                    {/* Hacemos que el botón sea un Link dinámico */}
+                    {servicio.tipo === "Dónde comer" && (
+                      <Link
+                        to={`/restaurantes/${destino.locality}`}
+                        className="btn mt-auto service-button"
+                        style={{ '--service-color': servicio.color }}
+                      >
+                        Ver opciones
+                      </Link>
+                    )}
+                    {servicio.tipo === "Dónde pasear" && (
+                      <Link
+                        to={`/cuerpos-de-agua/${destino.locality}`}
+                        className="btn mt-auto service-button"
+                        style={{ '--service-color': servicio.color }}
+                      >
+                        Ver opciones
+                      </Link>
+                    )}
+                    {servicio.tipo !== "Dónde comer" && servicio.tipo !== "Dónde pasear" && (
+                      <Button 
+                        className="mt-auto service-button"
+                        style={{ '--service-color': servicio.color }}
+                      >
+                        Ver opciones
+                      </Button>
+                    )}
                   </Card.Body>
                 </Card>
               </motion.div>

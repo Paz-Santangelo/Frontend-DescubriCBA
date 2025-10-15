@@ -33,6 +33,13 @@ const DestinationsList = () => {
     fetchDestinationCards();
   }, []);
 
+  // Función para crear un "slug" amigable para la URL a partir de la localidad
+  const createSlug = (text) => {
+    return text.toString().toLowerCase()
+      .replace(/\s+/g, '-')           // Reemplaza espacios con -
+      .replace(/[^\w\-]+/g, '');      // Elimina caracteres no válidos
+  };
+
   // Variantes de animación
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -48,7 +55,7 @@ const DestinationsList = () => {
   return (
     <div className={`destinations-container ${isLoggedIn ? "logged-in" : ""}`}>
       <Container>
-        <h1 className="text-center my-5 fw-semibold section-title">
+        <h1 className="text-center fw-semibold section-title">
           Seleccione un Destino
         </h1>
 
@@ -86,7 +93,7 @@ const DestinationsList = () => {
                 transition={{ delay: index * 0.1 }}
               >
                 <Link
-                  to={`/destino/${destino.id}`}
+                  to={`/destino/${createSlug(destino.locality)}`}
                   className="text-decoration-none"
                 >
                   <Card className="destination-card h-100">

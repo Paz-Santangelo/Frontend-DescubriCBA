@@ -7,16 +7,10 @@ const authService = {
   register: async (userData) => {
     try {      
       
-      // El backend espera un objeto User con: name, lastname, email, password
-      // Dividir el nombre completo en name y lastname
-      const nombreCompleto = userData.nombre.trim();
-      const partesNombre = nombreCompleto.split(' ');
-      const name = partesNombre[0]; // Primer nombre
-      const lastname = partesNombre.slice(1).join(' ') || 'Usuario'; // Resto como apellido
-      
+      // El backend espera 'name' y 'lastname', así que mapeamos los campos.
       const requestData = {
-        name: name,
-        lastname: lastname,
+        name: userData.nombre,
+        lastname: userData.apellido,
         email: userData.email,
         password: userData.password
       };
@@ -28,9 +22,6 @@ const authService = {
       return response.data;
 
     } catch (error) {
-      // Si hay un error, no lo manejamos aquí.
-      // Simplemente lo relanzamos para que el componente que llamó (RegistroForm) lo capture.
-      // El objeto 'error' de axios ya contiene toda la información necesaria (error.response.data).
       throw error;
     }
   },
