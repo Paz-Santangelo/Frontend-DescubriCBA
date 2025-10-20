@@ -1,7 +1,6 @@
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Facebook, Instagram, Twitter } from 'react-bootstrap-icons';
-import './footer.css';
+import { Container, Row, Col } from "react-bootstrap";
+import { Facebook, Instagram, Twitter } from "react-bootstrap-icons";
+import "./footer.css";
 
 const Footer = () => {
   return (
@@ -19,16 +18,41 @@ const Footer = () => {
           </Col>
           <Col xs={12} md={4} className="text-center text-md-end">
             <h6>Redes Sociales</h6>
-            <a href="https://www.facebook.com/turismocba/?locale=es_LA" className="social-link" target="_blank" rel="noopener noreferrer"><Facebook /></a>
-            <a href="https://www.instagram.com/turismocba/?hl=es" className="social-link" target="_blank" rel="noopener noreferrer"><Instagram /></a>
-            <a href="https://x.com/turismocba/highlights" className="social-link me-0" target="_blank" rel="noopener noreferrer"><Twitter /></a>
+            <a
+              href="https://www.facebook.com/turismocba/?locale=es_LA"
+              className="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Facebook />
+            </a>
+            <a
+              href="https://www.instagram.com/turismocba/?hl=es"
+              className="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Instagram />
+            </a>
+            <a
+              href="https://x.com/turismocba/highlights"
+              className="social-link me-0"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Twitter />
+            </a>
           </Col>
         </Row>
         <Row className="mt-4">
           <Col className="text-center">
-            <a href="#" className="legal-link">Términos y Condiciones</a>
+            <a href="#" className="legal-link">
+              Términos y Condiciones
+            </a>
             <span className="mx-2">|</span>
-            <a href="#" className="legal-link">Política de Privacidad</a>
+            <a href="#" className="legal-link">
+              Política de Privacidad
+            </a>
           </Col>
         </Row>
       </Container>

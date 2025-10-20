@@ -2,31 +2,101 @@ import apiClient from "./apiClient";
 
 const BASE = "/emergencyServices";
 
-export const getAllServices = () => apiClient(`${BASE}/all`);
+const emergencyService = {
+  getAllServices: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/all`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error al obtener todos los servicios de emergencia:",
+        error.response || error
+      );
+      throw error;
+    }
+  },
 
-export const getServiceById = (id) => apiClient(`${BASE}/${id}`);
+  getServiceById: async (id) => {
+    try {
+      const response = await apiClient.get(`${BASE}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error al obtener el servicio de emergencia con ID ${id}:`,
+        error.response || error
+      );
+      throw error;
+    }
+  },
 
-export const createService = (formData) =>
-  apiClient(`${BASE}/create`, {
-    method: "POST",
-    body: formData,
-  });
+  createService: async (formData) => {
+    try {
+      const response = await apiClient.post(`${BASE}/create`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error al crear el servicio de emergencia:",
+        error.response || error
+      );
+      throw error;
+    }
+  },
 
-export const updateService = (id, formData) =>
-  apiClient(`${BASE}/update/${id}`, {
-    method: "PUT",
-    body: formData,
-  });
+  updateService: async (id, formData) => {
+    try {
+      const response = await apiClient.put(`${BASE}/update/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error al actualizar el servicio de emergencia con ID ${id}:`,
+        error.response || error
+      );
+      throw error;
+    }
+  },
 
-export const deleteService = (id) =>
-  apiClient(`${BASE}/delete/${id}`, {
-    method: "DELETE",
-  });
+  deleteService: async (id) => {
+    try {
+      const response = await apiClient.delete(`${BASE}/delete/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error al eliminar el servicio de emergencia con ID ${id}:`,
+        error.response || error
+      );
+      throw error;
+    }
+  },
 
-export const getAllByScoreDesc = () =>
-  apiClient(`${BASE}/allByOrderDescendent`);
+  getAllByScoreDesc: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/allByOrderDescendent`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error al obtener servicios de emergencia ordenados:",
+        error.response || error
+      );
+      throw error;
+    }
+  },
 
-export const getByDynamicFilter = ({ locality, minAverageScore, type }) => {
-  const query = new URLSearchParams({ locality, minAverageScore, type });
-  return apiClient(`${BASE}/dinamicFilter?${query}`);
+  dynamicFilterEmergencyServices: async (params) => {
+    try {
+      const response = await apiClient.get(`${BASE}/dinamicFilter`, { params });
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error al filtrar servicios de emergencia:",
+        error.response || error
+      );
+      throw error;
+    }
+  },
 };
+
+export default emergencyService;

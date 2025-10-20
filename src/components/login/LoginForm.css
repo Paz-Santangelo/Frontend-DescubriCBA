@@ -16,6 +16,10 @@
   transition: border-color 0.2s;
 }
 
+.login-form .form-group input {
+  font-size: .9rem; 
+}
+
 .floating-group input:focus {
   border-color: #007bff;
 }
@@ -54,7 +58,7 @@
   max-width: 500px; /* Base max-width */
   min-width: 320px;
   margin: 0 auto;
-  padding: 2.2rem 2.2rem 2rem 2.2rem;
+  padding: 2.2rem;
   font-family: 'Poppins', sans-serif;
   transition: box-shadow 0.3s;
 }
@@ -182,7 +186,7 @@ button[disabled] {
     width: 90vw;
     max-width: 90vw; /* Adjusted for smaller screens */
     min-width: unset;
-    padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+    padding: 1.5rem;
   }
 
   .login-form h2 {

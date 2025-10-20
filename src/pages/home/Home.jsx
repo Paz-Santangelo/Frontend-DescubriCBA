@@ -2,7 +2,8 @@
 import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import "./home.css"; 
+import { useUser } from "../../hooks/useUser";
+import "./home.css";
 import Champaqui from "../../assets/Cerro-Champaqui.jpg";
 import Calamuchita from "../../assets/Valle-Calamuchita.jpg";
 import Uritorco from "../../assets/Cerro-Uritorco.jpg";
@@ -12,6 +13,26 @@ import IconoCalendario from "../../assets/icono-calendario.png";
 import Testimonials from "../../components/testimonials/Testimonials";
 
 const Home = () => {
+  console.log("🏠 Home component loading...");
+
+  const userContext = useUser();
+
+  // Verificación segura del contexto
+  if (!userContext) {
+    console.error("❌ UserContext no está disponible en Home");
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h2>Error: Contexto de usuario no disponible</h2>
+        <p>Verificando el contexto del usuario...</p>
+      </div>
+    );
+  }
+
+  console.log("✅ UserContext disponible:", userContext);
+
+  const { user, loginAsAdmin, logout } = userContext;
+
+  console.log("👤 Usuario actual:", user);
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {

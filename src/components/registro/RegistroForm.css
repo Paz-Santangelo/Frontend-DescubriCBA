@@ -5,11 +5,11 @@
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
   border: 1.5px solid rgba(255, 255, 255, 0.25);
-  width: 40%;
   width: 100%;
   max-width: 600px;
   padding: 1.2rem 2rem;
   transition: box-shadow 0.3s;
+  margin: 7rem 0 3rem;
 }
 
 .registro-form h2 {
@@ -42,15 +42,18 @@
 .form-group input {
   width: 100%;
   padding: 0.6rem 1rem;
-  /* antes 0.7rem 1.1rem */
   border: 1.5px solid #e0e7ef;
   border-radius: 10px;
   font-size: 0.7rem;
-  /* antes 0.98rem */
   background: rgba(255, 255, 255, 0.85);
   transition: border 0.2s, box-shadow 0.2s;
   box-shadow: 0 1px 4px rgba(59, 130, 246, 0.04);
 }
+
+.registro-form .form-group input {
+  font-size: .9rem; 
+}
+
 
 .form-group input:focus {
   border: 1.5px solid #40a189;
@@ -64,6 +67,15 @@
   display: block;
   font-weight: 500;
   letter-spacing: 0.1px;
+}
+
+.help-text {
+  display: block;
+  color: #666;
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+  font-style: italic;
+  opacity: 0.8;
 }
 
 /* Botón un poco más compacto */

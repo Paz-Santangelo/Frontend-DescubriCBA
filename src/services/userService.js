@@ -1,53 +1,59 @@
-// src/services/userService.js
 import apiClient from "./apiClient";
 
-const BASE = "/users";
+// Servicio para manejar operaciones relacionadas con usuarios
+const userService = {
+  
+  // Función para obtener todos los usuarios (requiere autenticación)
+  getAllUsers: async () => {
+    try {
+      // El interceptor de apiClient ya añade el token automáticamente.
+      const response = await apiClient.get('/api/usuarios/all');
+      // Devolvemos directamente el array de usuarios que viene en response.data.
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      // Si hay un error (401, 403, etc.), lo relanzamos para que el componente lo maneje.
+      // El interceptor de apiClient ya se encarga de los errores 401 (redirección).
+      throw error;
+    }
+  },
 
-// Obtener todos los usuarios
-export const getAllUsers = () => apiClient(`${BASE}/all`);
+  // Función para obtener un usuario específico por ID
+  getUserById: async (userId) => {
+    try {
+      const response = await apiClient.get(`/api/usuarios/${userId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 
-// Obtener usuario por ID
-export const getUserById = (id) => apiClient(`${BASE}/${id}`);
+  // Función para actualizar perfil de usuario
+  updateProfile: async (userData) => {
+    try {
+      const response = await apiClient.put('/api/usuarios/profile', userData);
+      // Actualizar datos del usuario en localStorage si es exitoso
+      if (response.data) {
+        localStorage.setItem('user_data', JSON.stringify(response.data));
+      }
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 
-// Obtener usuario por email
-export const getUserByEmail = (email) =>
-  apiClient(`${BASE}/findByEmail/${email}`);
-
-// Eliminar usuario por ID
-export const deleteUser = (id) =>
-  apiClient(`${BASE}/delete/${id}`, {
-    method: "DELETE",
-  });
-
-// Actualizar datos de usuario (con imagen opcional)
-export const updateUser = (
-  idUser,
-  { image, name, lastname, email, password }
-) => {
-  const formData = new FormData();
-  if (image) formData.append("image", image);
-  if (name) formData.append("name", name);
-  if (lastname) formData.append("lastname", lastname);
-  if (email) formData.append("email", email);
-  if (password) formData.append("password", password);
-
-  return apiClient(`${BASE}/update/${idUser}`, {
-    method: "PUT",
-    body: formData,
-  });
+  // Función para actualizar el rol de un usuario
+  updateUserRole: async (userId, newRole) => {
+    try {
+      // Llamar al endpoint real del backend
+      const response = await apiClient.put(`/api/usuarios/${userId}/role`, {
+        role: newRole
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
-// Actualizar rol del usuario
-export const updateUserRole = (idUser, newRole) => {
-  const formData = new FormData();
-  formData.append("newRole", newRole);
-
-  return apiClient(`${BASE}/updateRole/${idUser}`, {
-    method: "PUT",
-    body: formData,
-  });
-};
-
-// Buscar usuarios por nombre o apellido
-export const searchUsers = (query) =>
-  apiClient(`${BASE}/search?query=${encodeURIComponent(query)}`);
+export default userService;

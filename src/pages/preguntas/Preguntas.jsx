@@ -1,4 +1,3 @@
-import React from "react";
 import { Accordion, Container } from "react-bootstrap";
 import "./preguntas.css";
 

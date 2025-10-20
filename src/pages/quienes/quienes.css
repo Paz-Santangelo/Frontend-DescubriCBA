@@ -50,8 +50,10 @@ body,
 .equipo-foto-fondo {
   position: relative;
   background: center center / cover no-repeat;
-  min-height: 400px; /* dinámico */
-  height: auto;      /* se adapta al contenido */
+  min-height: 400px;
+  /* dinámico */
+  height: auto;
+  /* se adapta al contenido */
   border-radius: 10px;
   margin: 40px auto 60px auto;
   display: flex;
@@ -59,7 +61,8 @@ body,
   align-items: center;
   font-size: 18px;
   overflow: hidden;
-  padding: 40px 20px; /* aire interno */
+  padding: 40px 20px;
+  /* aire interno */
 }
 
 .descripcion-instituto .overlay,
@@ -79,7 +82,8 @@ body,
 }
 
 .descripcion-instituto .overlay {
-  background-color: rgba(62, 67, 62, 0.55); /* tono gris propio */
+  background-color: rgba(62, 67, 62, 0.55);
+  /* tono gris propio */
 }
 
 /* =============================
@@ -166,6 +170,7 @@ body,
    Responsividad
 ============================= */
 @media (max-width: 768px) {
+
   .quienes-title,
   .equipo-title {
     font-size: 24px;
@@ -173,7 +178,8 @@ body,
   }
 
   .equipo-title {
-    margin-bottom: 2rem; /* corregido */
+    margin-bottom: 2rem;
+    /* corregido */
   }
 
   .equipo-card img {

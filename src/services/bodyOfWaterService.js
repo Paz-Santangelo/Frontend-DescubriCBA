@@ -2,40 +2,82 @@ import apiClient from "./apiClient";
 
 const BASE = "/bodyOfWaters";
 
-export const getAllBodies = () => apiClient(`${BASE}/all`);
+const bodyOfWaterService = {
+  getAllBodies: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/all`);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener todos los cuerpos de agua:", error.response || error);
+      throw error;
+    }
+  },
 
-export const getBodyById = (id) => apiClient(`${BASE}/${id}`);
+  getBodyById: async (id) => {
+    try {
+      const response = await apiClient.get(`${BASE}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al obtener el cuerpo de agua con ID ${id}:`, error.response || error);
+      throw error;
+    }
+  },
 
-export const createBody = (formData) =>
-  apiClient(`${BASE}/create`, {
-    method: "POST",
-    body: formData,
-  });
+  createBody: async (formData) => {
+    try {
+      const response = await apiClient.post(`${BASE}/create`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear el cuerpo de agua:", error.response || error);
+      throw error;
+    }
+  },
 
-export const updateBody = (id, formData) =>
-  apiClient(`${BASE}/update/${id}`, {
-    method: "PUT",
-    body: formData,
-  });
+  updateBody: async (id, formData) => {
+    try {
+      const response = await apiClient.put(`${BASE}/update/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error al actualizar el cuerpo de agua con ID ${id}:`, error.response || error);
+      throw error;
+    }
+  },
 
-export const deleteBody = (id) =>
-  apiClient(`${BASE}/delete/${id}`, {
-    method: "DELETE",
-  });
+  deleteBody: async (id) => {
+    try {
+      const response = await apiClient.delete(`${BASE}/delete/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al eliminar el cuerpo de agua con ID ${id}:`, error.response || error);
+      throw error;
+    }
+  },
 
-export const getAllByScoreDesc = () => apiClient(`${BASE}/allByOrderDescendent`);
+  getAllByScoreDesc: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/allByOrderDescendent`);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener cuerpos de agua ordenados:", error.response || error);
+      throw error;
+    }
+  },
 
-export const filterBodies = ({
-  locality,
-  minAverageScore,
-  freeAdmission,
-  type,
-}) => {
-  const query = new URLSearchParams({
-    locality,
-    minAverageScore,
-    freeAdmission,
-    type,
-  });
-  return apiClient(`${BASE}/dinamicFilter?${query}`);
+  filterBodies: async (params) => {
+    try {
+      // Axios se encarga de construir la query string a partir del objeto params.
+      // Los parámetros que sean undefined o null no se incluirán.
+      const response = await apiClient.get(`${BASE}/dinamicFilter`, { params });
+      return response.data;
+    } catch (error) {
+      console.error("Error al filtrar cuerpos de agua:", error.response || error);
+      throw error;
+    }
+  },
 };
+
+export default bodyOfWaterService;

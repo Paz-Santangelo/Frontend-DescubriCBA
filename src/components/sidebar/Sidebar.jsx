@@ -8,15 +8,23 @@ import {
   ChevronRight,
   Building,
 } from "react-bootstrap-icons";
-import { useUser } from "../../context/UserContext";
+import { useUser } from "../../hooks/useUser";
+
 import "./Sidebar.css";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useRef } from "react";
+import { useLogout } from "../../hooks/useLogout";
 
 function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
-  const { user } = useUser();
+  const { user, canManageUsers } = useUser();
   const location = useLocation();
   const sidebarContainerRef = useRef(null);
+  const logout = useLogout();
+
+  // Función para manejar el logout
+  const handleLogout = () => {
+    logout();
+  };
 
   const TooltipMenuItem = ({ collapsed, tooltipText, children }) => {
     if (collapsed) {
@@ -98,7 +106,8 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
             </MenuItem>
           </TooltipMenuItem>
 
-          {user.role === "OWNER" && (
+          {/* Menú para rol OWNER */}
+          {user && user.role === "OWNER" && (
             <TooltipMenuItem
               collapsed={collapsed}
               tooltipText="Mis Propiedades"
@@ -113,12 +122,13 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
             </TooltipMenuItem>
           )}
 
-          {user.role === "ADMIN" && (
+          {/* Menú para gestión de usuarios (ADMIN y MANAGEMENT) */}
+          {canManageUsers() && (
             <TooltipMenuItem collapsed={collapsed} tooltipText="Usuarios">
               <MenuItem
-                active={location.pathname === "/usuarios"}
+                active={location.pathname === "/gestion-usuarios"}
                 icon={<Person size={22} stroke="#f8f9fa" strokeWidth={0.5} />}
-                component={<Link to="/usuarios" />}
+                component={<Link to="/gestion-usuarios" />}
               >
                 Usuarios
               </MenuItem>
@@ -131,7 +141,7 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
               icon={
                 <BoxArrowRight size={22} stroke="#f8f9fa" strokeWidth={0.5} />
               }
-              component={<Link to="/" />}
+              onClick={handleLogout}
             >
               Cerrar Sesión
             </MenuItem>
