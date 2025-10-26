@@ -16,7 +16,6 @@ const LoginForm = ({ onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
-  const navigate = useNavigate();
 
   const userContext = useUser();
 
@@ -63,7 +62,6 @@ const LoginForm = ({ onSuccess }) => {
   // Manejar cambios en los inputs
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    // Limpiar error del campo cuando el usuario empiece a escribir
     setErrors({ ...errors, [e.target.name]: undefined });
     setMessage(null);
   };
@@ -105,10 +103,7 @@ const LoginForm = ({ onSuccess }) => {
 
       setForm(initialState);
 
-      // Redirigir después de un momento
-      setTimeout(() => {
-        onSuccess ? onSuccess() : navigate("/");
-      }, 1500);
+      if (onSuccess) onSuccess();
     } catch (error) {
       // El error viene de Axios y contiene la respuesta del backend.
       console.error("❌ Error durante el login:", error.response || error);

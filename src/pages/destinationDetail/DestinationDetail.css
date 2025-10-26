@@ -18,17 +18,14 @@
 .back-button {
   display: inline-flex;
   align-items: center;
-  color: #39d8a8 !important; /* Cambiado a verde oscuro */
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
   padding: 0.5rem 1rem;
   border-radius: 25px;
-  border: 2px solid #39d8a8; /* Cambiado a verde oscuro */
 }
 
 .back-button:hover {
-  background-color: #39d8a8; /* Cambiado a verde oscuro */
   color: white !important;
   text-decoration: none;
   transform: translateX(-5px);
