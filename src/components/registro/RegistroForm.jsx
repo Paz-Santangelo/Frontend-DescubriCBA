@@ -30,61 +30,27 @@ const RegistroForm = ({ onSuccess }) => {
     },
   };
 
-  // Función para validar los campos del formulario
-  const validate = () => {
-    const newErrors = {};
-
-    // Validar nombre
-    if (!form.nombre.trim()) {
-      newErrors.nombre = "El nombre es obligatorio.";
-    } else if (form.nombre.trim().length < 2) {
-      newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
-    }
-
-    // Validar apellido
-    if (!form.apellido.trim()) {
-      newErrors.apellido = "El apellido es obligatorio.";
-    } else if (form.apellido.trim().length < 2) {
-      newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
-    }
-
-    // Validar email
-    if (!form.email.trim()) {
-      newErrors.email = "El correo es obligatorio.";
-    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
-      newErrors.email = "Correo inválido.";
-    }
-
-    // Validar contraseña
-    if (!form.password) {
-      newErrors.password = "La contraseña es obligatoria.";
-    } else if (form.password.length < 8) {
-      newErrors.password = "Mínimo 8 caracteres.";
-    } else if (!/[A-Z]/.test(form.password)) {
-      newErrors.password = "Debe tener una mayúscula.";
-    } else if (!/[0-9]/.test(form.password)) {
-      newErrors.password = "Debe tener un número.";
-    }
-
-    // Validar confirmación de contraseña
-    if (!form.confirmPassword) {
-      newErrors.confirmPassword = "Confirme la contraseña.";
-    } else if (form.password !== form.confirmPassword) {
-      newErrors.confirmPassword = "Las contraseñas no coinciden.";
-    }
-
-    return newErrors;
-  };
-
   // Manejar cambios en los inputs
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: undefined });
     setMessage(null);
   };
-
-  // Efecto para validar el formulario en tiempo real y actualizar el estado del botón
+  
+    // Efecto para validar el formulario en tiempo real y actualizar el estado del botón
   useEffect(() => {
+    // La función de validación se define DENTRO del efecto
+    // para capturar siempre el estado 'form' más reciente.
+    const validate = () => {
+      const newErrors = {};
+      if (!form.nombre.trim() || form.nombre.trim().length < 2) newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
+      if (!form.apellido.trim() || form.apellido.trim().length < 2) newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
+      if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) newErrors.email = "Correo inválido.";
+      if (!form.password || form.password.length < 8 || !/[A-Z]/.test(form.password) || !/[0-9]/.test(form.password)) newErrors.password = "La contraseña debe tener 8+ caracteres, una mayúscula y un número.";
+      if (!form.confirmPassword || form.password !== form.confirmPassword) newErrors.confirmPassword = "Las contraseñas no coinciden.";
+      return newErrors;
+    };
+
     const validationErrors = validate();
     const allFieldsFilled = Object.values(form).every(field => field.trim() !== '');
     setIsFormValid(Object.keys(validationErrors).length === 0 && allFieldsFilled);
@@ -93,6 +59,24 @@ const RegistroForm = ({ onSuccess }) => {
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Re-definimos la función de validación aquí también para el envío.
+    const validate = () => {
+      const newErrors = {};
+      if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio.";
+      else if (form.nombre.trim().length < 2) newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
+      if (!form.apellido.trim()) newErrors.apellido = "El apellido es obligatorio.";
+      else if (form.apellido.trim().length < 2) newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
+      if (!form.email.trim()) newErrors.email = "El correo es obligatorio.";
+      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) newErrors.email = "Correo inválido.";
+      if (!form.password) newErrors.password = "La contraseña es obligatoria.";
+      else if (form.password.length < 8) newErrors.password = "Mínimo 8 caracteres.";
+      else if (!/[A-Z]/.test(form.password)) newErrors.password = "Debe tener una mayúscula.";
+      else if (!/[0-9]/.test(form.password)) newErrors.password = "Debe tener un número.";
+      if (!form.confirmPassword) newErrors.confirmPassword = "Confirme la contraseña.";
+      else if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Las contraseñas no coinciden.";
+      return newErrors;
+    };
 
     // Validar formulario antes de enviar
     const validationErrors = validate();
