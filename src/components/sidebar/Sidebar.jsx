@@ -16,7 +16,7 @@ import { useRef } from "react";
 import { useLogout } from "../../hooks/useLogout";
 
 function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
-  const { user, canManageUsers } = useUser();
+  const { user, canManageUsers, hasAnyRole } = useUser();
   const location = useLocation();
   const sidebarContainerRef = useRef(null);
   const logout = useLogout();
@@ -106,8 +106,8 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
             </MenuItem>
           </TooltipMenuItem>
 
-          {/* Menú para rol OWNER */}
-          {user && user.role === "OWNER" && (
+          {/* Menú para Mis Propiedades (OWNER, ADMIN, MANAGEMENT) */}
+          {hasAnyRole(['OWNER', 'ADMIN', 'MANAGEMENT']) && (
             <TooltipMenuItem
               collapsed={collapsed}
               tooltipText="Mis Propiedades"

@@ -11,9 +11,9 @@ import {
 } from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
 import destinationService from "../../services/DestinationService";
-import "./DestinationDetail.css";
+import "./DestinationOptionsPage.css";
 
-const DestinationDetail = () => {
+const DestinationOptionsPage = () => {
   const { slug } = useParams(); // Ahora obtenemos el 'slug' de la URL
   const { user } = useUser();
   const isLoggedIn = user && user.role;
@@ -224,4 +224,4 @@ const DestinationDetail = () => {
   );
 };
 
-export default DestinationDetail;
+export default DestinationOptionsPage;

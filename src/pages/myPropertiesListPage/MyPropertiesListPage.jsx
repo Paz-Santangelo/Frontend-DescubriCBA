@@ -1,0 +1,91 @@
+import "../serviceListPage/ServiceListPage.css";
+import { motion } from "framer-motion";
+import { Container, Row, Col, Card, Alert } from "react-bootstrap";
+import { StarFill, StarHalf, Star } from "react-bootstrap-icons";
+import { useUser } from "../../hooks/useUser";
+
+const MyPropertiesListPage = () => {
+  const { user } = useUser();
+  const properties = user?.ownedDestinations || [];
+
+  // Variante para cada tarjeta individual
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  // Función para renderizar las estrellas según el puntaje
+  const renderStars = (score) => {
+    const stars = [];
+    const totalStars = 5;
+    const roundedScore = Math.round((score || 0) * 2) / 2;
+
+    for (let i = 1; i <= totalStars; i++) {
+      if (roundedScore >= i) stars.push(<StarFill key={i} />);
+      else if (roundedScore >= i - 0.5) stars.push(<StarHalf key={i} />);
+      else stars.push(<Star key={i} />);
+    }
+    return <div className="star-rating">{stars}</div>;
+  };
+
+  // Función para crear un "slug" amigable para la URL
+  const createSlug = (text) => {
+    if (!text) return "";
+    return text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "");
+  };
+
+  return (
+    <div className="service-list-container logged-in">
+      <Container>
+        <h1 className="text-center mb-5 section-title">
+        Mis Propiedades
+      </h1>
+
+        {properties.length === 0 && (
+          <div className="text-center">
+            <Alert variant="info" className="d-inline-block">
+              Aún no tienes propiedades registradas.
+            </Alert>
+          </div>
+        )}
+
+        <Row>
+          {properties.map((property, index) => (
+            <Col md={4} key={property.id} className="mb-4">
+              <motion.div
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.5, delay: index * 0.1 }} // Usamos el index para el efecto stagger
+              >
+                {/* El enlace se agregará en el futuro para ir a la página de edición de la propiedad */}
+                <Card className="service-card h-100">
+                  <Card.Img
+                    variant="top"
+                    src={
+                      property.imagesDestinations?.[0]?.urlImage ||
+                      "https://via.placeholder.com/400x250"
+                    }
+                    className="service-card-img"
+                  />
+                  <div className="card-img-overlay">
+                    <div className="card-overlay-content">
+                      <h5 className="card-title text-white">{property.name}</h5>
+                      {renderStars(property.averageScore)}
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default MyPropertiesListPage;

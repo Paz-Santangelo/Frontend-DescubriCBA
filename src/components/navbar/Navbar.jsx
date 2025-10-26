@@ -29,9 +29,10 @@ function AppNavbar({ setToggled }) {
   const privatePaths = [
     "/mi-perfil",
     "/destinos",
-    "/destino",   // Para que aparezca en /destino/:slug
-    "/servicios", // Para que aparezca en las páginas de servicios
-    "/gestion-usuarios", // Para que aparezca en la gestión de usuarios
+    "/destino",   
+    "/servicios", 
+    "/gestion-usuarios",
+    "/mis-propiedades",
   ];
   const showSidebarToggle = isLoggedIn && privatePaths.some(path => location.pathname.startsWith(path));
 

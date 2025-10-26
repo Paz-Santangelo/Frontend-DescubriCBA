@@ -28,7 +28,6 @@ export const UserProvider = ({ children }) => {
           userData !== "null"
         ) {
           const parsedUser = JSON.parse(userData);
-          //console.log('🔄 Restaurando sesión:', parsedUser);
           setUser(parsedUser);
         } else {
           console.log("🚫 No hay sesión válida para restaurar");
@@ -54,6 +53,8 @@ export const UserProvider = ({ children }) => {
 
     // Tu backend devuelve 'token', no 'accessToken'. Hacemos la desestructuración correcta.
     const { token, ...userData } = userDto;
+
+    console.log("Datos guardados en el contexto:", userData);
 
     if (token) {
       // Guardar el token y los datos del usuario en localStorage

@@ -1,14 +1,6 @@
 import { useUser } from "../../hooks/useUser";
 import { Navigate } from "react-router-dom";
 
-/**
- * Componente para proteger rutas basadas en roles
- * @param {Object} props
- * @param {React.ReactNode} props.children - Componente a renderizar si tiene permisos
- * @param {string|string[]} props.requiredRole - Rol(es) requerido(s) para acceder
- * @param {string} props.fallbackPath - Ruta a la que redirigir si no tiene permisos
- * @param {React.ReactNode} props.fallbackComponent - Componente a mostrar si no tiene permisos
- */
 const ProtectedRoute = ({ 
   children, 
   requiredRole, 

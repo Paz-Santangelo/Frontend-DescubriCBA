@@ -185,9 +185,9 @@ const UserManagement = () => {
       case "ADMIN":
         return "danger";
       case "OWNER":
-        return "success"; // Color verde para dueños
+        return "success";
       case "MANAGEMENT":
-        return "warning"; // Color amarillo para gestores
+        return "warning";
       case "CLIENTE":
         return "info";
       case "USER":
@@ -255,8 +255,7 @@ const UserManagement = () => {
                 </Alert>
               )}
 
-              <div className="table-responsive">
-                <Table striped bordered hover className="user-table">
+                <Table striped bordered hover responsive className="user-table">
                   <thead className="table-dark">
                     <tr>
                       <th>ID</th>
@@ -325,7 +324,6 @@ const UserManagement = () => {
                     )}
                   </tbody>
                 </Table>
-              </div>
             </Card.Body>
           </Card>
         </Col>
