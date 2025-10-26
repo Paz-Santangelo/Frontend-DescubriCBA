@@ -25,8 +25,15 @@ function AppNavbar({ setToggled }) {
   };
 
   // El botón del sidebar solo debe aparecer en las rutas que usan LayoutPrivado
-  const privatePaths = ["/mi-perfil", "/destinos"];
-  const showSidebarToggle = privatePaths.includes(location.pathname);
+  // y cuando el usuario está logueado.
+  const privatePaths = [
+    "/mi-perfil",
+    "/destinos",
+    "/destino",   // Para que aparezca en /destino/:slug
+    "/servicios", // Para que aparezca en las páginas de servicios
+    "/gestion-usuarios", // Para que aparezca en la gestión de usuarios
+  ];
+  const showSidebarToggle = isLoggedIn && privatePaths.some(path => location.pathname.startsWith(path));
 
   const navbarClasses = `py-2 custom-navbar`;
 

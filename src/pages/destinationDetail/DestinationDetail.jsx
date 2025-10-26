@@ -126,6 +126,13 @@ const DestinationDetail = () => {
     },
   ];
 
+  // Función para crear un "slug" amigable para la URL a partir de la localidad
+  const createSlug = (text) => {
+    if (!text) return "";
+    return text.toString().toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
+  };
+  const localitySlug = createSlug(destino.locality);
+
   // Variantes de animación
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -147,7 +154,11 @@ const DestinationDetail = () => {
       <Container>
         {/* Botón de volver */}
         <div className="back-button-container">
-          <Link to="/destinos" className="back-button">
+          <Link
+            to="/destinos"
+            className="back-button"
+            style={{ "--service-color": "#39d8a8" }}
+          >
             <ArrowLeft size={20} className="me-2" />
             Volver a destinos
           </Link>
@@ -190,57 +201,18 @@ const DestinationDetail = () => {
                     <Card.Text className="service-description flex-grow-1">
                       {servicio.descripcion}
                     </Card.Text>
-                    {/* Hacemos que el botón sea un Link dinámico */}
-                    {servicio.tipo === "Dónde dormir" && (
-                      <Link
-                        to={`/alojamientos/${destino.locality}`}
-                        className="btn mt-auto service-button"
-                        style={{ "--service-color": servicio.color }}
-                      >
-                        Ver opciones
-                      </Link>
-                    )}
-                    {servicio.tipo === "Dónde comer" && (
-                      <Link
-                        to={`/restaurantes/${destino.locality}`}
-                        className="btn mt-auto service-button"
-                        style={{ "--service-color": servicio.color }}
-                      >
-                        Ver opciones
-                      </Link>
-                    )}
-                    {servicio.tipo === "Dónde pasear" && (
-                      <Link
-                        to={`/cuerpos-de-agua/${destino.locality}`}
-                        className="btn mt-auto service-button"
-                        style={{ "--service-color": servicio.color }}
-                      >
-                        Ver opciones
-                      </Link>
-                    )}
-                    {servicio.tipo === "Emergencias" && (
-                      <Link
-                        to={`/emergencias/${destino.locality}`}
-                        className="btn mt-auto service-button"
-                        style={{ "--service-color": servicio.color }}
-                      >
-                        Ver opciones
-                      </Link>
-                    )}
-                    {
-                      /* Botón genérico para cualquier otro servicio futuro */
-                      servicio.tipo !== "Dónde dormir" &&
-                        servicio.tipo !== "Dónde comer" &&
-                        servicio.tipo !== "Dónde pasear" &&
-                        servicio.tipo !== "Emergencias" && (
-                          <Button
-                            className="mt-auto service-button disabled"
-                            style={{ "--service-color": servicio.color }}
-                          >
-                            Ver opciones
-                          </Button>
-                        )
-                    }
+                    <Link
+                      to={`/servicios/${
+                        servicio.tipo === "Dónde dormir" ? "alojamientos"
+                        : servicio.tipo === "Dónde comer" ? "restaurantes"
+                        : servicio.tipo === "Dónde pasear" ? "cuerpos-de-agua"
+                        : "emergencias"
+                      }/${localitySlug}`}
+                      className="btn mt-auto service-button"
+                      style={{ "--service-color": servicio.color }}
+                    >
+                      Ver opciones
+                    </Link>
                   </Card.Body>
                 </Card>
               </motion.div>

@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
@@ -10,23 +11,22 @@ import Registro from "./pages/registro/Registro.jsx";
 import Quienes from "./pages/quienes/Quienes";
 import Preguntas from "./pages/preguntas/Preguntas";
 import MyProfile from "./pages/myProfile/MyProfile.jsx";
-import DestinationsList from "./pages/destinationsList/DestinationsList.jsx";
+import DestinationsList from "./pages/destinationsList/DestinationsList.jsx"; 
 import DestinationDetail from "./pages/destinationDetail/DestinationDetail.jsx";
-import RestaurantListPage from "./pages/restaurantListPage/RestaurantListPage.jsx";
-import AccommodationListPage from "./pages/accommodationListPage/AccommodationListPage.jsx";
+import ServiceListPage from "./pages/serviceListPage/ServiceListPage.jsx"; // Importamos el nuevo componente
 
 import UserManagement from "./pages/userManagement/UserManagement.jsx";
 import LayoutPrivado from "./layouts/LayoutPrivado.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import UserProvider from "./context/UserContext";
 import { useUser } from "./hooks/useUser";
-import { useState } from "react";
-import BodyOfWaterListPage from "./pages/bodyOfWaterListPage/BodyOfWaterListPage.jsx";
-import EmergencyListPage from "./pages/emergencyListPage/EmergencyListPage.jsx";
+import { useState, useEffect } from "react";
 
 // Componente que contiene la lógica de las rutas y puede acceder al contexto
 function AppContent() {
   const [toggled, setToggled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const userContext = useUser();
 
   // Verificación segura del contexto
@@ -37,23 +37,24 @@ function AppContent() {
 
   const { user, isLoading } = userContext;
 
-  // Verificar si el usuario está autenticado de manera más flexible
+  // Efecto para redirigir al usuario después de iniciar sesión
+  useEffect(() => {
+    const isLoggedIn = user && (user.role || user.email || user.id);
+
+    // Si el usuario acaba de iniciar sesión (isLoggedIn es true)
+    // y todavía está en la página de login, lo redirigimos.
+    if (isLoggedIn && location.pathname === "/login") {
+      navigate("/mi-perfil", { replace: true });
+    }
+    // Agregamos 'user' como dependencia para que el efecto se re-evalúe cuando cambie.
+  }, [user, location.pathname, navigate]);
+
+  // Verificar si el usuario está autenticado de manera más flexible (lo usamos después de los returns)
   const isLoggedIn = user && (user.role || user.email || user.id);
 
-  // Mostrar loading mientras se verifica la sesión
-  if (isLoading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <Router>
-      <div className="d-flex flex-column min-vh-100">
+    <div className="d-flex flex-column min-vh-100">
+      {/* El Navbar y Footer ahora están dentro del componente que tiene acceso a las rutas */}
         <AppNavbar setToggled={() => setToggled(!toggled)} />
         <main className="flex-grow-1">
           <Routes>
@@ -69,22 +70,7 @@ function AppContent() {
               <>
                 <Route path="/destinos" element={<DestinationsList />} />
                 <Route path="/destino/:slug" element={<DestinationDetail />} />
-                <Route
-                  path="/restaurantes/:locality"
-                  element={<RestaurantListPage />}
-                />
-                <Route
-                  path="/cuerpos-de-agua/:locality"
-                  element={<BodyOfWaterListPage />}
-                />
-                <Route
-                  path="/alojamientos/:locality"
-                  element={<AccommodationListPage />}
-                />
-                <Route
-                  path="/emergencias/:locality"
-                  element={<EmergencyListPage />}
-                />
+                <Route path="/servicios/:serviceType/:locality" element={<ServiceListPage />} />
               </>
             )}
 
@@ -97,22 +83,7 @@ function AppContent() {
               >
                 <Route path="/destinos" element={<DestinationsList />} />
                 <Route path="/destino/:slug" element={<DestinationDetail />} />
-                <Route
-                  path="/restaurantes/:locality"
-                  element={<RestaurantListPage />}
-                />
-                <Route
-                  path="/cuerpos-de-agua/:locality"
-                  element={<BodyOfWaterListPage />}
-                />
-                <Route
-                  path="/alojamientos/:locality"
-                  element={<AccommodationListPage />}
-                />
-                <Route
-                  path="/emergencias/:locality"
-                  element={<EmergencyListPage />}
-                />
+                <Route path="/servicios/:serviceType/:locality" element={<ServiceListPage />} />
                 <Route
                   path="/mi-perfil"
                   element={
@@ -151,16 +122,18 @@ function AppContent() {
           </Routes>
         </main>
         <Footer />
-      </div>
-    </Router>
+    </div>
   );
 }
 
 // Componente principal que provee el contexto
 function App() {
   return (
+    // El Router debe envolver al componente que usa los hooks de navegación (useNavigate, etc.)
     <UserProvider>
-      <AppContent />
+      <Router>
+        <AppContent />
+      </Router>
     </UserProvider>
   );
 }
