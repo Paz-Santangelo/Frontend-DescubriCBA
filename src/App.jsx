@@ -19,6 +19,7 @@ import Preguntas from "./pages/preguntas/Preguntas";
 import MyProfile from "./pages/myProfile/MyProfile.jsx";
 import DestinationsList from "./pages/destinationsList/DestinationsList.jsx";
 import DestinationOptionsPage from "./pages/destinationOptionsPage/DestinationOptionsPage.jsx";
+import DestinationDetailPage from "./pages/DestinationDetailPage/DestinationDetailPage.jsx"; // Import DestinationDetailPage
 import ServiceListPage from "./pages/serviceListPage/ServiceListPage.jsx"; // Importamos el nuevo componente
 
 import UserManagement from "./pages/userManagement/UserManagement.jsx";
@@ -81,6 +82,10 @@ function AppContent() {
                 path="/servicios/:serviceType/:locality"
                 element={<ServiceListPage />}
               />
+              <Route
+                path="/destinations/:id"
+                element={<DestinationDetailPage />}
+              />
             </>
           )}
 
@@ -96,6 +101,10 @@ function AppContent() {
               <Route
                 path="/servicios/:serviceType/:locality"
                 element={<ServiceListPage />}
+              />
+              <Route
+                path="/destinations/:id"
+                element={<DestinationDetailPage />}
               />
               <Route
                 path="/mi-perfil"

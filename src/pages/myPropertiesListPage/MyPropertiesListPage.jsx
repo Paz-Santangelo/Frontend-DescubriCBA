@@ -1,12 +1,15 @@
 import "../serviceListPage/ServiceListPage.css";
 import { motion } from "framer-motion";
-import { Container, Row, Col, Card, Alert } from "react-bootstrap";
-import { StarFill, StarHalf, Star } from "react-bootstrap-icons";
+import { Container, Row, Col, Card, Alert, Button } from "react-bootstrap";
+import { StarFill, StarHalf, Star, PlusCircleFill } from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
+import { Link } from "react-router-dom";
 
 const MyPropertiesListPage = () => {
   const { user } = useUser();
   const properties = user?.ownedDestinations || [];
+
+  console.log("Propiedades: ", properties);
 
   // Variante para cada tarjeta individual
   const cardVariants = {
@@ -41,9 +44,22 @@ const MyPropertiesListPage = () => {
   return (
     <div className="service-list-container logged-in">
       <Container>
-        <h1 className="text-center mb-5 section-title">
-        Mis Propiedades
-      </h1>
+        {/* Título centrado */}
+        <h1 className="text-center mb-4 section-title">Mis Propiedades</h1>
+
+        {/* Botón alineado a la derecha */}
+        <div className="text-end mb-5">
+          <Button
+            className="back-button"
+            style={{ "--service-color": "#39d8a8" }}
+            onClick={() => {
+              /* Lógica para agregar propiedad irá aquí */
+            }}
+          >
+            <PlusCircleFill size={20} className="me-2" />
+            Agregar Propiedad
+          </Button>
+        </div>
 
         {properties.length === 0 && (
           <div className="text-center">
@@ -60,25 +76,31 @@ const MyPropertiesListPage = () => {
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
-                transition={{ duration: 0.5, delay: index * 0.1 }} // Usamos el index para el efecto stagger
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                {/* El enlace se agregará en el futuro para ir a la página de edición de la propiedad */}
-                <Card className="service-card h-100">
-                  <Card.Img
-                    variant="top"
-                    src={
-                      property.imagesDestinations?.[0]?.urlImage ||
-                      "https://via.placeholder.com/400x250"
-                    }
-                    className="service-card-img"
-                  />
-                  <div className="card-img-overlay">
-                    <div className="card-overlay-content">
-                      <h5 className="card-title text-white">{property.name}</h5>
-                      {renderStars(property.averageScore)}
+                <Link
+                  to={`/destinations/${property.id}`}
+                  className="text-decoration-none"
+                >
+                  <Card className="service-card h-100">
+                    <Card.Img
+                      variant="top"
+                      src={
+                        property.imagesDestinations?.[0]?.urlImage ||
+                        "https://via.placeholder.com/400x250"
+                      }
+                      className="service-card-img"
+                    />
+                    <div className="card-img-overlay">
+                      <div className="card-overlay-content">
+                        <h5 className="card-title text-white">
+                          {property.name}
+                        </h5>
+                        {renderStars(property.averageScore)}
+                      </div>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+                </Link>
               </motion.div>
             </Col>
           ))}

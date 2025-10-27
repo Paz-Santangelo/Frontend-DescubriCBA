@@ -2,12 +2,11 @@ import apiClient from "./apiClient";
 
 // Servicio para manejar operaciones relacionadas con usuarios
 const userService = {
-  
   // Función para obtener todos los usuarios (requiere autenticación)
   getAllUsers: async () => {
     try {
       // El interceptor de apiClient ya añade el token automáticamente.
-      const response = await apiClient.get('/api/usuarios/all');
+      const response = await apiClient.get("/api/usuarios/all");
       // Devolvemos directamente el array de usuarios que viene en response.data.
       console.log(response.data);
       return response.data;
@@ -29,13 +28,9 @@ const userService = {
   },
 
   // Función para actualizar perfil de usuario
-  updateProfile: async (userData) => {
+  updateProfile: async (userId, formData) => {
     try {
-      const response = await apiClient.put('/api/usuarios/profile', userData);
-      // Actualizar datos del usuario en localStorage si es exitoso
-      if (response.data) {
-        localStorage.setItem('user_data', JSON.stringify(response.data));
-      }
+      const response = await apiClient.put(`/api/usuarios/update/${userId}`, formData);
       return response.data;
     } catch (error) {
       throw error;
@@ -47,13 +42,13 @@ const userService = {
     try {
       // Llamar al endpoint real del backend
       const response = await apiClient.put(`/api/usuarios/${userId}/role`, {
-        role: newRole
+        role: newRole,
       });
       return response.data;
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
 
 export default userService;

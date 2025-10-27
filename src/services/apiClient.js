@@ -7,9 +7,6 @@ const API_URL = "http://localhost:8080";
 const apiClient = axios.create({
   baseURL: API_URL,
   timeout: 10000, // 10 segundos de timeout
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Interceptor para agregar token JWT automáticamente a las peticiones
