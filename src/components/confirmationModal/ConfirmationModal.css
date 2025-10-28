@@ -1,0 +1,5 @@
+/* Hereda los estilos de ModalMyProfile.css cuando se usa la clase profile-modal-content */
+/* Esto asegura que el botón de cierre sea blanco en el tema oscuro */
+.profile-modal-content .modal-header-custom .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}

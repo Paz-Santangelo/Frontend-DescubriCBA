@@ -100,6 +100,13 @@
   color: #39d8a8;
 }
 
+/* Efecto hover para el botón de Google Maps */
+.google-maps-btn:hover {
+  background-color: #39d8a8;
+  border-color: #39d8a8; /* Añadimos el color del borde en hover */
+  color: white;
+}
+
 /* Estilos para la sección de comentarios */
 .comments-card {
   background-color: #ffffff;
@@ -204,7 +211,8 @@
 }
 
 .back-button:focus {
-  box-shadow: none !important; /* Solo eliminamos el anillo de foco azul */
+  box-shadow: none !important;
+  /* Solo eliminamos el anillo de foco azul */
 }
 
 /* Asegura que el texto del botón de eliminar sea blanco en hover */

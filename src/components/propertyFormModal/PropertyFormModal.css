@@ -1,0 +1,46 @@
+/* Esta clase se aplica al .modal-content div a través de la prop contentClassName */
+.property-form-modal-content {
+  background-color: #344944; /* Mismo verde oscuro que el modal de perfil */
+  color: white;
+  border: none;
+}
+
+/* Estilo del encabezado dentro de nuestro modal personalizado */
+.property-form-modal-content .modal-header-custom {
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Estilo del pie de página dentro de nuestro modal personalizado */
+.property-form-modal-content .modal-footer {
+  background-color: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-create-property {
+  background-color: #39d8a8; /* Un naranja brillante */
+  border-color: #39d8a8;
+  color: #151a19; /* Texto oscuro para mejor lectura sobre naranja */
+}
+
+.btn-create-property:hover {
+  background-color: #39d8a8; /* Un naranja un poco más claro en hover */
+  border-color: #39d8a8;
+  color: #ffffff;
+}
+
+/* Estilos para el selector de tipo de propiedad */
+.property-type-selector {
+  width: 50%; /* Ancho reducido */
+  background-color: #2a3a35; /* Un verde más oscuro que el fondo */
+  color: white; /* Texto blanco */
+  border-color: rgba(255, 255, 255, 0.2); /* Borde sutil */
+  /* Icono de flecha blanco para el tema oscuro */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* Cambia el color de las opciones en el desplegable (puede no funcionar en todos los navegadores) */
+.property-type-selector option {
+  background-color: #344944;
+  color: white;
+}

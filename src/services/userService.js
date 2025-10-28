@@ -49,6 +49,16 @@ const userService = {
       throw error;
     }
   },
+
+  // Función para eliminar un usuario por ID
+  deleteUserById: async (userId) => {
+    try {
+      const response = await apiClient.delete(`/api/usuarios/delete/${userId}`);
+      return response.data; // Devuelve el mensaje "El perfil fue eliminado con éxito."
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userService;

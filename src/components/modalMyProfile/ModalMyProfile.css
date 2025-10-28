@@ -21,6 +21,17 @@
   filter: invert(1) grayscale(100%) brightness(200%);
 }
 
+/* Estilo del pie de página dentro de nuestro modal personalizado */
+.profile-modal-content .modal-footer {
+  background-color: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Anulamos el color de .text-muted de Bootstrap para que sea legible en el fondo oscuro */
+.profile-modal-content .text-muted {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
 /* Estilos para los inputs en fondo oscuro */
 .profile-modal-content .form-control {
   background-color: rgba(255, 255, 255, 0.1);
@@ -45,6 +56,14 @@
   background-color: #39d8a8;
   border-color: #39d8a8;
   font-weight: 600;
+}
+
+/* Hacemos el spinner dentro de los botones un poco más pequeño y sutil */
+.profile-modal-content .btn .spinner-border-sm {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-width: 0.18em;
+  vertical-align: -0.1em; /* Alinea mejor el spinner con el texto */
 }
 
 /* Estilo para la vista previa de la imagen */

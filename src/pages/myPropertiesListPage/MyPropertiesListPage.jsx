@@ -1,12 +1,16 @@
 import "../serviceListPage/ServiceListPage.css";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Container, Row, Col, Card, Alert, Button } from "react-bootstrap";
 import { StarFill, StarHalf, Star, PlusCircleFill } from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
 import { Link } from "react-router-dom";
+import PropertyFormModal from "../../components/propertyFormModal/PropertyFormModal";
 
 const MyPropertiesListPage = () => {
   const { user } = useUser();
+  const [showPropertyModal, setShowPropertyModal] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null); // Para futura edición
   const properties = user?.ownedDestinations || [];
 
   console.log("Propiedades: ", properties);
@@ -52,9 +56,8 @@ const MyPropertiesListPage = () => {
           <Button
             className="back-button"
             style={{ "--service-color": "#39d8a8" }}
-            onClick={() => {
-              /* Lógica para agregar propiedad irá aquí */
-            }}
+            // Al hacer clic, limpiamos la propiedad seleccionada y mostramos el modal
+            onClick={() => { setSelectedProperty(null); setShowPropertyModal(true); }}
           >
             <PlusCircleFill size={20} className="me-2" />
             Agregar Propiedad
@@ -106,6 +109,13 @@ const MyPropertiesListPage = () => {
           ))}
         </Row>
       </Container>
+
+      {/* Renderizamos el modal para agregar/editar propiedades */}
+      <PropertyFormModal
+        show={showPropertyModal}
+        onHide={() => setShowPropertyModal(false)}
+        property={selectedProperty}
+      />
     </div>
   );
 };
