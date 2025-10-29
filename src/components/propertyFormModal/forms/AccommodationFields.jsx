@@ -1,4 +1,3 @@
-import React from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 
 const AccommodationFields = ({ formData, handleChange }) => {
@@ -15,6 +14,7 @@ const AccommodationFields = ({ formData, handleChange }) => {
             value={formData.type}
             onChange={handleChange}
             required
+            className="form-control-medium"
           >
             <option value="">Seleccionar tipo...</option>
             {accommodationTypes.map(type => (

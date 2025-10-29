@@ -29,7 +29,7 @@ const emergencyService = {
     }
   },
 
-  createService: async (formData) => {
+  createEmergencyService: async (formData) => {
     try {
       const response = await apiClient.post(`${BASE}/create`, formData, {
         headers: { "Content-Type": "multipart/form-data" },

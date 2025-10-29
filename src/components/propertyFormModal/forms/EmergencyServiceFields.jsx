@@ -1,4 +1,3 @@
-import React from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 
 const EmergencyServiceFields = ({ formData, handleChange }) => {
@@ -15,6 +14,7 @@ const EmergencyServiceFields = ({ formData, handleChange }) => {
             value={formData.typeOfEmergency}
             onChange={handleChange}
             required
+            className="form-control-medium"
           >
             <option value="">Seleccionar tipo...</option>
             {emergencyTypes.map(type => (

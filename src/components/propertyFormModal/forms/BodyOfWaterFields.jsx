@@ -18,6 +18,7 @@ const BodyOfWaterFields = ({ formData, handleChange }) => {
             value={formData.typeBodyOfWater}
             onChange={handleChange}
             required
+            className="form-control-medium"
           >
             <option value="">Seleccionar tipo...</option>
             {bodyOfWaterTypes.map(type => (
@@ -34,6 +35,7 @@ const BodyOfWaterFields = ({ formData, handleChange }) => {
             value={formData.cleaningLevel}
             onChange={handleChange}
             required
+            className="form-control-medium"
           >
             <option value="">Seleccionar nivel...</option>
             {cleaningLevels.map(level => (
