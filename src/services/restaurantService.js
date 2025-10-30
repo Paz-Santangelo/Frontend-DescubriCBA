@@ -43,6 +43,7 @@ const restaurantService = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        timeout: 60000, // 60 segundos de timeout para esta solicitud
       });
       return response.data;
     } catch (error) {

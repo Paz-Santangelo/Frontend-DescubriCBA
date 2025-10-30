@@ -119,6 +119,18 @@
   width: 50% !important;
 }
 
+/* Estilo para InputGroup cuando está deshabilitado (ej. Precio de Entrada) */
+.input-group:has(.form-control:disabled) {
+  opacity: 0.6;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Estilo para el grupo de Métodos de Pago cuando está deshabilitado */
+.payment-methods-group:has(.form-check-input:disabled) {
+  opacity: 0.6;
+  transition: opacity 0.2s ease-in-out;
+}
+
 /* --- Input de hora con ícono blanco --- */
 .time-input-white-icon {
   color-scheme: dark;
@@ -129,7 +141,7 @@
   background-color: #39d8a8;
   border-color: #39d8a8;
   color: #151a19;
-  max-width: 20% !important;
+  width: 35% !important;
 }
 
 .btn-create-property:hover {
@@ -142,7 +154,8 @@
   background-color: #39d8a8;
   border-color: #39d8a8;
   color: #151a19;
-  opacity: 0.65;
+  opacity: 0.65 !important;
+  cursor: not-allowed;
 }
 
 /* ==========================================================================
@@ -198,7 +211,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease;
   color: white;
-  margin-bottom: 0; /* Override default label margin */
+  margin-bottom: 0;
 }
 
 .custom-file-upload-btn:hover {
@@ -209,4 +222,34 @@
 .file-counter-text {
   color: rgba(255, 255, 255, 0.8);
   font-style: italic;
+}
+
+/* ==========================================================================
+   5. Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 983px) {
+  .btn-create-property {
+    font-size: 0.85rem;
+  }
+
+  .modal-footer-custom {
+    justify-content: center !important;
+    flex-wrap: nowrap;
+  }
+
+  /* Hacemos que los botones compartan el espacio en pantallas pequeñas */
+  .modal-footer-custom .btn, .property-type-selector-responsive {
+    flex-grow: 1;
+    width: 100% !important;
+  }
+
+  /* Ajustes para el texto del selector de tipo de propiedad en pantallas pequeñas */
+  .property-type-select__placeholder,
+  .property-type-select__single-value {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

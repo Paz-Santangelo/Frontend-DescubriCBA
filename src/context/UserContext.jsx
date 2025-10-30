@@ -1,5 +1,6 @@
 // src/context/UserContext.jsx
 import { createContext, useState, useEffect } from "react";
+import userService from "../services/userService"; // Importamos el servicio de usuario
 import ProfilePhoto from "../assets/Alejandro.jpg";
 
 const UserContext = createContext();
@@ -48,24 +49,22 @@ export const UserProvider = ({ children }) => {
 
   // Función para hacer login en el sistema
   const login = (userDto) => {
-    // Imprimimos el DTO completo que llega del backend, como solicitaste.
-    //console.log('✅ Login exitoso. DTO del usuario recibido del backend:', userDto);
+    console.log("📄 DTO recibido en la función login:", userDto);
 
-    // Tu backend devuelve 'token', no 'accessToken'. Hacemos la desestructuración correcta.
+    // La respuesta es un objeto plano, usamos el resto de parámetros para capturar los datos del usuario
     const { token, ...userData } = userDto;
 
-    console.log("Datos guardados en el contexto:", userData);
+    console.log("🔍 Después de desestructurar:", { token, userData });
 
-    if (token) {
-      // Guardar el token y los datos del usuario en localStorage
+    if (token && userData && Object.keys(userData).length > 0) {
+      console.log("✅ Token y userData encontrados. Actualizando estado.");
       localStorage.setItem("jwt_token", token);
       localStorage.setItem("user_data", JSON.stringify(userData));
-      // Actualizar el estado global de la aplicación
       setUser(userData);
     } else {
       console.error(
-        "❌ No se encontró el token en la respuesta del login:",
-        userDto
+        "❌ No se encontró el token o los datos de usuario en la respuesta del login.",
+        { token, userData }
       );
     }
   };
@@ -77,6 +76,25 @@ export const UserProvider = ({ children }) => {
     // Limpiar localStorage
     localStorage.removeItem("jwt_token");
     localStorage.removeItem("user_data");
+  };
+
+  // Función para refrescar los datos del usuario desde el backend
+  const refreshUser = async () => {
+    console.log("🔄 Refrescando datos del usuario...");
+    if (user && user.id) {
+      try {
+        // Hacemos una llamada a la API para obtener los datos actualizados del usuario
+        const updatedUserData = await userService.getUserById(user.id);
+        // Actualizamos el estado global y el localStorage
+        localStorage.setItem("user_data", JSON.stringify(updatedUserData));
+        setUser(updatedUserData);
+        console.log("✅ Datos del usuario refrescados con éxito.");
+      } catch (error) {
+        console.error("❌ Error al refrescar los datos del usuario:", error);
+        // Opcional: si el token es inválido, podríamos cerrar sesión
+        // logout();
+      }
+    }
   };
 
   // Función opcional para cambiar el rol manualmente (ejemplo para pruebas)
@@ -156,6 +174,7 @@ export const UserProvider = ({ children }) => {
         changeRole,
         login,
         logout,
+        refreshUser, // Exponemos la nueva función
         loginAsAdmin,
         isLoading,
         hasRole, // Aún disponible para lógica jerárquica compleja

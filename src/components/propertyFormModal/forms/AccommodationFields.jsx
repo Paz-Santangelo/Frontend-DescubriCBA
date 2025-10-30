@@ -1,26 +1,99 @@
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Row, Col } from "react-bootstrap";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
-const AccommodationFields = ({ formData, handleChange }) => {
-  const accommodationTypes = ['HOTEL', 'HOSTEL', 'CAMPING', 'CABANIA'];
+const AccommodationFields = ({ formData, handleAccommodationTypeChange }) => {
+  const accommodationTypesList = ["HOTEL", "HOSTEL", "CAMPING", "CABAÑA"];
+
+  const accommodationTypeOptions = accommodationTypesList.map((type) => ({
+    value: type,
+    label: type,
+  }));
+
+  const animatedComponents = makeAnimated();
+
+  // Estilos personalizados para este react-select (consistentes con los demás)
+  const customAccommodationSelectStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      borderColor: state.isFocused ? "#39d8a8" : "rgba(255, 255, 255, 0.2)",
+      color: "white",
+      boxShadow: state.isFocused
+        ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)"
+        : null,
+      "&:hover": { borderColor: "#39d8a8" },
+      width: "50%",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: "white",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: "rgba(255, 247, 247, 0.6)",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: "#344944",
+      width: "50%",
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      maxHeight: "120px",
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      color: "white",
+      backgroundColor: "transparent",
+      borderRadius: "50%",
+      width: "20px",
+      height: "20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginRight: "4px",
+      transition: "background-color 0.2s ease-in-out, color 0.2s ease-in-out",
+      ":hover": { backgroundColor: "white", color: "#344944" },
+      "> svg": { transform: "scale(5.2)" },
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? "#39d8a8"
+        : state.isFocused
+        ? "rgba(57, 216, 168, 0.3)"
+        : "transparent",
+      color: state.isSelected ? "#151a19" : "white",
+      "&:active": { backgroundColor: "#39d8a8" },
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: "white",
+    }),
+  };
 
   return (
     <>
-      <h5 className="mt-4">Datos Específicos de Alojamiento</h5>
+      <h5 className="my-4">Datos Específicos de Alojamiento</h5>
       <Row>
         <Form.Group as={Col} md="6" className="mb-3">
           <Form.Label>Tipo de Alojamiento</Form.Label>
-          <Form.Select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
+          <Select
+            name="type" // Nombre para el formulario
+            options={accommodationTypeOptions}
+            value={
+              accommodationTypeOptions.find(
+                (option) => option.value === formData.type
+              ) || null
+            }
+            onChange={handleAccommodationTypeChange}
+            components={animatedComponents}
+            styles={customAccommodationSelectStyles}
+            placeholder="Seleccionar tipo..."
+            isClearable={true}
             required
-            className="form-control-medium"
-          >
-            <option value="">Seleccionar tipo...</option>
-            {accommodationTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </Form.Select>
+          />
         </Form.Group>
       </Row>
     </>

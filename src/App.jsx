@@ -26,18 +26,18 @@ import UserManagement from "./pages/userManagement/UserManagement.jsx";
 import LayoutPrivado from "./layouts/LayoutPrivado.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import UserProvider from "./context/UserContext";
-import { useUser } from "./hooks/useUser";
+import { NotificationProvider } from "./context/NotificationContext";
+import NotificationContainer from "./components/notifications/NotificationContainer";
 import { useState, useEffect } from "react";
 import MyPropertiesListPage from "./pages/myPropertiesListPage/MyPropertiesListPage.jsx";
+import { useUser } from './hooks/useUser';
 
-// Componente que contiene la lógica de las rutas y puede acceder al contexto
 function AppContent() {
   const [toggled, setToggled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const userContext = useUser();
 
-  // Verificación segura del contexto
   if (!userContext) {
     console.error("❌ UserContext no está disponible");
     return <div>Error: Contexto de usuario no disponible</div>;
@@ -45,23 +45,20 @@ function AppContent() {
 
   const { user, isLoading } = userContext;
 
-  // Efecto para redirigir al usuario después de iniciar sesión
   useEffect(() => {
     const isLoggedIn = user && (user.role || user.email || user.id);
 
-    // Si el usuario acaba de iniciar sesión (isLoggedIn es true)
-    // y todavía está en la página de login, lo redirigimos.
     if (isLoggedIn && location.pathname === "/login") {
       navigate("/mi-perfil", { replace: true });
     }
-    // Agregamos 'user' como dependencia para que el efecto se re-evalúe cuando cambie.
   }, [user, location.pathname, navigate]);
 
-  // Verificar si el usuario está autenticado de manera más flexible (lo usamos después de los returns)
+ 
   const isLoggedIn = user && (user.role || user.email || user.id);
 
   return (
     <div className="d-flex flex-column min-vh-100">
+      <NotificationContainer />
       {/* El Navbar y Footer ahora están dentro del componente que tiene acceso a las rutas */}
       <AppNavbar setToggled={() => setToggled(!toggled)} />
       <main className="flex-grow-1">
@@ -163,9 +160,11 @@ function App() {
   return (
     // El Router debe envolver al componente que usa los hooks de navegación (useNavigate, etc.)
     <UserProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <NotificationProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </NotificationProvider>
     </UserProvider>
   );
 }

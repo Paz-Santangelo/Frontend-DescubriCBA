@@ -1,0 +1,25 @@
+.notification-container {
+  position: fixed;
+  top: 80px; /* Ajustar según la altura de tu navbar */
+  right: 20px;
+  z-index: 1055; /* Asegura que esté por encima de otros elementos, incluido el modal backdrop (1050) */
+  width: 350px;
+}
+
+.notification-toast {
+  margin-bottom: 1rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  opacity: 0.95;
+  animation: slideIn 0.5s forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 0.95;
+  }
+}

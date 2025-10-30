@@ -188,8 +188,6 @@ const UserManagement = () => {
         return "success";
       case "MANAGEMENT":
         return "warning";
-      case "CLIENTE":
-        return "info";
       case "USER":
         return "secondary";
       default:
@@ -359,7 +357,7 @@ const UserManagement = () => {
                   disabled={updateLoading}
                 >
                   <option value="USER">USER - Usuario normal</option>
-                  <option value="CLIENTE">CLIENTE - Dueño de negocio</option>
+                  <option value="OWNER">OWNER - Dueño de negocio</option>
                   <option value="MANAGEMENT">MANAGEMENT - Gestor</option>
                   <option value="ADMIN">ADMIN - Administrador</option>
                 </Form.Select>

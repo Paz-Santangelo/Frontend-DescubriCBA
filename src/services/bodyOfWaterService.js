@@ -27,6 +27,7 @@ const bodyOfWaterService = {
     try {
       const response = await apiClient.post(`${BASE}/create`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        timeout: 60000, // 60 segundos de timeout para esta solicitud
       });
       return response.data;
     } catch (error) {

@@ -3,27 +3,26 @@ import { Modal, Button, Form, Alert, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/userService";
 import { useUser } from "../../hooks/useUser";
+import { useNotification } from "../../context/NotificationContext";
 import "./ModalMyProfile.css";
 
 const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
   const { logout } = useUser();
+  const { addNotification } = useNotification();
   const [formData, setFormData] = useState({
     name: "",
     lastname: "",
     email: "",
-    password: "", // Nueva contraseña
-    currentPassword: "", // Contraseña actual para verificación
+    password: "",
+    currentPassword: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [error, setError] = useState(null);
-  const [validationErrors, setValidationErrors] = useState({}); // Nuevo estado para errores de validación
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({}); 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Rellenar y resetear el formulario cada vez que el modal se abre
     if (show && initialUser) {
       setFormData({
         name: initialUser.name || "",
@@ -32,12 +31,9 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
         password: "",
         currentPassword: "",
       });
-      // Al abrir, mostramos la imagen actual del usuario
       setImagePreview(initialUser.imageUser?.urlImage || null);
       setImageFile(null);
-      setError(null);
-      setSuccessMessage(null);
-      setValidationErrors({}); // Limpiar errores de validación al abrir el modal
+      setValidationErrors({}); 
     }
   }, [initialUser, show]);
 
@@ -47,7 +43,6 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
       ...prevData,
       [name]: value,
     }));
-    // Limpiar el error específico cuando el campo cambia
     setValidationErrors((prevErrors) => ({
       ...prevErrors,
       [name]: undefined,
@@ -57,18 +52,14 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Si había una vista previa de un archivo local, la liberamos para evitar memory leaks
       if (imagePreview && imagePreview.startsWith("blob:")) {
         URL.revokeObjectURL(imagePreview);
       }
       setImageFile(file);
-      // Crear una URL local para la vista previa
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
     } else {
-      // Si el usuario cancela la selección, limpiamos todo
       setImageFile(null);
-      // Y volvemos a mostrar la imagen original del usuario
       setImagePreview(initialUser.imageUser?.urlImage || null);
     }
   };
@@ -98,10 +89,6 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
       }
     }
 
-    // Validación de Contraseña Actual (siempre requerida para enviar)
-    // Solo requerida si no hay errores en otros campos y se intenta enviar
-    // O si se ha modificado algún campo que no sea la contraseña nueva
-    // Simplificamos: siempre requerida para habilitar el botón
     if (!formData.currentPassword.trim()) {
       newErrors.currentPassword =
         "La contraseña actual es obligatoria para guardar cambios.";
@@ -146,9 +133,9 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const errors = validateForm(); // Ejecutar validación
+    const errors = validateForm();
     if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors); // Establecer errores y detener el envío
+      setValidationErrors(errors);
       return;
     }
 
@@ -157,9 +144,7 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
       return;
     }
 
-    setIsSubmitting(true); // Si no hay errores de validación, procedemos
-    setError(null); // Limpiar errores de backend anteriores
-    setSuccessMessage(null); // Limpiar mensajes de éxito anteriores
+    setIsSubmitting(true);
 
     try {
       const data = new FormData();
@@ -173,19 +158,18 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
       }
 
       const message = await userService.updateProfile(initialUser.id, data);
-      setSuccessMessage(message);
+      addNotification(message, "success");
+      onHide();
 
-      // Después de 3 segundos, cerramos sesión y el modal.
+      // Después de 2 segundos, cerramos sesión y redirigimos.
       setTimeout(() => {
-        onHide();
         logout();
-        navigate("/login"); // Redirigimos al login
-      }, 3000);
+        navigate("/login");
+      }, 2000);
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "No se pudo actualizar el perfil. Inténtalo de nuevo."
-      );
+      const errorMessage = err.response?.data?.message || "No se pudo actualizar el perfil. Inténtalo de nuevo.";
+      addNotification(errorMessage, "error");
+      onHide();
     } finally {
       setIsSubmitting(false);
     }
@@ -205,126 +189,117 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          {successMessage ? (
-            <Alert variant="success">{successMessage}</Alert>
-          ) : (
-            <>
-              <Row>
-                <Col md={5} className="text-center">
-                  <Form.Group className="mb-3" controlId="formImage">
-                    <Form.Label>Foto de perfil</Form.Label>
-                    {/* Contenedor para la vista previa de la imagen */}
-                    <div className="mb-2">
-                      <img
-                        src={
-                          imagePreview ||
-                          "https://via.placeholder.com/150?text=Sin+Foto"
-                        }
-                        alt="Vista previa"
-                        className="image-preview"
-                      />
-                    </div>
-                    <Form.Control
-                      type="file"
-                      name="image"
-                      onChange={handleFileChange}
-                      size="sm"
-                      className="custom-file-input"
+          <>
+            <Row>
+              <Col md={5} className="text-center">
+                <Form.Group className="mb-3" controlId="formImage">
+                  <Form.Label>Foto de perfil</Form.Label>
+                  {/* Contenedor para la vista previa de la imagen */}
+                  <div className="mb-2">
+                    <img
+                      src={
+                        imagePreview ||
+                        "https://via.placeholder.com/150?text=Sin+Foto"
+                      }
+                      alt="Vista previa"
+                      className="image-preview"
                     />
-                  </Form.Group>
-                </Col>
+                  </div>
+                  <Form.Control
+                    type="file"
+                    name="image"
+                    onChange={handleFileChange}
+                    size="sm"
+                    className="custom-file-input"
+                  />
+                </Form.Group>
+              </Col>
 
-                <Col md={7}>
-                  <Form.Group className="mb-3" controlId="formName">
-                    <Form.Label>Nombre</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
+              <Col md={7}>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Nombre</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
 
-                  <Form.Group className="mb-3" controlId="formLastname">
-                    <Form.Label>Apellido</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="lastname"
-                      value={formData.lastname}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
+                <Form.Group className="mb-3" controlId="formLastname">
+                  <Form.Label>Apellido</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="lastname"
+                    value={formData.lastname}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
 
-                  <Form.Group className="mb-3" controlId="formEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
+                <Form.Group className="mb-3" controlId="formEmail">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
 
-              <hr className="my-4" />
+            <hr className="my-4" />
 
-              <Row>
-                <Col md={6}>
-                  <Form.Group className="mb-2" controlId="formCurrentPassword">
-                    <Form.Label>Contraseña Actual (requerida)</Form.Label>
-                    <Form.Control
-                      type="password"
-                      name="currentPassword"
-                      value={formData.currentPassword}
-                      onChange={handleChange}
-                      required
-                      isInvalid={!!validationErrors.currentPassword}
-                    />
-                    <div className="validation-feedback-container">
-                      {validationErrors.currentPassword}
-                    </div>
-                  </Form.Group>
-                </Col>
-                 <Col md={6}>
-                  <Form.Group className="mb-3" controlId="formNewPassword">
-                    <Form.Label>Nueva Contraseña (opcional)</Form.Label>
-                    <Form.Control
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="Dejar en blanco para no cambiar"
-                      isInvalid={!!validationErrors.password}
-                    />
-                    <div className="validation-feedback-container">
-                      {validationErrors.password}
-                    </div>
-                  </Form.Group>
-                </Col>
-              </Row>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-2" controlId="formCurrentPassword">
+                  <Form.Label>Contraseña Actual (requerida)</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="currentPassword"
+                    value={formData.currentPassword}
+                    onChange={handleChange}
+                    required
+                    isInvalid={!!validationErrors.currentPassword}
+                  />
+                  <div className="validation-feedback-container">
+                    {validationErrors.currentPassword}
+                  </div>
+                </Form.Group>
+              </Col>
+               <Col md={6}>
+                <Form.Group className="mb-3" controlId="formNewPassword">
+                  <Form.Label>Nueva Contraseña (opcional)</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Dejar en blanco para no cambiar"
+                    isInvalid={!!validationErrors.password}
+                  />
+                  <div className="validation-feedback-container">
+                    {validationErrors.password}
+                  </div>
+                </Form.Group>
+              </Col>
+            </Row>
 
-              <div className="d-grid mt-3">
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={
-                    isSubmitting ||
-                    !formData.currentPassword.trim() ||
-                    Object.values(validationErrors).some((error) => error)
-                  }
-                >
-                  {isSubmitting ? "Guardando..." : "Guardar Cambios"}
-                </Button>
-              </div>
-              {error && (
-                <Alert variant="danger" className="mt-3">
-                  {error}
-                </Alert>
-              )}
-            </>
-          )}
+            <div className="d-grid mt-3">
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={
+                  isSubmitting ||
+                  !formData.currentPassword.trim() ||
+                  Object.values(validationErrors).some((error) => error)
+                }
+              >
+                {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+              </Button>
+            </div>
+          </>
         </Form>
       </Modal.Body>
     </Modal>
