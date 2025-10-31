@@ -8,16 +8,14 @@ import { Link } from "react-router-dom";
 import PropertyFormModal from "../../components/propertyFormModal/PropertyFormModal";
 
 const MyPropertiesListPage = () => {
-  const { user } = useUser(); // No necesitamos refreshUser aquí
+  const { user } = useUser();
   const [showPropertyModal, setShowPropertyModal] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState(null); // Para futura edición
+  const [selectedProperty, setSelectedProperty] = useState(null);
   const properties = user?.ownedDestinations || [];
 
   const handleCloseModal = () => {
-    setShowPropertyModal(false); // Solo cerramos el modal
+    setShowPropertyModal(false);
   };
-
-  console.log("Propiedades: ", user);
 
   // Variante para cada tarjeta individual
   const cardVariants = {
@@ -60,7 +58,6 @@ const MyPropertiesListPage = () => {
           <Button
             className="back-button"
             style={{ "--service-color": "#39d8a8" }}
-            // Al hacer clic, limpiamos la propiedad seleccionada y mostramos el modal
             onClick={() => { setSelectedProperty(null); setShowPropertyModal(true); }}
           >
             <PlusCircleFill size={20} className="me-2" />
@@ -117,7 +114,7 @@ const MyPropertiesListPage = () => {
       {/* Renderizamos el modal para agregar/editar propiedades */}
       <PropertyFormModal
         show={showPropertyModal}
-        onHide={handleCloseModal} // Usamos la nueva función para cerrar el modal
+        onHide={handleCloseModal}
         property={selectedProperty}
       />
     </div>

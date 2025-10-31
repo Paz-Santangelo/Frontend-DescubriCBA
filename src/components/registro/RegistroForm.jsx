@@ -39,8 +39,6 @@ const RegistroForm = ({ onSuccess }) => {
   
     // Efecto para validar el formulario en tiempo real y actualizar el estado del botón
   useEffect(() => {
-    // La función de validación se define DENTRO del efecto
-    // para capturar siempre el estado 'form' más reciente.
     const validate = () => {
       const newErrors = {};
       if (!form.nombre.trim() || form.nombre.trim().length < 2) newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
@@ -114,9 +112,6 @@ const RegistroForm = ({ onSuccess }) => {
         }
       }, 1500);
     } catch (error) {
-      // El error viene de Axios y contiene la respuesta del backend.
-      console.error("❌ Error en el registro:", error.response || error);
-
       let errorMessage =
         "Error de conexión. Verifica que el servidor esté funcionando.";
 

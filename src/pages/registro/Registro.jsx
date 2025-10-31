@@ -6,7 +6,6 @@ const Registro = () => {
   const navigate = useNavigate();
 
   const handleSuccess = () => {
-    // Redirigir al login después del registro exitoso
     navigate("/login");
   };
 

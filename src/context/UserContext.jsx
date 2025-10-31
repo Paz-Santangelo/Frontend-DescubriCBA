@@ -16,12 +16,6 @@ export const UserProvider = ({ children }) => {
       try {
         const token = localStorage.getItem("jwt_token");
         const userData = localStorage.getItem("user_data");
-
-        console.log("🔍 Verificando localStorage:", {
-          token: token ? "✅ Presente" : "❌ No encontrado",
-          userData,
-        });
-
         if (
           token &&
           userData &&
@@ -31,12 +25,8 @@ export const UserProvider = ({ children }) => {
           const parsedUser = JSON.parse(userData);
           setUser(parsedUser);
         } else {
-          console.log("🚫 No hay sesión válida para restaurar");
         }
       } catch (error) {
-        console.error("❌ Error al restaurar sesión:", error);
-        console.log("🧹 Limpiando localStorage corrupto");
-        // Limpiar datos corruptos
         localStorage.removeItem("jwt_token");
         localStorage.removeItem("user_data");
       } finally {
@@ -49,50 +39,31 @@ export const UserProvider = ({ children }) => {
 
   // Función para hacer login en el sistema
   const login = (userDto) => {
-    console.log("📄 DTO recibido en la función login:", userDto);
-
-    // La respuesta es un objeto plano, usamos el resto de parámetros para capturar los datos del usuario
     const { token, ...userData } = userDto;
 
-    console.log("🔍 Después de desestructurar:", { token, userData });
-
     if (token && userData && Object.keys(userData).length > 0) {
-      console.log("✅ Token y userData encontrados. Actualizando estado.");
       localStorage.setItem("jwt_token", token);
       localStorage.setItem("user_data", JSON.stringify(userData));
       setUser(userData);
     } else {
-      console.error(
-        "❌ No se encontró el token o los datos de usuario en la respuesta del login.",
-        { token, userData }
-      );
     }
   };
 
   // Función para hacer logout en el sistema
   const logout = () => {
-    //console.log('🚪 Cerrando sesión');
     setUser(null);
-    // Limpiar localStorage
     localStorage.removeItem("jwt_token");
     localStorage.removeItem("user_data");
   };
 
   // Función para refrescar los datos del usuario desde el backend
   const refreshUser = async () => {
-    console.log("🔄 Refrescando datos del usuario...");
     if (user && user.id) {
       try {
-        // Hacemos una llamada a la API para obtener los datos actualizados del usuario
         const updatedUserData = await userService.getUserById(user.id);
-        // Actualizamos el estado global y el localStorage
         localStorage.setItem("user_data", JSON.stringify(updatedUserData));
         setUser(updatedUserData);
-        console.log("✅ Datos del usuario refrescados con éxito.");
       } catch (error) {
-        console.error("❌ Error al refrescar los datos del usuario:", error);
-        // Opcional: si el token es inválido, podríamos cerrar sesión
-        // logout();
       }
     }
   };

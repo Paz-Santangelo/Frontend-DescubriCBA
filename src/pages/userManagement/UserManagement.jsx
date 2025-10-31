@@ -87,13 +87,14 @@ const UserManagement = () => {
     const originalError = console.error;
     console.error = (...args) => {
       originalError(...args);
-      console.log("🚨 Error capturado en UserManagement:", args);
     };
 
     // Manejar errores no capturados
     const handleError = (event) => {
-      console.error("🚨 Error no manejado:", event.error);
-      addNotification("Error crítico detectado: " + event.error?.message, "danger");
+      addNotification(
+        "Error crítico detectado: " + event.error?.message,
+        "danger"
+      );
       event.preventDefault();
     };
 
@@ -116,12 +117,18 @@ const UserManagement = () => {
         if (usersData && usersData.length > 0) {
           setUsers(usersData);
           if (!initialLoadDone.current) {
-            addNotification(`Se cargaron ${usersData.length} usuarios correctamente`, "success");
+            addNotification(
+              `Se cargaron ${usersData.length} usuarios correctamente`,
+              "success"
+            );
           }
         } else {
           setUsers([]);
           if (!initialLoadDone.current) {
-            addNotification("No se encontraron usuarios en la base de datos.", "warning");
+            addNotification(
+              "No se encontraron usuarios en la base de datos.",
+              "warning"
+            );
           }
         }
       } catch (error) {
@@ -129,7 +136,6 @@ const UserManagement = () => {
         const errorMessage =
           error.response?.data?.message ||
           "Error de conexión al cargar usuarios.";
-        console.error("❌ Error al cargar usuarios:", error.response || error);
         addNotification(errorMessage, "danger");
       } finally {
         setLoading(false);
@@ -144,10 +150,7 @@ const UserManagement = () => {
   const handleReloadUsers = async () => {
     try {
       setLoading(true);
-
-      console.log("🔄 Recargando usuarios...");
       const usersData = await userService.getAllUsers();
-
       setUsers(usersData);
       addNotification(
         `Usuarios recargados exitosamente. Total: ${usersData?.length || 0}`,
@@ -157,7 +160,6 @@ const UserManagement = () => {
       const errorMessage =
         error.response?.data?.message ||
         "Error de conexión al recargar usuarios.";
-      console.error("❌ Error al recargar usuarios:", error.response || error);
       addNotification(errorMessage, "danger");
     } finally {
       setLoading(false);
@@ -180,24 +182,16 @@ const UserManagement = () => {
 
     try {
       setUpdateLoading(true);
-
-      /*console.log(
-        `🔄 Actualizando rol de ${selectedUser.email} de ${selectedUser.role} a ${newRole}`
-      );*/
-
-      // El servicio ahora devuelve el usuario actualizado directamente o lanza un error.
       const updatedUser = await userService.updateUserRole(
         selectedUser.id,
         newRole
       );
 
-      //console.log("📥 Resultado de actualización:", updatedUser);
-
       // Actualizar en la lista local inmediatamente
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
           u.id === selectedUser.id
-            ? { ...u, role: newRole } // O usar directamente updatedUser si el backend lo devuelve completo
+            ? { ...u, role: newRole }
             : u
         )
       );
@@ -211,10 +205,6 @@ const UserManagement = () => {
       const errorMessage =
         error.response?.data?.message ||
         "Error de conexión al actualizar el rol.";
-      console.error(
-        "❌ Error crítico al actualizar rol:",
-        error.response || error
-      );
       addNotification(errorMessage, "danger");
     } finally {
       setUpdateLoading(false);
@@ -250,9 +240,7 @@ const UserManagement = () => {
   return (
     <Container className="mt-2 user-management-container">
       {/* Título principal con el estilo unificado */}
-      <h1 className="text-center section-title">
-        Gestión de Usuarios
-      </h1>
+      <h1 className="text-center section-title">Gestión de Usuarios</h1>
 
       {/* Contenedor para el botón de recarga, alineado a la derecha */}
       <div className="d-flex justify-content-end mb-3">
@@ -272,7 +260,13 @@ const UserManagement = () => {
         <Col>
           <Card className="user-management-card">
             <Card.Body>
-              <Table striped bordered hover responsive className="user-table text-center">
+              <Table
+                striped
+                bordered
+                hover
+                responsive
+                className="user-table text-center"
+              >
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -324,7 +318,9 @@ const UserManagement = () => {
                             : "No se encontraron usuarios"}
                           <br />
                           <small>
-                            {"La base de datos no contiene usuarios registrados"}
+                            {
+                              "La base de datos no contiene usuarios registrados"
+                            }
                           </small>
                         </div>
                       </td>
@@ -387,7 +383,10 @@ const UserManagement = () => {
               try {
                 handleSaveRole();
               } catch (error) {
-                addNotification("Error crítico al guardar rol: " + error.message, "danger");
+                addNotification(
+                  "Error crítico al guardar rol: " + error.message,
+                  "danger"
+                );
                 setUpdateLoading(false);
               }
             }}

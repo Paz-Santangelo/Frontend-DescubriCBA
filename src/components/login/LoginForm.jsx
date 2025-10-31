@@ -21,7 +21,6 @@ const LoginForm = ({ onSuccess }) => {
 
   // Verificación segura del contexto
   if (!userContext) {
-    console.error("❌ UserContext no está disponible en LoginForm");
     return <div>Error: Contexto de usuario no disponible</div>;
   }
 
@@ -87,15 +86,10 @@ const LoginForm = ({ onSuccess }) => {
         password: form.password,
       };
 
-      // Llamar al servicio de login
-      // Ahora authService.login devuelve directamente el UserDTO del backend o lanza un error.
       const userDto = await authService.login(loginData);
 
-      // Éxito: El backend devolvió el DTO del usuario.
-      // Llamamos a la función login del contexto con el DTO completo.
       login(userDto);
 
-      // Mostrar mensaje de éxito
       setMessage({
         type: "success",
         text: "¡Inicio de sesión exitoso! Redirigiendo...",
@@ -105,11 +99,6 @@ const LoginForm = ({ onSuccess }) => {
 
       if (onSuccess) onSuccess();
     } catch (error) {
-      // El error viene de Axios y contiene la respuesta del backend.
-      console.error("❌ Error durante el login:", error.response || error);
-
-      // Tu backend para credenciales incorrectas (BadCredentialsException) devuelve un 401
-      // con un JSON: { status: 'UNAUTHORIZED', message: 'Email o contraseña incorrectos...' }
       const errorMessage =
         error.response?.data?.message ||
         "Error de conexión. Verifica que el servidor esté funcionando.";

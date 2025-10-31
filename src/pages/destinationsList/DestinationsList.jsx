@@ -24,7 +24,6 @@ const DestinationsList = () => {
         setError(
           "No se pudieron cargar los destinos. Inténtalo de nuevo más tarde."
         );
-        console.error("Error fetching destination cards:", err);
       } finally {
         setLoading(false);
       }
@@ -35,9 +34,11 @@ const DestinationsList = () => {
 
   // Función para crear un "slug" amigable para la URL a partir de la localidad
   const createSlug = (text) => {
-    return text.toString().toLowerCase()
-      .replace(/\s+/g, '-')           // Reemplaza espacios con -
-      .replace(/[^\w\-]+/g, '');      // Elimina caracteres no válidos
+    return text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "");
   };
 
   // Variantes de animación

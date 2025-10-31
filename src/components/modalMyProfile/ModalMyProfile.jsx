@@ -289,6 +289,7 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
             <div className="d-grid mt-3">
               <Button
                 type="submit"
+                className="profile-save-btn"
                 disabled={
                   isSubmitting ||
                   !formData.currentPassword.trim() ||

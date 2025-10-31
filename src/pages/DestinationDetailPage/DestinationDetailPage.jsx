@@ -49,13 +49,13 @@ const DestinationDetailPage = () => {
   const location = useLocation();
 
   const isLoggedIn = user && user.role;
-  // Botón para usuarios logueados que vienen de su panel
-  const canSeeBackButton = user && ["OWNER", "MANAGEMENT", "ADMIN"].includes(user.role);
-  // Botón para usuarios que vienen de una lista de servicios
+
+  const canSeeBackButton =
+    user && ["OWNER", "MANAGEMENT", "ADMIN"].includes(user.role);
+
   const previousState = location.state;
-  // Verificamos si el usuario actual puede editar/eliminar la propiedad
-  const canEditOrDelete =
-    user && user.id === destination?.ownerId;
+
+  const canEditOrDelete = user && user.id === destination?.ownerId;
 
   useEffect(() => {
     const fetchDestination = async () => {
@@ -68,7 +68,6 @@ const DestinationDetailPage = () => {
         setError(
           "No se pudieron cargar los detalles del destino. Por favor, intente más tarde."
         );
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -117,11 +116,15 @@ const DestinationDetailPage = () => {
       else stars.push(<Star key={i} />);
     }
     // Se envuelve en un div para aplicar estilos y mostrar el puntaje numérico
-    return <div className="star-rating-container">{stars} <span className="score-text">({roundedScore.toFixed(1)} de 5)</span></div>;
+    return (
+      <div className="star-rating-container">
+        {stars}{" "}
+        <span className="score-text">({roundedScore.toFixed(1)} de 5)</span>
+      </div>
+    );
   };
 
   // --- Funciones de renderizado para detalles específicos ---
-
   const renderRestaurantDetails = (dest) => (
     <>
       <ListGroup.Item>
@@ -187,19 +190,17 @@ const DestinationDetailPage = () => {
     </ListGroup.Item>
   );
 
-  // --- Renderizado Principal ---
-
   return (
     <div className={`destination-detail-page ${isLoggedIn ? "logged-in" : ""}`}>
       <Container>
-        {/* --- Lógica de Botones de Volver --- */}
-        {/* 1. Si el usuario viene de una lista de servicios, muestra este botón */}
         {previousState?.fromLink && (
           <div className="back-button-container">
             <Link
               to={previousState.fromLink}
               className="back-button"
-              style={{ "--service-color": previousState.fromColor || "#39d8a8" }}
+              style={{
+                "--service-color": previousState.fromColor || "#39d8a8",
+              }}
             >
               <ArrowLeft size={20} className="me-2" />
               Volver a {previousState.fromTitle}
@@ -295,7 +296,14 @@ const DestinationDetailPage = () => {
                   <ListGroup.Item>
                     <MapFill className="detail-icon" />
                     <div>
-                      <a href={destination.urlGoogleMaps} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm google-maps-btn">Ver en Google Maps</a>
+                      <a
+                        href={destination.urlGoogleMaps}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline-primary btn-sm google-maps-btn"
+                      >
+                        Ver en Google Maps
+                      </a>
                     </div>
                   </ListGroup.Item>
                 )}
@@ -309,7 +317,8 @@ const DestinationDetailPage = () => {
                 <ListGroup.Item>
                   <TelephoneFill className="detail-icon" />
                   <div>
-                    <strong>Teléfono:</strong> {destination.numberPhone || "N/A"}
+                    <strong>Teléfono:</strong>{" "}
+                    {destination.numberPhone || "N/A"}
                   </div>
                 </ListGroup.Item>
                 {destination.cellPhone && (
@@ -325,7 +334,11 @@ const DestinationDetailPage = () => {
                     <Globe className="detail-icon" />
                     <div>
                       <strong>Sitio Web:</strong>{" "}
-                      <a href={destination.website[0]} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={destination.website[0]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {destination.website[0]}
                       </a>
                     </div>
@@ -338,7 +351,12 @@ const DestinationDetailPage = () => {
                       <div>
                         <strong>Métodos de Pago:</strong>{" "}
                         {destination.paymentMethods.map((method) => (
-                          <Badge pill bg="secondary" className="me-1" key={method}>
+                          <Badge
+                            pill
+                            bg="secondary"
+                            className="me-1"
+                            key={method}
+                          >
                             {method}
                           </Badge>
                         ))}
@@ -349,7 +367,9 @@ const DestinationDetailPage = () => {
                   <PeopleFill className="detail-icon" />
                   <div>
                     <strong>Concurrencia:</strong>{" "}
-                    <Badge pill bg="info">{destination.levelConcurrence}</Badge>
+                    <Badge pill bg="info">
+                      {destination.levelConcurrence}
+                    </Badge>
                   </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -361,9 +381,10 @@ const DestinationDetailPage = () => {
                 </ListGroup.Item>
 
                 {/* --- Renderizado Condicional de Detalles Específicos --- */}
-                {destination.cuisineType && destination.cuisineType.length > 0 &&
+                {destination.cuisineType &&
+                  destination.cuisineType.length > 0 &&
                   renderRestaurantDetails(destination)}
-                {destination.type && renderAccommodationDetails(destination)} 
+                {destination.type && renderAccommodationDetails(destination)}
                 {destination.typeBodyOfWater &&
                   renderBodyOfWaterDetails(destination)}
                 {destination.typeOfEmergency &&
@@ -389,7 +410,9 @@ const DestinationDetailPage = () => {
                       <ChatQuoteFill className="comment-icon" />
                       <div className="comment-body">
                         <div className="comment-header">
-                          <strong className="comment-user">{comment.user.name} {comment.user.lastname}</strong>
+                          <strong className="comment-user">
+                            {comment.user.name} {comment.user.lastname}
+                          </strong>
                           <span className="comment-date">
                             {new Date(comment.commentDate).toLocaleDateString()}
                           </span>

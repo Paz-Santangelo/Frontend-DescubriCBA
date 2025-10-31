@@ -138,23 +138,23 @@
 
 /* --- Botón de Crear/Guardar Propiedad --- */
 .btn-create-property {
-  background-color: #39d8a8;
+  background-color: #39d8a8 !important;
+  color: white;
   border-color: #39d8a8;
-  color: #151a19;
   width: 35% !important;
 }
 
 .btn-create-property:hover {
-  background-color: #39d8a8;
-  border-color: #39d8a8;
-  color: #ffffff;
+  background-color: #2dbb90 !important; 
+  border-color: #2dbb90;
+  color: white;
 }
 
 .btn-create-property:disabled {
   background-color: #39d8a8;
   border-color: #39d8a8;
-  color: #151a19;
-  opacity: 0.65 !important;
+  color: white;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 

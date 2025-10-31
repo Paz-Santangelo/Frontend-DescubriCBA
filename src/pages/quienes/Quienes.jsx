@@ -1,6 +1,4 @@
-import React from "react";
 import "./quienes.css";
-import { Carousel } from "react-bootstrap";
 
 // Imágenes
 import Instituto from "../../assets/instituto.jpg";

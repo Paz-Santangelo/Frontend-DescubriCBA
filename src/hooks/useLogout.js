@@ -7,15 +7,8 @@ export const useLogout = () => {
   const { logout: contextLogout } = useUser();
 
   const logout = () => {
-    console.log("🚪 Cerrando sesión...");
-
-    // Limpiar contexto y localStorage
     contextLogout();
-
-    // Redirigir al home
     navigate("/");
-
-    console.log("✅ Sesión cerrada exitosamente");
   };
 
   return logout;

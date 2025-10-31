@@ -216,8 +216,8 @@ const PropertyFormModal = ({ show, onHide, property }) => {
         setFormData((prev) => ({
           ...prev,
           [name]: checked,
-          entrancePrice: checked ? 0 : prev.entrancePrice, // Resetea el precio
-          paymentMethods: checked ? [] : prev.paymentMethods, // Limpia los métodos de pago
+          entrancePrice: checked ? 0 : prev.entrancePrice, 
+          paymentMethods: checked ? [] : prev.paymentMethods, 
         }));
       } else {
         setFormData((prev) => ({ ...prev, [name]: checked }));

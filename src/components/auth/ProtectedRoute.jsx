@@ -11,7 +11,6 @@ const ProtectedRoute = ({
   
   // Verificación segura del contexto
   if (!userContext) {
-    console.error('❌ UserContext no está disponible en ProtectedRoute');
     return <Navigate to="/login" replace />;
   }
   
@@ -30,7 +29,6 @@ const ProtectedRoute = ({
   
   // Si no está logueado, redirigir al login
   if (!user) {
-    console.log('🚫 Usuario no autenticado, redirigiendo al login');
     return <Navigate to="/login" replace />;
   }
   
@@ -38,28 +36,15 @@ const ProtectedRoute = ({
   let hasAccess = false;
   
   if (!requiredRole) {
-    // Si no se especifica rol, solo verificar que esté logueado
     hasAccess = true;
   } else if (Array.isArray(requiredRole)) {
-    // Si es un array de roles, verificar que tenga al menos uno
     hasAccess = hasAnyRole(requiredRole);
   } else {
-    // Si es un rol específico
     hasAccess = hasRole(requiredRole);
   }
-  
-  // Log para debugging
-  console.log('🔐 Verificando permisos:', {
-    user: user.email,
-    userRole: user.role,
-    requiredRole,
-    hasAccess
-  });
-  
-  // Si no tiene acceso
-  if (!hasAccess) {
-    console.log('🚫 Acceso denegado por rol insuficiente');
     
+  // Si no tiene acceso
+  if (!hasAccess) {    
     if (fallbackComponent) {
       return fallbackComponent;
     }

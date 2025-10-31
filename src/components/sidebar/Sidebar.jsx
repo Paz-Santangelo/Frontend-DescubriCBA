@@ -39,7 +39,7 @@ function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
               {
                 name: "offset",
                 options: {
-                  offset: [0, -160], // distancia lateral reducida
+                  offset: [0, -160],
                 },
               },
             ],
