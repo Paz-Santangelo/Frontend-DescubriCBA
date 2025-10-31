@@ -13,8 +13,6 @@ import IconoCalendario from "../../assets/icono-calendario.png";
 import Testimonials from "../../components/testimonials/Testimonials";
 
 const Home = () => {
-  console.log("🏠 Home component loading...");
-
   const userContext = useUser();
 
   // Verificación segura del contexto
@@ -28,11 +26,8 @@ const Home = () => {
     );
   }
 
-  console.log("✅ UserContext disponible:", userContext);
-
   const { user, loginAsAdmin, logout } = userContext;
 
-  console.log("👤 Usuario actual:", user);
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {

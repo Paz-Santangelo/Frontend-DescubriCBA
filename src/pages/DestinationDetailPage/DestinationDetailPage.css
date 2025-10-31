@@ -1,0 +1,219 @@
+/* Padding para la vista pública (sin sidebar) */
+.destination-detail-page {
+  padding-top: 7rem;
+  padding-bottom: 5rem;
+  background-color: #f8f9fa;
+  min-height: 80vh;
+}
+
+/* Padding para la vista privada (con sidebar) */
+.destination-detail-page.logged-in {
+  padding-top: 3rem;
+}
+
+/* Título principal (estilo copiado de destinationsList.css para consistencia) */
+.section-title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 50px !important;
+  text-align: center;
+  color: #111;
+  font-weight: 700;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: #39d8a8;
+  border-radius: 2px;
+}
+
+/* Ajustes para el spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Estilos para el carrusel de imágenes */
+.destination-carousel {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-image {
+  height: 500px;
+  object-fit: cover;
+}
+
+/* Tarjeta de detalles */
+.details-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.details-subtitle {
+  font-weight: 600;
+  color: #333;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.list-group-item {
+  border: none;
+  padding: 0.8rem 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.detail-icon {
+  color: #39d8a8;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Media query para pantallas más pequeñas */
+@media (max-width: 991px) {
+  .carousel-image {
+    height: 400px;
+  }
+}
+
+/* Botón para ver en Google Maps */
+.google-maps-btn {
+  font-weight: 600;
+  border-color: #39d8a8;
+  color: #39d8a8;
+}
+
+/* Efecto hover para el botón de Google Maps */
+.google-maps-btn:hover {
+  background-color: #39d8a8;
+  border-color: #39d8a8;
+  color: white;
+}
+
+/* Estilos para la sección de comentarios */
+.comments-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el contenedor de estrellas */
+.star-rating-container {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #ffc107;
+}
+
+.star-rating-container svg {
+  margin-right: 0.2rem;
+}
+
+.score-text {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* Estilos para cada item de comentario */
+.comment-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 0 !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.comment-item:last-child {
+  border-bottom: none !important;
+}
+
+.comment-icon {
+  color: #ced4da;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.comment-body {
+  flex-grow: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.comment-user {
+  color: #343a40;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.comment-text {
+  color: #495057;
+}
+
+/* Estilos para el botón de volver (copiados de DestinationOptionsPage.css) */
+.back-button-container {
+  margin-bottom: 2rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--service-color, #39d8a8);
+  color: var(--service-color, #39d8a8);
+  background-color: transparent;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.back-button:hover {
+  background-color: var(--service-color, #39d8a8);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Al hacer clic, mantenemos el estilo del hover y lo "presionamos" */
+.back-button:active {
+  background-color: var(--service-color, #39d8a8) !important;
+  color: white;
+  transform: translateY(0px);
+}
+
+.back-button:focus {
+  box-shadow: none !important;
+}
+
+/* Asegura que el texto del botón de eliminar sea blanco en hover */
+.delete-button:hover {
+  color: white !important;
+}

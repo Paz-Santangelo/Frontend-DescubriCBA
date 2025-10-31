@@ -11,10 +11,10 @@ import {
 } from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
 import destinationService from "../../services/DestinationService";
-import "./DestinationDetail.css";
+import "./DestinationOptionsPage.css";
 
-const DestinationDetail = () => {
-  const { slug } = useParams(); // Ahora obtenemos el 'slug' de la URL
+const DestinationOptionsPage = () => {
+  const { slug } = useParams();
   const { user } = useUser();
   const isLoggedIn = user && user.role;
   const [destino, setDestino] = useState(null);
@@ -23,7 +23,6 @@ const DestinationDetail = () => {
 
   useEffect(() => {
     const fetchDestinationDetail = async () => {
-      // Convertimos el slug de la URL de nuevo a un formato legible (ej. "la-cumbre" -> "La Cumbre")
       const locality = slug
         .replace(/-/g, " ")
         .replace(/\b\w/g, (l) => l.toUpperCase());
@@ -35,7 +34,7 @@ const DestinationDetail = () => {
           locality
         );
         if (data && data.length > 0) {
-          setDestino(data[0]); // Tomamos el primer resultado para la página de detalle
+          setDestino(data[0]);
         } else {
           throw new Error("No se encontró un destino para esta localidad.");
         }
@@ -43,7 +42,6 @@ const DestinationDetail = () => {
         setError(
           err.response?.data?.message || "No se pudo cargar el destino."
         );
-        console.error(`Error fetching destination for slug ${slug}:`, err);
       } finally {
         setLoading(false);
       }
@@ -224,4 +222,4 @@ const DestinationDetail = () => {
   );
 };
 
-export default DestinationDetail;
+export default DestinationOptionsPage;

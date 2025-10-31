@@ -176,7 +176,15 @@ const ServiceListPage = () => {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
               >
-                <Link to="#" className="text-decoration-none">
+                <Link
+                  to={`/destinations/${item.id}`}
+                  className="text-decoration-none"
+                  state={{
+                    fromLink: `/servicios/${serviceType}/${destinationSlug}`,
+                    fromTitle: config.title,
+                    fromColor: config.color,
+                  }}
+                >
                   <Card className="service-card h-100">
                     <Card.Img
                       variant="top"

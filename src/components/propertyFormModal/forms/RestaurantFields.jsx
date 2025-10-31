@@ -1,0 +1,173 @@
+import { Form, Row, Col } from "react-bootstrap";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+
+const RestaurantFields = ({
+  formData,
+  handleChange,
+  handleCuisineTypeChange,
+}) => {
+  const cuisineTypeOptionsList = [
+    "PARRILLA",
+    "PASTA",
+    "MINUTAS",
+    "VEGANO",
+    "VEGETARIANO",
+    "INTERNACIONAL",
+    "REGIONAL",
+    "PESCADOS_Y_MARISCOS",
+    "COMIDA_RAPIDA",
+    "ASIATICA",
+    "MEXICANA",
+    "ITALIANA",
+    "FRANCESA",
+    "MEDITERRANEA",
+  ];
+
+  const cuisineTypeOptions = cuisineTypeOptionsList.map((type) => ({
+    value: type,
+    label: type.replace(/_/g, " "),
+  }));
+
+  const animatedComponents = makeAnimated();
+
+  // Estilos personalizados para que react-select se vea bien en un tema oscuro
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      borderColor: state.isFocused ? "#39d8a8" : "rgba(255, 255, 255, 0.2)",
+      color: "white",
+      boxShadow: state.isFocused
+        ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)"
+        : null,
+      "&:hover": { borderColor: "#39d8a8" },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: "#344944",
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      maxHeight: "180px",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? "#39d8a8"
+        : state.isFocused
+        ? "rgba(57, 216, 168, 0.3)"
+        : "transparent",
+      color: "white",
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      backgroundColor: "rgba(57, 216, 168, 0.8)",
+      borderRadius: "8px",
+      alignItems: "center",
+    }),
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: "white",
+    }),
+    multiValueRemove: (provided) => ({
+      ...provided,
+      color: "white",
+      backgroundColor: "transparent",
+      borderRadius: "50%",
+      width: "20px",
+      height: "20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginRight: "4px",
+      transition: "background-color 0.2s ease-in-out, color 0.2s ease-in-out",
+      ":hover": {
+        backgroundColor: "white",
+        color: "#344944",
+      },
+      "> svg": {
+        transform: "scale(1.2)",
+      },
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      color: "white",
+      backgroundColor: "transparent",
+      borderRadius: "50%",
+      width: "20px",
+      height: "20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginRight: "4px",
+      transition: "background-color 0.2s ease-in-out, color 0.2s ease-in-out",
+      ":hover": {
+        backgroundColor: "white",
+        color: "#344944",
+      },
+      "> svg": {
+        transform: "scale(5.2)",
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: "white",
+    }),
+  };
+
+  return (
+    <>
+      <h5 className="my-4">Datos Específicos de Restaurante</h5>
+      <Row>
+        {/* Tipos de Cocina */}
+        <Form.Group as={Col} md={6} className="mb-3">
+          <Form.Label>Tipos de Cocina</Form.Label>
+          <Select
+            isMulti
+            name="cuisineType"
+            options={cuisineTypeOptions}
+            value={cuisineTypeOptions.filter((option) =>
+              formData.cuisineType.includes(option.value)
+            )}
+            onChange={handleCuisineTypeChange}
+            components={animatedComponents}
+            styles={customStyles}
+            placeholder="Selecciona uno o más tipos..."
+            isClearable={true}
+            required={formData.cuisineType.length === 0}
+          />
+          <Form.Text>Puedes buscar y seleccionar múltiples opciones.</Form.Text>
+        </Form.Group>
+      </Row>
+
+      <Row>
+        {/* Delivery */}
+        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+          <Form.Check
+            type="switch"
+            id="delivery-switch"
+            label="¿Tiene delivery?"
+            name="delivery"
+            checked={formData.delivery}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        {/* Reservas */}
+        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+          <Form.Check
+            type="switch"
+            id="reservations-switch"
+            label="¿Acepta reservas?"
+            name="reservations"
+            checked={formData.reservations}
+            onChange={handleChange}
+          />
+        </Form.Group>
+      </Row>
+    </>
+  );
+};
+
+export default RestaurantFields;

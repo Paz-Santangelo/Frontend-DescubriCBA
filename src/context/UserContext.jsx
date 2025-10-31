@@ -1,5 +1,6 @@
 // src/context/UserContext.jsx
 import { createContext, useState, useEffect } from "react";
+import userService from "../services/userService"; // Importamos el servicio de usuario
 import ProfilePhoto from "../assets/Alejandro.jpg";
 
 const UserContext = createContext();
@@ -15,12 +16,6 @@ export const UserProvider = ({ children }) => {
       try {
         const token = localStorage.getItem("jwt_token");
         const userData = localStorage.getItem("user_data");
-
-        console.log("🔍 Verificando localStorage:", {
-          token: token ? "✅ Presente" : "❌ No encontrado",
-          userData,
-        });
-
         if (
           token &&
           userData &&
@@ -28,15 +23,10 @@ export const UserProvider = ({ children }) => {
           userData !== "null"
         ) {
           const parsedUser = JSON.parse(userData);
-          //console.log('🔄 Restaurando sesión:', parsedUser);
           setUser(parsedUser);
         } else {
-          console.log("🚫 No hay sesión válida para restaurar");
         }
       } catch (error) {
-        console.error("❌ Error al restaurar sesión:", error);
-        console.log("🧹 Limpiando localStorage corrupto");
-        // Limpiar datos corruptos
         localStorage.removeItem("jwt_token");
         localStorage.removeItem("user_data");
       } finally {
@@ -49,33 +39,33 @@ export const UserProvider = ({ children }) => {
 
   // Función para hacer login en el sistema
   const login = (userDto) => {
-    // Imprimimos el DTO completo que llega del backend, como solicitaste.
-    //console.log('✅ Login exitoso. DTO del usuario recibido del backend:', userDto);
-
-    // Tu backend devuelve 'token', no 'accessToken'. Hacemos la desestructuración correcta.
     const { token, ...userData } = userDto;
 
-    if (token) {
-      // Guardar el token y los datos del usuario en localStorage
+    if (token && userData && Object.keys(userData).length > 0) {
       localStorage.setItem("jwt_token", token);
       localStorage.setItem("user_data", JSON.stringify(userData));
-      // Actualizar el estado global de la aplicación
       setUser(userData);
     } else {
-      console.error(
-        "❌ No se encontró el token en la respuesta del login:",
-        userDto
-      );
     }
   };
 
   // Función para hacer logout en el sistema
   const logout = () => {
-    //console.log('🚪 Cerrando sesión');
     setUser(null);
-    // Limpiar localStorage
     localStorage.removeItem("jwt_token");
     localStorage.removeItem("user_data");
+  };
+
+  // Función para refrescar los datos del usuario desde el backend
+  const refreshUser = async () => {
+    if (user && user.id) {
+      try {
+        const updatedUserData = await userService.getUserById(user.id);
+        localStorage.setItem("user_data", JSON.stringify(updatedUserData));
+        setUser(updatedUserData);
+      } catch (error) {
+      }
+    }
   };
 
   // Función opcional para cambiar el rol manualmente (ejemplo para pruebas)
@@ -155,6 +145,7 @@ export const UserProvider = ({ children }) => {
         changeRole,
         login,
         logout,
+        refreshUser, // Exponemos la nueva función
         loginAsAdmin,
         isLoading,
         hasRole, // Aún disponible para lógica jerárquica compleja

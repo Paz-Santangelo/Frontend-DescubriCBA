@@ -1,14 +1,6 @@
 import { useUser } from "../../hooks/useUser";
 import { Navigate } from "react-router-dom";
 
-/**
- * Componente para proteger rutas basadas en roles
- * @param {Object} props
- * @param {React.ReactNode} props.children - Componente a renderizar si tiene permisos
- * @param {string|string[]} props.requiredRole - Rol(es) requerido(s) para acceder
- * @param {string} props.fallbackPath - Ruta a la que redirigir si no tiene permisos
- * @param {React.ReactNode} props.fallbackComponent - Componente a mostrar si no tiene permisos
- */
 const ProtectedRoute = ({ 
   children, 
   requiredRole, 
@@ -19,7 +11,6 @@ const ProtectedRoute = ({
   
   // Verificación segura del contexto
   if (!userContext) {
-    console.error('❌ UserContext no está disponible en ProtectedRoute');
     return <Navigate to="/login" replace />;
   }
   
@@ -38,7 +29,6 @@ const ProtectedRoute = ({
   
   // Si no está logueado, redirigir al login
   if (!user) {
-    console.log('🚫 Usuario no autenticado, redirigiendo al login');
     return <Navigate to="/login" replace />;
   }
   
@@ -46,28 +36,15 @@ const ProtectedRoute = ({
   let hasAccess = false;
   
   if (!requiredRole) {
-    // Si no se especifica rol, solo verificar que esté logueado
     hasAccess = true;
   } else if (Array.isArray(requiredRole)) {
-    // Si es un array de roles, verificar que tenga al menos uno
     hasAccess = hasAnyRole(requiredRole);
   } else {
-    // Si es un rol específico
     hasAccess = hasRole(requiredRole);
   }
-  
-  // Log para debugging
-  console.log('🔐 Verificando permisos:', {
-    user: user.email,
-    userRole: user.role,
-    requiredRole,
-    hasAccess
-  });
-  
-  // Si no tiene acceso
-  if (!hasAccess) {
-    console.log('🚫 Acceso denegado por rol insuficiente');
     
+  // Si no tiene acceso
+  if (!hasAccess) {    
     if (fallbackComponent) {
       return fallbackComponent;
     }

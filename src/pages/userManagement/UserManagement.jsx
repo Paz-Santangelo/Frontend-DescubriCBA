@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Container,
   Row,
@@ -9,37 +9,92 @@ import {
   Badge,
   Modal,
   Form,
-  Alert,
   Spinner,
 } from "react-bootstrap";
+import { ArrowClockwise } from "react-bootstrap-icons";
+import Select from "react-select";
 import { useUser } from "../../hooks/useUser";
-import RoleBasedComponent from "../../components/auth/RoleBasedComponent"; // 1. Importamos el componente
+import { useNotification } from "../../context/NotificationContext";
+import RoleBasedComponent from "../../components/auth/RoleBasedComponent";
 import userService from "../../services/userService";
 import "./UserManagement.css";
 
+const roleOptions = [
+  { value: "USER", label: "USER - Usuario normal" },
+  { value: "OWNER", label: "OWNER - Dueño de negocio" },
+  { value: "MANAGEMENT", label: "MANAGEMENT - Gestor" },
+  { value: "ADMIN", label: "ADMIN - Administrador" },
+];
+
+const customSelectStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderColor: state.isFocused ? "#39d8a8" : "rgba(255, 255, 255, 0.2)",
+    color: "white",
+    boxShadow: state.isFocused ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)" : null,
+    "&:hover": { borderColor: "#39d8a8" },
+    width: "100%",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "white",
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: "rgba(255, 247, 247, 0.6)",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    backgroundColor: "#344944",
+    width: "100%",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isSelected
+      ? "#39d8a8"
+      : state.isFocused
+      ? "rgba(57, 216, 168, 0.3)"
+      : "transparent",
+    color: state.isSelected ? "#151a19" : "white",
+    "&:active": {
+      backgroundColor: "#39d8a8",
+    },
+  }),
+  input: (provided) => ({
+    ...provided,
+    color: "white",
+  }),
+};
+
 const UserManagement = () => {
   const { user, hasRole } = useUser();
+  const { addNotification } = useNotification();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newRole, setNewRole] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const initialLoadDone = useRef(false);
+
+  const handleRoleChange = (selectedOption) => {
+    setNewRole(selectedOption.value);
+  };
 
   // Capturar errores globales que puedan causar página en blanco
   useEffect(() => {
     const originalError = console.error;
     console.error = (...args) => {
       originalError(...args);
-      console.log("🚨 Error capturado en UserManagement:", args);
     };
 
     // Manejar errores no capturados
     const handleError = (event) => {
-      console.error("🚨 Error no manejado:", event.error);
-      setError("Error crítico detectado: " + event.error?.message);
+      addNotification(
+        "Error crítico detectado: " + event.error?.message,
+        "danger"
+      );
       event.preventDefault();
     };
 
@@ -56,37 +111,35 @@ const UserManagement = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        setError("");
 
-        //console.log("🔄 Cargando usuarios desde el backend...");
-        //console.log("🔄 Usuario actual:", user);
-        /*console.log(
-          "🔄 Token presente:",
-          localStorage.getItem("jwt_token") ? "✅" : "❌"
-        );*/
-
-        // Ahora userService.getAllUsers() devuelve el array de usuarios directamente.
         const usersData = await userService.getAllUsers();
-
-        /*         console.log('✅ Usuarios cargados exitosamente:', usersData);
-        console.log('✅ Cantidad de usuarios:', usersData?.length || 0); */
 
         if (usersData && usersData.length > 0) {
           setUsers(usersData);
-          setSuccess(`Se cargaron ${usersData.length} usuarios correctamente`);
+          if (!initialLoadDone.current) {
+            addNotification(
+              `Se cargaron ${usersData.length} usuarios correctamente`,
+              "success"
+            );
+          }
         } else {
           setUsers([]);
-          setError("No se encontraron usuarios en la base de datos.");
+          if (!initialLoadDone.current) {
+            addNotification(
+              "No se encontraron usuarios en la base de datos.",
+              "warning"
+            );
+          }
         }
       } catch (error) {
         // El error es lanzado por el servicio y capturado aquí.
         const errorMessage =
           error.response?.data?.message ||
           "Error de conexión al cargar usuarios.";
-        console.error("❌ Error al cargar usuarios:", error.response || error);
-        setError(errorMessage);
+        addNotification(errorMessage, "danger");
       } finally {
         setLoading(false);
+        initialLoadDone.current = true;
       }
     };
 
@@ -97,23 +150,17 @@ const UserManagement = () => {
   const handleReloadUsers = async () => {
     try {
       setLoading(true);
-      setError("");
-      setSuccess("");
-
-      console.log("🔄 Recargando usuarios...");
       const usersData = await userService.getAllUsers();
-
       setUsers(usersData);
-      setSuccess(
-        `Usuarios recargados exitosamente. Total: ${usersData?.length || 0}`
+      addNotification(
+        `Usuarios recargados exitosamente. Total: ${usersData?.length || 0}`,
+        "success"
       );
-      //console.log("✅ Usuarios recargados:", usersData);
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
         "Error de conexión al recargar usuarios.";
-      console.error("❌ Error al recargar usuarios:", error.response || error);
-      setError(errorMessage);
+      addNotification(errorMessage, "danger");
     } finally {
       setLoading(false);
     }
@@ -135,45 +182,30 @@ const UserManagement = () => {
 
     try {
       setUpdateLoading(true);
-      setError("");
-      setSuccess("");
-
-      /*console.log(
-        `🔄 Actualizando rol de ${selectedUser.email} de ${selectedUser.role} a ${newRole}`
-      );*/
-
-      // El servicio ahora devuelve el usuario actualizado directamente o lanza un error.
       const updatedUser = await userService.updateUserRole(
         selectedUser.id,
         newRole
       );
 
-      //console.log("📥 Resultado de actualización:", updatedUser);
-
       // Actualizar en la lista local inmediatamente
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
           u.id === selectedUser.id
-            ? { ...u, role: newRole } // O usar directamente updatedUser si el backend lo devuelve completo
+            ? { ...u, role: newRole }
             : u
         )
       );
 
-      setSuccess(
-        `Rol actualizado exitosamente para ${selectedUser.name} ${selectedUser.lastname}`
+      addNotification(
+        `Rol actualizado exitosamente para ${selectedUser.name} ${selectedUser.lastname}`,
+        "success"
       );
       setShowEditModal(false);
-
-      setTimeout(() => setSuccess(""), 3000);
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
         "Error de conexión al actualizar el rol.";
-      console.error(
-        "❌ Error crítico al actualizar rol:",
-        error.response || error
-      );
-      setError(errorMessage);
+      addNotification(errorMessage, "danger");
     } finally {
       setUpdateLoading(false);
     }
@@ -185,11 +217,9 @@ const UserManagement = () => {
       case "ADMIN":
         return "danger";
       case "OWNER":
-        return "success"; // Color verde para dueños
+        return "success";
       case "MANAGEMENT":
-        return "warning"; // Color amarillo para gestores
-      case "CLIENTE":
-        return "info";
+        return "warning";
       case "USER":
         return "secondary";
       default:
@@ -208,124 +238,96 @@ const UserManagement = () => {
   }
 
   return (
-    <Container className="mt-4 user-management-container">
+    <Container className="mt-2 user-management-container">
+      {/* Título principal con el estilo unificado */}
+      <h1 className="text-center section-title">Gestión de Usuarios</h1>
+
+      {/* Contenedor para el botón de recarga, alineado a la derecha */}
+      <div className="d-flex justify-content-end mb-3">
+        <Button
+          className="back-button"
+          onClick={handleReloadUsers}
+          disabled={loading}
+          style={{ "--service-color": "#007bff" }}
+        >
+          {/* El icono de recarga de Bootstrap */}
+          <ArrowClockwise className="me-2" size={20} />
+          {loading ? "Cargando..." : "Recargar"}
+        </Button>
+      </div>
+
       <Row>
         <Col>
           <Card className="user-management-card">
-            <Card.Header className="user-management-header">
-              <div className="d-flex justify-content-between align-items-center">
-                <h4 className="mb-0">
-                  <i className="bi bi-people-fill me-2"></i>
-                  Gestión de Usuarios
-                </h4>
-                <div>
-                  <Button
-                    variant="outline-light"
-                    size="sm"
-                    onClick={handleReloadUsers}
-                    disabled={loading}
-                  >
-                    <i className="bi bi-arrow-clockwise me-1"></i>
-                    {loading ? "Cargando..." : "Recargar"}
-                  </Button>
-                </div>
-              </div>
-            </Card.Header>
             <Card.Body>
-              {/* Alertas de éxito y error */}
-              {success && (
-                <Alert
-                  variant="success"
-                  dismissible
-                  onClose={() => setSuccess("")}
-                  className="alert-container"
-                >
-                  {success}
-                </Alert>
-              )}
-
-              {error && (
-                <Alert
-                  variant="danger"
-                  dismissible
-                  onClose={() => setError("")}
-                  className="alert-container"
-                >
-                  {error}
-                </Alert>
-              )}
-
-              <div className="table-responsive">
-                <Table striped bordered hover className="user-table">
-                  <thead className="table-dark">
-                    <tr>
-                      <th>ID</th>
-                      <th>Nombre</th>
-                      <th>Email</th>
-                      <th>Rol Actual</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.length > 0 ? (
-                      users.map((userData) => (
-                        <tr key={userData.id}>
-                          <td>{userData.id}</td>
-                          <td>
-                            {userData.name} {userData.lastname}
-                          </td>
-                          <td>{userData.email}</td>
-                          <td>
-                            <Badge
-                              bg={getRoleBadgeVariant(userData.role)}
-                              className="role-badge"
+              <Table
+                striped
+                bordered
+                hover
+                responsive
+                className="user-table text-center"
+              >
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol Actual</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.length > 0 ? (
+                    users.map((userData) => (
+                      <tr key={userData.id}>
+                        <td>{userData.id}</td>
+                        <td>
+                          {userData.name} {userData.lastname}
+                        </td>
+                        <td>{userData.email}</td>
+                        <td>
+                          <Badge
+                            bg={getRoleBadgeVariant(userData.role)}
+                            className="role-badge"
+                          >
+                            {userData.role}
+                          </Badge>
+                        </td>
+                        <td>
+                          {/* 2. Envolvemos el botón con RoleBasedComponent */}
+                          <RoleBasedComponent requiredRole="ADMIN">
+                            <Button
+                              variant="outline-primary"
+                              size="sm"
+                              onClick={() => handleEditRole(userData)}
+                              className="me-2 edit-role-btn"
                             >
-                              {userData.role}
-                            </Badge>
-                          </td>
-                          <td className="text-center">
-                            {/* 2. Envolvemos el botón con RoleBasedComponent */}
-                            <RoleBasedComponent requiredRole="ADMIN">
-                              <Button
-                                variant="outline-primary"
-                                size="sm"
-                                onClick={() => handleEditRole(userData)}
-                                className="me-2 edit-role-btn"
-                              >
-                                Editar Rol
-                              </Button>
-                            </RoleBasedComponent>
-                            <Button variant="outline-info" size="sm">
-                              Ver Perfil
+                              Editar Rol
                             </Button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="text-center py-4">
-                          <div className="text-muted">
-                            <i
-                              className="bi bi-people me-2"
-                              style={{ fontSize: "1.5em" }}
-                            ></i>
-                            <br />
-                            {loading
-                              ? "Cargando usuarios..."
-                              : "No se encontraron usuarios"}
-                            <br />
-                            <small>
-                              {error
-                                ? "Error al cargar datos"
-                                : "La base de datos no contiene usuarios registrados"}
-                            </small>
-                          </div>
+                          </RoleBasedComponent>
                         </td>
                       </tr>
-                    )}
-                  </tbody>
-                </Table>
-              </div>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center py-4">
+                        <div className="text-muted">
+                          <br />
+                          {loading
+                            ? "Cargando usuarios..."
+                            : "No se encontraron usuarios"}
+                          <br />
+                          <small>
+                            {
+                              "La base de datos no contiene usuarios registrados"
+                            }
+                          </small>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
             </Card.Body>
           </Card>
         </Col>
@@ -355,16 +357,14 @@ const UserManagement = () => {
 
               <Form.Group className="mt-3">
                 <Form.Label>Nuevo Rol:</Form.Label>
-                <Form.Select
-                  value={newRole}
-                  onChange={(e) => setNewRole(e.target.value)}
-                  disabled={updateLoading}
-                >
-                  <option value="USER">USER - Usuario normal</option>
-                  <option value="CLIENTE">CLIENTE - Dueño de negocio</option>
-                  <option value="MANAGEMENT">MANAGEMENT - Gestor</option>
-                  <option value="ADMIN">ADMIN - Administrador</option>
-                </Form.Select>
+                <Select
+                  options={roleOptions}
+                  value={roleOptions.find((option) => option.value === newRole)}
+                  onChange={handleRoleChange}
+                  styles={customSelectStyles}
+                  isDisabled={updateLoading}
+                  placeholder="-- Elige un rol --"
+                />
               </Form.Group>
             </>
           )}
@@ -378,16 +378,15 @@ const UserManagement = () => {
             Cancelar
           </Button>
           <Button
-            variant="primary"
+            className="save-changes-btn"
             onClick={() => {
               try {
-                console.log("🔄 Botón Guardar presionado");
-                console.log("📄 Selected User:", selectedUser);
-                console.log("📄 New Role:", newRole);
                 handleSaveRole();
               } catch (error) {
-                console.error("❌ Error al ejecutar handleSaveRole:", error);
-                setError("Error crítico al guardar rol: " + error.message);
+                addNotification(
+                  "Error crítico al guardar rol: " + error.message,
+                  "danger"
+                );
                 setUpdateLoading(false);
               }
             }}

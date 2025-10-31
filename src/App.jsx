@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
@@ -11,25 +17,27 @@ import Registro from "./pages/registro/Registro.jsx";
 import Quienes from "./pages/quienes/Quienes";
 import Preguntas from "./pages/preguntas/Preguntas";
 import MyProfile from "./pages/myProfile/MyProfile.jsx";
-import DestinationsList from "./pages/destinationsList/DestinationsList.jsx"; 
-import DestinationDetail from "./pages/destinationDetail/DestinationDetail.jsx";
+import DestinationsList from "./pages/destinationsList/DestinationsList.jsx";
+import DestinationOptionsPage from "./pages/destinationOptionsPage/DestinationOptionsPage.jsx";
+import DestinationDetailPage from "./pages/DestinationDetailPage/DestinationDetailPage.jsx"; // Import DestinationDetailPage
 import ServiceListPage from "./pages/serviceListPage/ServiceListPage.jsx"; // Importamos el nuevo componente
 
 import UserManagement from "./pages/userManagement/UserManagement.jsx";
 import LayoutPrivado from "./layouts/LayoutPrivado.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import UserProvider from "./context/UserContext";
-import { useUser } from "./hooks/useUser";
+import { NotificationProvider } from "./context/NotificationContext";
+import NotificationContainer from "./components/notifications/NotificationContainer";
 import { useState, useEffect } from "react";
+import MyPropertiesListPage from "./pages/myPropertiesListPage/MyPropertiesListPage.jsx";
+import { useUser } from './hooks/useUser';
 
-// Componente que contiene la lógica de las rutas y puede acceder al contexto
 function AppContent() {
   const [toggled, setToggled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const userContext = useUser();
 
-  // Verificación segura del contexto
   if (!userContext) {
     console.error("❌ UserContext no está disponible");
     return <div>Error: Contexto de usuario no disponible</div>;
@@ -37,91 +45,112 @@ function AppContent() {
 
   const { user, isLoading } = userContext;
 
-  // Efecto para redirigir al usuario después de iniciar sesión
   useEffect(() => {
     const isLoggedIn = user && (user.role || user.email || user.id);
 
-    // Si el usuario acaba de iniciar sesión (isLoggedIn es true)
-    // y todavía está en la página de login, lo redirigimos.
     if (isLoggedIn && location.pathname === "/login") {
       navigate("/mi-perfil", { replace: true });
     }
-    // Agregamos 'user' como dependencia para que el efecto se re-evalúe cuando cambie.
   }, [user, location.pathname, navigate]);
 
-  // Verificar si el usuario está autenticado de manera más flexible (lo usamos después de los returns)
+ 
   const isLoggedIn = user && (user.role || user.email || user.id);
 
   return (
     <div className="d-flex flex-column min-vh-100">
+      <NotificationContainer />
       {/* El Navbar y Footer ahora están dentro del componente que tiene acceso a las rutas */}
-        <AppNavbar setToggled={() => setToggled(!toggled)} />
-        <main className="flex-grow-1">
-          <Routes>
-            {/* Rutas Públicas */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registro" element={<Registro />} />
-            <Route path="/quienes" element={<Quienes />} />
-            <Route path="/preguntas" element={<Preguntas />} />
+      <AppNavbar setToggled={() => setToggled(!toggled)} />
+      <main className="flex-grow-1">
+        <Routes>
+          {/* Rutas Públicas */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
+          <Route path="/quienes" element={<Quienes />} />
+          <Route path="/preguntas" element={<Preguntas />} />
 
-            {/* Si el usuario NO está logueado, /destinos es pública y sin sidebar */}
-            {!isLoggedIn && (
-              <>
-                <Route path="/destinos" element={<DestinationsList />} />
-                <Route path="/destino/:slug" element={<DestinationDetail />} />
-                <Route path="/servicios/:serviceType/:locality" element={<ServiceListPage />} />
-              </>
-            )}
-
-            {/* Rutas Privadas: Si el usuario SÍ está logueado, se renderizan dentro del LayoutPrivado */}
-            {isLoggedIn && (
+          {/* Si el usuario NO está logueado, /destinos es pública y sin sidebar */}
+          {!isLoggedIn && (
+            <>
+              <Route path="/destinos" element={<DestinationsList />} />
+              <Route path="/destino/:slug" element={<DestinationOptionsPage />} />
               <Route
+                path="/servicios/:serviceType/:locality"
+                element={<ServiceListPage />}
+              />
+              <Route
+                path="/destinations/:id"
+                element={<DestinationDetailPage />}
+              />
+            </>
+          )}
+
+          {/* Rutas Privadas: Si el usuario SÍ está logueado, se renderizan dentro del LayoutPrivado */}
+          {isLoggedIn && (
+            <Route
+              element={
+                <LayoutPrivado toggled={toggled} setToggled={setToggled} />
+              }
+            >
+              <Route path="/destinos" element={<DestinationsList />} />
+              <Route path="/destino/:slug" element={<DestinationOptionsPage />} />
+              <Route
+                path="/servicios/:serviceType/:locality"
+                element={<ServiceListPage />}
+              />
+              <Route
+                path="/destinations/:id"
+                element={<DestinationDetailPage />}
+              />
+              <Route
+                path="/mi-perfil"
                 element={
-                  <LayoutPrivado toggled={toggled} setToggled={setToggled} />
+                  <ProtectedRoute>
+                    <MyProfile />
+                  </ProtectedRoute>
                 }
-              >
-                <Route path="/destinos" element={<DestinationsList />} />
-                <Route path="/destino/:slug" element={<DestinationDetail />} />
-                <Route path="/servicios/:serviceType/:locality" element={<ServiceListPage />} />
-                <Route
-                  path="/mi-perfil"
-                  element={
-                    <ProtectedRoute>
-                      <MyProfile />
-                    </ProtectedRoute>
-                  }
-                />
+              />
 
-                {/* Ruta solo para administradores */}
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRoute requiredRole="admin">
-                      <div className="container mt-5">
-                        <h1>Panel de Administración</h1>
-                        <p>Solo visible para administradores</p>
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
+              {/* Ruta solo para administradores */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <div className="container mt-5">
+                      <h1>Panel de Administración</h1>
+                      <p>Solo visible para administradores</p>
+                    </div>
+                  </ProtectedRoute>
+                }
+              />
 
-                {/* Ruta para gestión de usuarios - Solo para MANAGEMENT y ADMIN */}
-                <Route
-                  path="/gestion-usuarios"
-                  element={
-                    <ProtectedRoute requiredRole={["MANAGEMENT", "ADMIN"]}>
-                      <UserManagement />
-                    </ProtectedRoute>
-                  }
-                />
+              {/* Ruta para gestión de usuarios - Solo para MANAGEMENT y ADMIN */}
+              <Route
+                path="/gestion-usuarios"
+                element={
+                  <ProtectedRoute requiredRole={["MANAGEMENT", "ADMIN"]}>
+                    <UserManagement />
+                  </ProtectedRoute>
+                }
+              />
 
-                {/* Agrega aquí cualquier otra ruta privada que necesites */}
-              </Route>
-            )}
-          </Routes>
-        </main>
-        <Footer />
+              {/* Ruta para Mis Propiedades - Solo para OWNER y ADMIN */}
+              <Route
+                path="/mis-propiedades"
+                element={
+                  <ProtectedRoute requiredRole={["OWNER", "MANAGEMENT", "ADMIN"]}>
+                    <MyPropertiesListPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Agrega aquí cualquier otra ruta privada que necesites */}
+            </Route>
+          )}
+        </Routes>
+      </main>
+      <Footer />
     </div>
   );
 }
@@ -131,9 +160,11 @@ function App() {
   return (
     // El Router debe envolver al componente que usa los hooks de navegación (useNavigate, etc.)
     <UserProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <NotificationProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </NotificationProvider>
     </UserProvider>
   );
 }
