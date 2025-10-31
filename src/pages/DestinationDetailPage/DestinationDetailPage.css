@@ -82,7 +82,6 @@
   margin-right: 1rem;
   font-size: 1.2rem;
   flex-shrink: 0;
-  /* Evita que el ícono se encoja */
   margin-top: 2px;
 }
 
@@ -103,7 +102,7 @@
 /* Efecto hover para el botón de Google Maps */
 .google-maps-btn:hover {
   background-color: #39d8a8;
-  border-color: #39d8a8; /* Añadimos el color del borde en hover */
+  border-color: #39d8a8;
   color: white;
 }
 
@@ -212,7 +211,6 @@
 
 .back-button:focus {
   box-shadow: none !important;
-  /* Solo eliminamos el anillo de foco azul */
 }
 
 /* Asegura que el texto del botón de eliminar sea blanco en hover */

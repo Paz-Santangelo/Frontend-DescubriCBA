@@ -288,7 +288,6 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
 
             <div className="d-grid mt-3">
               <Button
-                variant="primary"
                 type="submit"
                 disabled={
                   isSubmitting ||

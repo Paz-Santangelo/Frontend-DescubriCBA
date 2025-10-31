@@ -48,7 +48,7 @@
 /* Cambiamos el color del placeholder para que sea legible en fondo oscuro */
 .profile-modal-content .form-control::placeholder {
   color: rgba(255, 247, 247, 0.692);
-  opacity: 1; /* Requerido para anular estilos de Firefox */
+  opacity: 1;
 }
 
 /* Hacemos el estilo específico para el botón DENTRO del modal */
