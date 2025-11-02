@@ -1,0 +1,55 @@
+/* Estilo para la página activa */
+.pagination .page-item.active .page-link {
+  background-color: #39d8a8;
+  border-color: #39d8a8;
+  color: white;
+  box-shadow: 0 2px 5px rgba(57, 216, 168, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Estilo general para cada botón de paginación */
+.pagination .page-link {
+  color: #344944;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 50% !important;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+/* Estilo al pasar el mouse sobre un botón no activo */
+.pagination .page-link:hover {
+  background-color: #f8f9fa;
+  color: #2aa885;
+  border-color: #39d8a8;
+}
+
+/* Estilo para los botones deshabilitados (primero/último) */
+.pagination .page-item.disabled .page-link {
+  background-color: #e9ecef;
+  color: #adb5bd;
+  border-color: #dee2e6;
+  box-shadow: none;
+  transform: none;
+}
+
+/* --- Ajustes específicos para los botones de flecha --- */
+
+/* Seleccionamos los botones de flecha a través de su clase padre */
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+  width: 36px;
+  height: 36px;
+  font-weight: bold;
+}
+
+/* Aumentamos el tamaño del ícono de la flecha */
+.pagination .page-item:first-child .page-link span[aria-hidden="true"],
+.pagination .page-item:last-child .page-link span[aria-hidden="true"] {
+  font-size: 1.8rem;
+}

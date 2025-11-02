@@ -1,40 +1,23 @@
 import apiClient from "./apiClient";
 
+const BASE = "/api/destinos";
+
 const destinationService = {
+
   /* Obtiene todas las "cards" de destinos para la vista principal. */
   getAllDestinationCards: async () => {
     try {
-      const response = await apiClient.get("/api/destinos/cards");
+      const response = await apiClient.get(`${BASE}/cards`);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
 
-  /* Obtiene un destino específico por su ID. */
+  /* Obtiene un destino específico por su ID para editar. */
   getDestinationById: async (id) => {
     try {
-      const response = await apiClient.get(`/api/destinos/${id}`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  /* Obtiene destinos filtrados por tipo. */
-  getDestinationsByType: async (tipo) => {
-    try {
-      const response = await apiClient.get(`/api/destinos/tipo/${tipo}`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  /* Busca destinos por nombre.  */
-  searchDestinations: async (query) => {
-    try {
-      const response = await apiClient.get("/api/destinos/search", { params: { query } });
+      const response = await apiClient.get(`${BASE}/${id}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -42,9 +25,21 @@ const destinationService = {
   },
 
   /* Obtiene destinos por localidad. */
-  getDestinationsByLocality: async (localidad) => {
+  getDestinationsByLocality: async (locality) => {
     try {
-      const response = await apiClient.get(`/api/destinos/localidad/${localidad}`);
+      const response = await apiClient.get(`${BASE}/buscar`, {
+        params: { localidad: locality },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+    /* Obtiene la lista de los niveles de concurrencia. */
+  getlevelsConcurrenceTypes: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/obtener/concurrencia`);
       return response.data;
     } catch (error) {
       throw error;

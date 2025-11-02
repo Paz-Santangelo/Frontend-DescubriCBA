@@ -229,11 +229,13 @@ const UserManagement = () => {
 
   if (loading) {
     return (
-      <Container className="mt-5 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando usuarios...</span>
-        </div>
-      </Container>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "80vh" }}
+      >
+        <Spinner animation="border" style={{ color: "#34b890" }} />
+        <p className="ms-3 mb-0">Cargando usuarios...</p>
+      </div>
     );
   }
 

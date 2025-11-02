@@ -110,3 +110,16 @@
 		font-size: 1.25rem;
 	}
 }
+
+/* Estilos para el input de búsqueda */
+.search-input-group .input-group-text {
+	background-color: white;
+	border-right: none;
+	border-color: #ced4da;
+}
+
+/* Cambia el color del resplandor y el borde al hacer foco */
+.search-input-group .form-control:focus {
+	border-color: #39d8a8;
+	box-shadow: 0 0 0 0.25rem rgba(57, 216, 168, 0.25);
+}

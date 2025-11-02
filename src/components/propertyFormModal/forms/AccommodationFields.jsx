@@ -1,11 +1,26 @@
 import { Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useEffect, useState } from "react";
+import accommodationService from "../../../services/accommodationService";
 
 const AccommodationFields = ({ formData, handleAccommodationTypeChange }) => {
-  const accommodationTypesList = ["HOTEL", "HOSTEL", "CAMPING", "CABAÑA"];
+  const [accommodationTypes, setAccommodationTypes] = useState([]);
 
-  const accommodationTypeOptions = accommodationTypesList.map((type) => ({
+  useEffect(() => {
+    const fetchAccommodationTypes = async () => {
+      try {
+        const types = await accommodationService.getAccommodationTypes();
+        setAccommodationTypes(types);
+      } catch (error) {
+        console.error("Error fetching accommodation types:", error);
+      }
+    };
+
+    fetchAccommodationTypes();
+  }, []);
+
+  const accommodationTypeOptions = accommodationTypes.map((type) => ({
     value: type,
     label: type,
   }));

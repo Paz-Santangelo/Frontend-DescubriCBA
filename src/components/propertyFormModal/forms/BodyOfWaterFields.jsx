@@ -1,6 +1,8 @@
 import { Form, Row, Col, InputGroup } from "react-bootstrap";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useEffect, useState } from "react";
+import bodyOfWaterService from "../../../services/bodyOfWaterService";
 
 const BodyOfWaterFields = ({
   formData,
@@ -8,19 +10,23 @@ const BodyOfWaterFields = ({
   handleBodyOfWaterTypeChange,
   handleCleaningLevelChange,
 }) => {
-  const bodyOfWaterTypesList = [
-    "RIO",
-    "LAGUNA",
-    "ARROYO",
-    "CASCADA",
-    "BALNEARIO",
-    "LAGO",
-    "EMBALSE",
-    "DIQUE",
-  ];
+  const [bodyOfWaterTypes, setBodyOfWaterTypes] = useState([]);
   const cleaningLevelsList = ["EXCELENTE", "BUENO", "REGULAR", "MALO"];
 
-  const bodyOfWaterTypeOptions = bodyOfWaterTypesList.map((type) => ({
+  useEffect(() => {
+    const fetchBodyOfWaterTypes = async () => {
+      try {
+        const types = await bodyOfWaterService.getBodiesOfWaterTypes();
+        setBodyOfWaterTypes(types);
+      } catch (error) {
+        console.error("Error fetching body of water types:", error);
+      }
+    };
+
+    fetchBodyOfWaterTypes();
+  }, []);
+
+  const bodyOfWaterTypeOptions = bodyOfWaterTypes.map((type) => ({
     value: type,
     label: type,
   }));
@@ -73,7 +79,11 @@ const BodyOfWaterFields = ({
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? "#39d8a8" : state.isFocused ? "rgba(57, 216, 168, 0.3)" : "transparent",
+      backgroundColor: state.isSelected
+        ? "#39d8a8"
+        : state.isFocused
+        ? "rgba(57, 216, 168, 0.3)"
+        : "transparent",
       color: state.isSelected ? "#151a19" : "white",
       "&:active": { backgroundColor: "#39d8a8" },
     }),
@@ -91,7 +101,11 @@ const BodyOfWaterFields = ({
           <Select
             name="typeBodyOfWater"
             options={bodyOfWaterTypeOptions}
-            value={bodyOfWaterTypeOptions.find(option => option.value === formData.typeBodyOfWater) || null}
+            value={
+              bodyOfWaterTypeOptions.find(
+                (option) => option.value === formData.typeBodyOfWater
+              ) || null
+            }
             onChange={handleBodyOfWaterTypeChange}
             components={animatedComponents}
             styles={customSelectStyles}
@@ -107,7 +121,11 @@ const BodyOfWaterFields = ({
           <Select
             name="cleaningLevel"
             options={cleaningLevelOptions}
-            value={cleaningLevelOptions.find(option => option.value === formData.cleaningLevel) || null}
+            value={
+              cleaningLevelOptions.find(
+                (option) => option.value === formData.cleaningLevel
+              ) || null
+            }
             onChange={handleCleaningLevelChange}
             components={animatedComponents}
             styles={customSelectStyles}

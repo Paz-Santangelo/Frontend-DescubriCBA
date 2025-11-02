@@ -83,14 +83,14 @@ const DestinationDetailPage = () => {
         style={{ height: "80vh" }}
       >
         <Spinner animation="border" style={{ color: "#39d8a8" }} />
-        <p className="ms-3">Cargando propiedad...</p>
+        <p className="ms-3 mb-0">Cargando propiedad...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <Container className="mt-5">
+      <Container className="mt-5 text-center">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
