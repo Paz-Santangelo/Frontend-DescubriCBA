@@ -22,19 +22,13 @@
   text-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
 }
 
-.form-group {
-  margin-bottom: 1.9rem;
-}
-
 .form-group label {
   display: block;
   margin-top: -0.5rem;
   margin-bottom: 0.6rem;
   color: #222;
   font-size: 0.9rem;
-  /* antes 1rem */
   font-weight: 600;
-  /* un poquito menos cargado */
   letter-spacing: 0.2px;
 }
 
@@ -54,19 +48,23 @@
   font-size: .9rem; 
 }
 
-
 .form-group input:focus {
   border: 1.5px solid #40a189;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.10);
 }
 
-.error {
-  color: #e53935;
-  font-size: 0.91rem;
+.error-container {
+  min-height: 2em;
   margin-top: 0.12rem;
+}
+
+.error {
+  color: #fdd3d3;
+  font-size: 0.91rem;
   display: block;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.1px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .help-text {
