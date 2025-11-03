@@ -23,6 +23,12 @@
   border-radius: 2px;
 }
 
+.save-changes-btn .update-spinner.spinner-border-sm {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-width: 0.18em;
+}
+
 /* Estilos para la página de gestión de usuarios */
 
 .user-management-container {
@@ -106,22 +112,23 @@
 }
 
 .save-changes-btn {
-  background-color: #39d8a8;
+  background-color: #39d8a8 !important;
   color: white;
-  border-color: #39d8a8;
+  border-color: #39d8a8 !important;
 }
 
 .save-changes-btn:hover {
-  background-color: #2dbb90; 
-  border-color: #2dbb90;
+  background-color: #2dbb90 !important;
+  border-color: #2dbb90 !important;
   color: white;
 }
 
 .save-changes-btn:disabled {
-  background-color: #39d8a8;
-  border-color: #39d8a8;
+  background-color: #39d8a8 !important;
+  border-color: #39d8a8 !important;
   color: white;
   opacity: 0.65;
+  cursor: not-allowed;
 }
 
 /* Responsive */

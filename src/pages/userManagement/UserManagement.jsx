@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useRef } from "react";
 import {
   Container,
@@ -190,9 +192,7 @@ const UserManagement = () => {
       // Actualizar en la lista local inmediatamente
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
-          u.id === selectedUser.id
-            ? { ...u, role: newRole }
-            : u
+          u.id === selectedUser.id ? { ...u, role: newRole } : u
         )
       );
 
@@ -396,7 +396,11 @@ const UserManagement = () => {
           >
             {updateLoading ? (
               <>
-                <Spinner animation="border" size="sm" className="me-2" />
+                <Spinner
+                  animation="border"
+                  size="sm"
+                  className="me-2 update-spinner"
+                />
                 Actualizando...
               </>
             ) : (

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import { motion } from "framer-motion";
 import "./ServiceListPage.css"; // Usaremos un CSS unificado
@@ -7,6 +8,7 @@ import Select from "react-select";
 import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
 import { ArrowLeft, StarFill, StarHalf, Star } from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
+import PaginationComponent from "../../components/pagination/PaginationComponent";
 
 // Importar todos los servicios necesarios
 import accommodationService from "../../services/accommodationService";
@@ -49,8 +51,11 @@ const ServiceListPage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const { user } = useUser();
   const isLoggedIn = user && user.role;
+
+  const ITEMS_PER_PAGE = 6; // 2 filas de 3 cards
 
   // Estado para los filtros
   const [filters, setFilters] = useState({
@@ -79,7 +84,8 @@ const ServiceListPage = () => {
 
   const [accommodationTypeOptions, setAccommodationTypeOptions] = useState([]);
   const [bodyOfWaterTypeOptions, setBodyOfWaterTypeOptions] = useState([]);
-  const [emergencyServiceTypeOptions, setEmergencyServiceTypeOptions] = useState([]);
+  const [emergencyServiceTypeOptions, setEmergencyServiceTypeOptions] =
+    useState([]);
 
   // Estilos personalizados para react-select para que coincida con la paleta de la app
   const customSelectStyles = {
@@ -170,12 +176,17 @@ const ServiceListPage = () => {
             { value: "", label: "Todos" },
             ...types.map((type) => ({
               value: type,
-              label: type.replace(/_/g, " ").charAt(0).toUpperCase() + type.replace(/_/g, " ").slice(1).toLowerCase(),
+              label:
+                type.replace(/_/g, " ").charAt(0).toUpperCase() +
+                type.replace(/_/g, " ").slice(1).toLowerCase(),
             })),
           ];
           setEmergencyServiceTypeOptions(formattedOptions);
         } catch (error) {
-          console.error("Error al cargar los tipos de servicios de emergencia:", error);
+          console.error(
+            "Error al cargar los tipos de servicios de emergencia:",
+            error
+          );
         }
       };
       fetchEmergencyServiceTypes();
@@ -204,6 +215,7 @@ const ServiceListPage = () => {
 
         const data = await config.fetchData(queryParams);
         setItems(data);
+        setCurrentPage(1); // Resetear a la primera página con cada nueva búsqueda
       } catch (err) {
         setError(
           `No se pudieron cargar los ${config.title.toLowerCase()} para esta localidad.`
@@ -220,7 +232,12 @@ const ServiceListPage = () => {
     fetchItems();
   }, [locality, serviceType, config, formattedLocality, filters]);
 
+  // Lógica de paginación
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   // Variantes de animación para el contenedor y las tarjetas
   const containerVariants = {
@@ -287,12 +304,10 @@ const ServiceListPage = () => {
             Volver a {formattedLocality}
           </Link>
         </div>
-
         <h1 className="text-center mb-5 section-title">
           {config.title} en{" "}
           <span className="highlight">{formattedLocality}</span>
         </h1>
-
         {/* Sección de Filtros */}
         <div className="filters-section mb-4">
           <h5 className="filters-title mb-4">Filtrar por:</h5>
@@ -382,13 +397,17 @@ const ServiceListPage = () => {
             {serviceType === "emergencias" && (
               <Col md={3}>
                 <div className="form-group">
-                  <label htmlFor="type-emergency-select">Tipo de Emergencia</label>
+                  <label htmlFor="type-emergency-select">
+                    Tipo de Emergencia
+                  </label>
                   <Select
                     id="type-emergency-select"
                     name="type"
                     options={emergencyServiceTypeOptions}
                     styles={customSelectStyles}
-                    value={emergencyServiceTypeOptions.find(option => option.value === filters.type)}
+                    value={emergencyServiceTypeOptions.find(
+                      (option) => option.value === filters.type
+                    )}
                     onChange={handleFilterChange}
                     placeholder="Seleccionar..."
                     aria-label="Selector de Tipo de Emergencia"
@@ -444,7 +463,6 @@ const ServiceListPage = () => {
             )}
           </Row>
         </div>
-
         {loading && (
           <div className="text-center">
             <Spinner
@@ -453,9 +471,7 @@ const ServiceListPage = () => {
             />
           </div>
         )}
-
         {error && <Alert variant="danger">{error}</Alert>}
-
         {!loading && !error && items.length === 0 && (
           <div className="text-center">
             <Alert variant="info" className="d-inline-block">
@@ -463,47 +479,57 @@ const ServiceListPage = () => {
             </Alert>
           </div>
         )}
-
-                        <motion.div
-                          className="row"
-                          key={JSON.stringify(filters)}
-                          variants={containerVariants}
-                          initial="hidden"
-                          animate="visible"
-                        >
-                          {items.map((item) => (
-                            <Col md={4} key={item.id} className="mb-4">
-                              <motion.div variants={itemVariants}>
-                                <Link
-                                  to={`/destinations/${item.id}`}
-                                  className="text-decoration-none"
-                                  state={{
-                                    fromLink: `/servicios/${serviceType}/${destinationSlug}`,
-                                    fromTitle: config.title,
-                                    fromColor: config.color,
-                                  }}
-                                >
-                                  <Card className="service-card h-100">
-                                    <Card.Img
-                                      variant="top"
-                                      src={
-                                        item.imagesDestinations?.[0]?.urlImage ||
-                                        "https://via.placeholder.com/400x250"
-                                      }
-                                      className="service-card-img"
-                                    />
-                                    <div className="card-img-overlay">
-                                      <div className="card-overlay-content">
-                                        <h5 className="card-title text-white">{item.name}</h5>
-                                        {renderStars(item.averageScore)}
-                                      </div>
-                                    </div>
-                                  </Card>
-                                </Link>
-                              </motion.div>
-                            </Col>
-                          ))}
-                        </motion.div>      </Container>
+        <motion.div
+          className="row"
+          key={JSON.stringify(filters)}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {currentItems.map((item) => (
+            <Col md={4} key={item.id} className="mb-4">
+              <motion.div variants={itemVariants}>
+                <Link
+                  to={`/destinations/${item.id}`}
+                  className="text-decoration-none"
+                  state={{
+                    fromLink: `/servicios/${serviceType}/${destinationSlug}`,
+                    fromTitle: config.title,
+                    fromColor: config.color,
+                  }}
+                >
+                  <Card className="service-card h-100">
+                    <Card.Img
+                      variant="top"
+                      src={
+                        item.imagesDestinations?.[0]?.urlImage ||
+                        "https://via.placeholder.com/400x250"
+                      }
+                      className="service-card-img"
+                    />
+                    <div className="card-img-overlay">
+                      <div className="card-overlay-content">
+                        <h5 className="card-title text-white">{item.name}</h5>
+                        {renderStars(item.averageScore)}
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              </motion.div>
+            </Col>
+          ))}
+        </motion.div>
+        {!loading && !error && items.length > ITEMS_PER_PAGE && (
+          <div className="d-flex justify-content-center mt-4">
+            <PaginationComponent
+              totalItems={items.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
+      </Container>
     </div>
   );
 };
