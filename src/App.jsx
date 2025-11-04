@@ -43,7 +43,7 @@ function AppContent() {
     return <div>Error: Contexto de usuario no disponible</div>;
   }
 
-  const { user, isLoading } = userContext;
+  const { user } = userContext;
 
   useEffect(() => {
     const isLoggedIn = user && (user.role || user.email || user.id);

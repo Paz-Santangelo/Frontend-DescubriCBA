@@ -1,9 +1,24 @@
 import { Form, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { useEffect, useState } from 'react';
+import DestinationService from '../../../services/DestinationService';
 
 const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handleRemoveImage, handleLevelConcurrenceChange }) => {
-  const concurrenceLevels = ['BAJA', 'MEDIA', 'ALTA'];
+  const [concurrenceLevels, setConcurrenceLevels] = useState([]);
+
+  useEffect(() => {
+    const fetchConcurrenceLevels = async () => {
+      try {
+        const levels = await DestinationService.getlevelsConcurrenceTypes();
+        setConcurrenceLevels(levels);
+      } catch (error) {
+        console.error('Error fetching concurrence levels:', error);
+      }
+    };
+
+    fetchConcurrenceLevels();
+  }, []);
 
   const paymentMethodOptions = [
     'EFECTIVO',

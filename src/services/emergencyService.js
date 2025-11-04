@@ -70,6 +70,16 @@ const emergencyService = {
       throw error;
     }
   },
+
+  /* Obtiene todos los tipos de servicios de emergencia. */
+  getEmergencyServicesTypes: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/obtener/tipos`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default emergencyService;

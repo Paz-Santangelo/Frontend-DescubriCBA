@@ -1,7 +1,7 @@
 /* Floating label effect */
 .floating-group {
   position: relative;
-  margin-bottom: 2rem;
+  margin: 2rem 0;
 }
 
 .floating-group input {

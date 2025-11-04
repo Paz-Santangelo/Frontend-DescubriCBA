@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import Select from "react-select";
@@ -171,8 +172,13 @@ const PropertyFormModal = ({ show, onHide, property }) => {
             return false;
           break;
         case "bodyOfWater":
-          if (!formData.typeBodyOfWater || !formData.cleaningLevel) return false;
-          if (!formData.freeAdmission && (!formData.entrancePrice || formData.entrancePrice <= 0)) return false;
+          if (!formData.typeBodyOfWater || !formData.cleaningLevel)
+            return false;
+          if (
+            !formData.freeAdmission &&
+            (!formData.entrancePrice || formData.entrancePrice <= 0)
+          )
+            return false;
           break;
         case "emergencyService":
           if (!formData.typeOfEmergency) return false;
@@ -216,8 +222,8 @@ const PropertyFormModal = ({ show, onHide, property }) => {
         setFormData((prev) => ({
           ...prev,
           [name]: checked,
-          entrancePrice: checked ? 0 : prev.entrancePrice, 
-          paymentMethods: checked ? [] : prev.paymentMethods, 
+          entrancePrice: checked ? 0 : prev.entrancePrice,
+          paymentMethods: checked ? [] : prev.paymentMethods,
         }));
       } else {
         setFormData((prev) => ({ ...prev, [name]: checked }));
@@ -453,7 +459,7 @@ const PropertyFormModal = ({ show, onHide, property }) => {
                   size="sm"
                   role="status"
                   aria-hidden="true"
-                  style={{ width: '1rem', height: '1rem', marginRight: '8px' }}
+                  style={{ width: "1rem", height: "1rem", marginRight: "8px" }}
                 />
                 <span> Procesando...</span>
               </>

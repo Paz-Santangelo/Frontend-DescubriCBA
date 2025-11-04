@@ -70,6 +70,16 @@ const bodyOfWaterService = {
       throw error;
     }
   },
+
+  /* Obtiene todos los tipos de cuerpos de agua. */
+  getBodiesOfWaterTypes: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/obtener/tipos`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default bodyOfWaterService;

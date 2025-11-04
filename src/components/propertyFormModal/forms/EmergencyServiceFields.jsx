@@ -1,16 +1,26 @@
 import { Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useEffect, useState } from "react";
+import emergencyService from "../../../services/emergencyService";
 
 const EmergencyServiceFields = ({ formData, handleEmergencyTypeChange }) => {
-  const emergencyTypesList = [
-    "SALUD",
-    "POLICIA",
-    "BOMBEROS",
-    "AUXILIO_MECANICO",
-  ];
+  const [emergencyTypes, setEmergencyTypes] = useState([]);
 
-  const emergencyTypeOptions = emergencyTypesList.map((type) => ({
+  useEffect(() => {
+    const fetchEmergencyTypes = async () => {
+      try {
+        const types = await emergencyService.getEmergencyServicesTypes();
+        setEmergencyTypes(types);
+      } catch (error) {
+        console.error("Error fetching emergency service types:", error);
+      }
+    };
+
+    fetchEmergencyTypes();
+  }, []);
+
+  const emergencyTypeOptions = emergencyTypes.map((type) => ({
     value: type,
     label: type.replace(/_/g, " "),
   }));
