@@ -1,37 +1,38 @@
-import { Form, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
-import { useEffect, useState } from 'react';
-import DestinationService from '../../../services/DestinationService';
+import { Form, Row, Col } from "react-bootstrap";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import { useEffect, useState } from "react";
+import DestinationService from "../../../services/DestinationService";
 
-const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handleRemoveImage, handleLevelConcurrenceChange }) => {
+const CommonFields = ({
+  formData,
+  handleChange,
+  handlePaymentMethodChange,
+  handleRemoveImage,
+  handleLevelConcurrenceChange,
+}) => {
   const [concurrenceLevels, setConcurrenceLevels] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
 
   useEffect(() => {
-    const fetchConcurrenceLevels = async () => {
+    const fetchInitialData = async () => {
       try {
         const levels = await DestinationService.getlevelsConcurrenceTypes();
         setConcurrenceLevels(levels);
+
+        const methods = await DestinationService.getPaymentMethods();
+        setPaymentMethods(methods);
       } catch (error) {
-        console.error('Error fetching concurrence levels:', error);
+        console.error("Error fetching initial data:", error);
       }
     };
 
-    fetchConcurrenceLevels();
+    fetchInitialData();
   }, []);
 
-  const paymentMethodOptions = [
-    'EFECTIVO',
-    'TARJETA_DE_CREDITO',
-    'TARJETA_DE_DEBITO',
-    'TRANSFERENCIA_BANCARIA',
-    'MERCADO_PAGO',
-    'MODO',
-  ];
-
-  const concurrenceLevelOptions = concurrenceLevels.map(level => ({
+  const concurrenceLevelOptions = concurrenceLevels.map((level) => ({
     value: level,
-    label: level
+    label: level,
   }));
 
   const animatedComponents = makeAnimated();
@@ -43,7 +44,9 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
       backgroundColor: "rgba(255, 255, 255, 0.1)",
       borderColor: state.isFocused ? "#39d8a8" : "rgba(255, 255, 255, 0.2)",
       color: "white",
-      boxShadow: state.isFocused ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)" : null,
+      boxShadow: state.isFocused
+        ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)"
+        : null,
       "&:hover": { borderColor: "#39d8a8" },
       minWidth: "220px",
     }),
@@ -81,7 +84,11 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? "#39d8a8" : state.isFocused ? "rgba(57, 216, 168, 0.3)" : "transparent",
+      backgroundColor: state.isSelected
+        ? "#39d8a8"
+        : state.isFocused
+        ? "rgba(57, 216, 168, 0.3)"
+        : "transparent",
       color: state.isSelected ? "#151a19" : "white",
       "&:active": { backgroundColor: "#39d8a8" },
     }),
@@ -92,8 +99,15 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
   };
 
   const TrashIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3-fill" viewBox="0 0 16 16">
-      <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m3 0a.5.5 0 0 0-1 0v8.5a.5.5 0 0 0 1 0zM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      className="bi bi-trash3-fill"
+      viewBox="0 0 16 16"
+    >
+      <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m3 0a.5.5 0 0 0-1 0v8.5a.5.5 0 0 0 1 0zM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
     </svg>
   );
 
@@ -104,7 +118,9 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
       {/* Sección de Previsualización de imágenes seleccionadas */}
       {formData.files && formData.files.length > 0 && (
         <Form.Group as={Row} className="mb-4">
-          <Form.Label column sm={12}>Imágenes seleccionadas</Form.Label>
+          <Form.Label column sm={12}>
+            Imágenes seleccionadas
+          </Form.Label>
           <Col sm={12}>
             <div className="image-preview-container">
               {Array.from(formData.files).map((file, index) => (
@@ -130,23 +146,28 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
 
       {/* Selector de Imágenes Personalizado */}
       <Form.Group as={Row} className="mb-4">
-        <Form.Label column sm={12}>Imágenes del lugar</Form.Label>
+        <Form.Label column sm={12}>
+          Imágenes del lugar
+        </Form.Label>
         <Col sm={12} className="d-flex align-items-center">
           <Form.Label htmlFor="file-upload" className="custom-file-upload-btn">
             Elegir archivos
           </Form.Label>
           {formData.files && formData.files.length > 0 && (
             <span className="file-counter-text ms-3">
-              {formData.files.length} {formData.files.length === 1 ? "archivo seleccionado" : "archivos seleccionados"}
+              {formData.files.length}{" "}
+              {formData.files.length === 1
+                ? "archivo seleccionado"
+                : "archivos seleccionados"}
             </span>
           )}
-          <Form.Control 
+          <Form.Control
             id="file-upload"
-            type="file" 
-            name="files" 
-            multiple 
-            onChange={handleChange} 
-            style={{ display: 'none' }} // Oculta el input nativo
+            type="file"
+            name="files"
+            multiple
+            onChange={handleChange}
+            style={{ display: "none" }} // Oculta el input nativo
           />
         </Col>
         <Col sm={12}>
@@ -208,7 +229,12 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
 
       {/* Horario Apertura y Cierre - Fila Centrada */}
       <Row className="justify-content-center">
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Horario de Apertura</Form.Label>
           <Form.Control
             type="time"
@@ -219,7 +245,12 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
             className="time-input-white-icon form-control-medium"
           />
         </Form.Group>
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Horario de Cierre</Form.Label>
           <Form.Control
             type="time"
@@ -234,7 +265,12 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
 
       {/* Teléfono y Celular - Fila Centrada */}
       <Row className="justify-content-center">
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Teléfono Fijo</Form.Label>
           <Form.Control
             type="tel"
@@ -244,7 +280,12 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
             className="form-control-medium"
           />
         </Form.Group>
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Celular</Form.Label>
           <Form.Control
             type="tel"
@@ -269,14 +310,18 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         />
       </Form.Group>
 
-      <Row>
+      <Row className="align-items-end">
         {/* Nivel de Concurrencia */}
         <Form.Group as={Col} md="auto" className="mb-4">
           <Form.Label>Nivel de Concurrencia</Form.Label>
           <Select
             name="levelConcurrence"
             options={concurrenceLevelOptions}
-            value={concurrenceLevelOptions.find(option => option.value === formData.levelConcurrence) || null}
+            value={
+              concurrenceLevelOptions.find(
+                (option) => option.value === formData.levelConcurrence
+              ) || null
+            }
             onChange={handleLevelConcurrenceChange}
             components={animatedComponents}
             styles={customConcurrenceSelectStyles}
@@ -287,7 +332,7 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         </Form.Group>
 
         {/* Accesibilidad */}
-        <Form.Group as={Col} md="auto" className="d-flex align-items-end mb-4">
+        <Form.Group as={Col} md="auto" className="mb-4">
           <Form.Check
             type="switch"
             id="disabled-accessibility-switch"
@@ -305,7 +350,7 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         <Form.Control
           type="text"
           name="website"
-          value={formData.website.join(', ')}
+          value={formData.website.join(", ")}
           onChange={handleChange}
           placeholder="www.ejemplo.com, www.otro.com"
         />
@@ -316,16 +361,16 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
       <Form.Group className="mb-4 payment-methods-group">
         <Form.Label>Métodos de Pago</Form.Label>
         <Row>
-          {paymentMethodOptions.map((method) => (
+          {paymentMethods.map((method) => (
             <Col md={4} sm={6} xs={12} key={method}>
               <Form.Check
                 type="checkbox"
                 id={`payment-${method}`}
-                label={method.replace(/_/g, ' ')}
+                label={method.replace(/_/g, " ")}
                 value={method}
                 checked={formData.paymentMethods.includes(method)}
                 onChange={handlePaymentMethodChange}
-                className="mb-2"
+                className="mb-1 payment-method-check"
                 disabled={formData.freeAdmission}
               />
             </Col>

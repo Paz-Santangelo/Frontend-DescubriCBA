@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/context/UserContext.jsx
 import { createContext, useState, useEffect } from "react";
 import userService from "../services/userService"; // Importamos el servicio de usuario
@@ -63,8 +64,7 @@ export const UserProvider = ({ children }) => {
         const updatedUserData = await userService.getUserById(user.id);
         localStorage.setItem("user_data", JSON.stringify(updatedUserData));
         setUser(updatedUserData);
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 

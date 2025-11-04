@@ -45,6 +45,16 @@ const destinationService = {
       throw error;
     }
   },
+
+  /* Obtiene la lista de los métodos de pago. */
+  getPaymentMethods: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/payment-methods`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default destinationService;
