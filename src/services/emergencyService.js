@@ -44,7 +44,7 @@ const emergencyService = {
     }
   },
 
-  deleteService: async (id) => {
+  deleteEmergency: async (id) => {
     try {
       const response = await apiClient.delete(`${BASE}/delete/${id}`);
       return response.data;

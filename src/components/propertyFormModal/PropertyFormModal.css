@@ -131,6 +131,16 @@
   transition: opacity 0.2s ease-in-out;
 }
 
+.payment-method-check {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.payment-method-check .form-check-input {
+  margin: 0 0.5rem;
+}
+
 /* --- Input de hora con ícono blanco --- */
 .time-input-white-icon {
   color-scheme: dark;
@@ -145,7 +155,7 @@
 }
 
 .btn-create-property:hover {
-  background-color: #2dbb90 !important; 
+  background-color: #2dbb90 !important;
   border-color: #2dbb90;
   color: white;
 }
@@ -239,7 +249,8 @@
   }
 
   /* Hacemos que los botones compartan el espacio en pantallas pequeñas */
-  .modal-footer-custom .btn, .property-type-selector-responsive {
+  .modal-footer-custom .btn,
+  .property-type-selector-responsive {
     flex-grow: 1;
     width: 100% !important;
   }
