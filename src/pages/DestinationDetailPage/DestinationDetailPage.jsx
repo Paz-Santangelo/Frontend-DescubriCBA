@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -67,7 +68,7 @@ const DestinationDetailPage = () => {
 
   const previousState = location.state;
 
-  const canEditOrDelete = user && user.id === destination?.ownerId;  
+  const canEditOrDelete = user && user.id === destination?.ownerId;
 
   useEffect(() => {
     const fetchDestination = async () => {
@@ -126,7 +127,7 @@ const DestinationDetailPage = () => {
 
     try {
       await deleteFunction(propertyToDelete.id);
-       await refreshUser();
+      await refreshUser();
       addNotification("Propiedad eliminada con éxito.", "success");
       navigate("/mis-propiedades"); // Redirige a la lista de propiedades
     } catch (error) {
