@@ -80,6 +80,19 @@ const bodyOfWaterService = {
       throw error;
     }
   },
+
+  /**
+   * Obtiene los niveles de limpieza para los cuerpos de agua.
+   * @returns {Promise<Array<string>>} Una promesa que resuelve a un array de strings con los niveles de limpieza.
+   */
+  getCleaningLevels: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/obtener/niveles-limpieza`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default bodyOfWaterService;

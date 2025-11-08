@@ -8,8 +8,11 @@ const CommonFields = ({
   formData,
   handleChange,
   handlePaymentMethodChange,
-  handleRemoveImage,
   handleLevelConcurrenceChange,
+  existingImages,
+  newImageFiles,
+  handleRemoveExistingImage,
+  handleRemoveNewImage,
 }) => {
   const [concurrenceLevels, setConcurrenceLevels] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -111,20 +114,45 @@ const CommonFields = ({
     </svg>
   );
 
+  const totalImages =
+    (existingImages?.length || 0) + (newImageFiles?.length || 0);
+
   return (
     <>
-      <h4 className="mb-3">Datos Generales</h4>
+      <h3 className="mb-3 title-text-aquamarine text-center">
+        Datos Generales
+      </h3>
 
-      {/* Sección de Previsualización de imágenes seleccionadas */}
-      {formData.files && formData.files.length > 0 && (
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Imágenes de tu propiedad</h5>
+
+      {/* Image Preview Section */}
+      {(existingImages?.length > 0 || newImageFiles?.length > 0) && (
         <Form.Group as={Row} className="mb-4">
           <Form.Label column sm={12}>
             Imágenes seleccionadas
           </Form.Label>
           <Col sm={12}>
             <div className="image-preview-container">
-              {Array.from(formData.files).map((file, index) => (
-                <div key={index} className="image-preview-item">
+              {/* Existing Images */}
+              {existingImages.map((url, index) => (
+                <div key={`existing-${index}`} className="image-preview-item">
+                  <img
+                    src={url}
+                    alt={`Preview ${index}`}
+                    className="image-preview-img"
+                  />
+                  <button
+                    type="button"
+                    className="image-remove-btn"
+                    onClick={() => handleRemoveExistingImage(index)}
+                  >
+                    <TrashIcon />
+                  </button>
+                </div>
+              ))}
+              {/* New Images */}
+              {newImageFiles.map((file, index) => (
+                <div key={`new-${index}`} className="image-preview-item">
                   <img
                     src={URL.createObjectURL(file)}
                     alt={`Preview ${index}`}
@@ -133,7 +161,7 @@ const CommonFields = ({
                   <button
                     type="button"
                     className="image-remove-btn"
-                    onClick={() => handleRemoveImage(index)}
+                    onClick={() => handleRemoveNewImage(index)}
                   >
                     <TrashIcon />
                   </button>
@@ -144,19 +172,16 @@ const CommonFields = ({
         </Form.Group>
       )}
 
-      {/* Selector de Imágenes Personalizado */}
+      {/* Custom Image Selector */}
       <Form.Group as={Row} className="mb-4">
-        <Form.Label column sm={12}>
-          Imágenes del lugar
-        </Form.Label>
         <Col sm={12} className="d-flex align-items-center">
           <Form.Label htmlFor="file-upload" className="custom-file-upload-btn">
             Elegir archivos
           </Form.Label>
-          {formData.files && formData.files.length > 0 && (
+          {totalImages > 0 && (
             <span className="file-counter-text ms-3">
-              {formData.files.length}{" "}
-              {formData.files.length === 1
+              {totalImages}{" "}
+              {totalImages === 1
                 ? "archivo seleccionado"
                 : "archivos seleccionados"}
             </span>
@@ -167,7 +192,7 @@ const CommonFields = ({
             name="files"
             multiple
             onChange={handleChange}
-            style={{ display: "none" }} // Oculta el input nativo
+            style={{ display: "none" }}
           />
         </Col>
         <Col sm={12}>
@@ -175,6 +200,9 @@ const CommonFields = ({
         </Col>
       </Form.Group>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Información Principal</h5>
       <Row>
         {/* Nombre */}
         <Form.Group as={Col} md="6" className="mb-4">
@@ -227,6 +255,9 @@ const CommonFields = ({
         </Form.Group>
       </Row>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Horarios y Contacto</h5>
       {/* Horario Apertura y Cierre - Fila Centrada */}
       <Row className="justify-content-center">
         <Form.Group
@@ -298,6 +329,9 @@ const CommonFields = ({
         </Form.Group>
       </Row>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Ubicación en Mapa</h5>
       {/* URL Google Maps */}
       <Form.Group className="mb-4">
         <Form.Label>URL de Google Maps</Form.Label>
@@ -310,9 +344,12 @@ const CommonFields = ({
         />
       </Form.Group>
 
-      <Row className="align-items-end">
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Detalles Adicionales</h5>
+      <Row className="justify-content-center align-items-end mb-4">
         {/* Nivel de Concurrencia */}
-        <Form.Group as={Col} md="auto" className="mb-4">
+        <Form.Group as={Col} md="auto">
           <Form.Label>Nivel de Concurrencia</Form.Label>
           <Select
             name="levelConcurrence"
@@ -332,7 +369,7 @@ const CommonFields = ({
         </Form.Group>
 
         {/* Accesibilidad */}
-        <Form.Group as={Col} md="auto" className="mb-4">
+        <Form.Group as={Col} md="auto" className="ms-4 mt-3">
           <Form.Check
             type="switch"
             id="disabled-accessibility-switch"
@@ -344,6 +381,9 @@ const CommonFields = ({
         </Form.Group>
       </Row>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Sitios Web y Pagos</h5>
       {/* Sitios Web */}
       <Form.Group className="mb-4">
         <Form.Label>Sitios Web</Form.Label>

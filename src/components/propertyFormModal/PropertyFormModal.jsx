@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import Select from "react-select";
@@ -124,7 +123,7 @@ const initialFormData = {
   typeOfEmergency: "",
 };
 
-const PropertyFormModal = ({ show, onHide, property }) => {
+const PropertyFormModal = ({ show, onHide, property, onUpdateSuccess }) => {
   const isEditing = !!property;
   const { user, refreshUser } = useUser();
   const { addNotification } = useNotification();
@@ -132,6 +131,38 @@ const PropertyFormModal = ({ show, onHide, property }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+
+  // State for image management
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImageFiles, setNewImageFiles] = useState([]);
+  const [imagesToDelete, setImagesToDelete] = useState([]);
+
+  useEffect(() => {
+    if (isEditing && property) {
+      let type = "";
+      if (property.cuisineType) type = "restaurant";
+      else if (property.type) type = "accommodation";
+      else if (property.typeBodyOfWater) type = "bodyOfWater";
+      else if (property.typeOfEmergency) type = "emergencyService";
+      setPropertyType(type);
+
+      setFormData({
+        ...initialFormData,
+        ...property,
+        files: [],
+      });
+
+      setExistingImages(property.imagesDestinations?.map(img => img.urlImage) || []);
+      setNewImageFiles([]);
+      setImagesToDelete([]);
+    } else {
+      setPropertyType("");
+      setFormData(initialFormData);
+      setExistingImages([]);
+      setNewImageFiles([]);
+      setImagesToDelete([]);
+    }
+  }, [property, isEditing, show]);
 
   useEffect(() => {
     const validateForm = () => {
@@ -144,7 +175,6 @@ const PropertyFormModal = ({ show, onHide, property }) => {
         closingTime,
         levelConcurrence,
         cellPhone,
-        files,
       } = formData;
 
       // Validación de campos comunes
@@ -156,9 +186,13 @@ const PropertyFormModal = ({ show, onHide, property }) => {
         !openingTime ||
         !closingTime ||
         !levelConcurrence ||
-        !cellPhone ||
-        files.length === 0
+        !cellPhone
       ) {
+        return false;
+      }
+
+      // Validación de imágenes: debe haber al menos una imagen.
+      if (existingImages.length + newImageFiles.length === 0) {
         return false;
       }
 
@@ -185,21 +219,15 @@ const PropertyFormModal = ({ show, onHide, property }) => {
           break;
         default:
           // Si no hay un tipo de propiedad seleccionado, el formulario no es válido
-          return false;
+          if (!isEditing) return false;
+          break;
       }
 
       return true;
     };
 
     setIsFormValid(validateForm());
-  }, [formData, propertyType]);
-
-  useEffect(() => {
-    if (show) {
-      setPropertyType("");
-      setFormData(initialFormData);
-    }
-  }, [show]);
+  }, [formData, propertyType, isEditing, newImageFiles, existingImages]);
 
   const handlePropertyTypeChange = (selectedOption) => {
     const newPropertyType = selectedOption ? selectedOption.value : "";
@@ -211,10 +239,7 @@ const PropertyFormModal = ({ show, onHide, property }) => {
     const { name, value, type, checked, files } = e.target;
     if (type === "file") {
       const newFiles = Array.from(files);
-      setFormData((prev) => ({
-        ...prev,
-        files: [...prev.files, ...newFiles],
-      }));
+      setNewImageFiles((prev) => [...prev, ...newFiles]);
       e.target.value = null;
     } else if (type === "checkbox") {
       // Lógica específica para el switch de admisión gratuita
@@ -289,12 +314,21 @@ const PropertyFormModal = ({ show, onHide, property }) => {
     setFormData((prev) => ({ ...prev, typeOfEmergency: newType }));
   };
 
-  const handleRemoveImage = (index) => {
-    setFormData((prev) => {
-      const updatedFiles = [...prev.files];
-      updatedFiles.splice(index, 1);
-      return { ...prev, files: updatedFiles };
-    });
+  const handleRemoveExistingImage = (index) => {
+    const imageToRemove = existingImages[index];
+    setImagesToDelete(prev => [...prev, imageToRemove]);
+    setExistingImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveNewImage = (index) => {
+    setNewImageFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Convert an image URL to a File object
+  const urlToFile = async (url, filename) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: blob.type });
   };
 
   const handleSubmit = async (e) => {
@@ -302,47 +336,121 @@ const PropertyFormModal = ({ show, onHide, property }) => {
     setIsSubmitting(true);
 
     const data = new FormData();
-    const finalData = { ...formData, ownerId: user.id };
+    let finalData = isEditing
+      ? { ...formData }
+      : { ...formData, ownerId: user.id };
 
+    // Normalize typeBodyOfWater for the backend enum
+    const normalizeForEnum = (str) => {
+      if (!str) return str;
+      return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toUpperCase();
+    };
+
+    if (propertyType === 'bodyOfWater' && finalData.typeBodyOfWater) {
+      finalData = {
+        ...finalData,
+        typeBodyOfWater: normalizeForEnum(finalData.typeBodyOfWater),
+      };
+    }
+
+    // Append all fields from formData except files and image arrays
     for (const key in finalData) {
-      if (key === "files") {
-        if (finalData.files) {
-          for (let i = 0; i < finalData.files.length; i++) {
-            data.append("files", finalData.files[i]);
-          }
+      if (key !== "files" && key !== "images" && key !== "imagesDestinations") { 
+        if (Array.isArray(finalData[key])) {
+          finalData[key].forEach((item) => data.append(key, item));
+        } else {
+          data.append(key, finalData[key]);
         }
-      } else if (Array.isArray(finalData[key])) {
-        finalData[key].forEach((item) => data.append(key, item));
-      } else {
-        data.append(key, finalData[key]);
       }
     }
 
+    // Handle images for editing
+    if (isEditing) {
+      // Convert remaining existing images to files
+      const existingFiles = await Promise.all(
+        existingImages.map((url) => {
+          const filename = url.substring(url.lastIndexOf("/") + 1);
+          return urlToFile(url, filename);
+        })
+      );
+
+      existingFiles.forEach((file) => {
+        data.append("files", file);
+      });
+
+      // Append images to delete
+      imagesToDelete.forEach((imageUrl) => {
+        data.append("imagesToDelete", imageUrl);
+      });
+    }
+
+    // Append new files for both creating and editing
+    newImageFiles.forEach((file) => {
+      data.append("files", file);
+    });
+
     try {
-      let response;
-      switch (propertyType) {
-        case "accommodation":
-          response = await accommodationService.createAccommodation(data);
-          break;
-        case "restaurant":
-          response = await restaurantService.createRestaurant(data);
-          break;
-        case "bodyOfWater":
-          response = await bodyOfWaterService.createBody(data);
-          break;
-        case "emergencyService":
-          response = await emergencyService.createEmergencyService(data);
-          break;
-        default:
-          throw new Error("Tipo de propiedad no válido");
+      if (isEditing) {
+        // Update logic
+        const propertyId = property.id;
+        switch (propertyType) {
+          case "accommodation":
+            await accommodationService.updateAccommodation(propertyId, data);
+            break;
+          case "restaurant":
+            await restaurantService.updateRestaurant(propertyId, data);
+            break;
+          case "bodyOfWater":
+            await bodyOfWaterService.updateBody(propertyId, data);
+            break;
+          case "emergencyService":
+            await emergencyService.updateService(propertyId, data);
+            break;
+          default:
+            throw new Error("Invalid property type");
+        }
+        addNotification("Propiedad actualizada con éxito!", "success");
+      } else {
+        // Create logic
+        switch (propertyType) {
+          case "accommodation":
+            await accommodationService.createAccommodation(data);
+            break;
+          case "restaurant":
+            await restaurantService.createRestaurant(data);
+            break;
+          case "bodyOfWater":
+            await bodyOfWaterService.createBody(data);
+            break;
+          case "emergencyService":
+            await emergencyService.createEmergencyService(data);
+            break;
+          default:
+            throw new Error("Invalid property type");
+        }
+        addNotification("Propiedad creada con éxito!", "success");
       }
-      // Refrescar los datos del usuario para obtener la propiedad recién creada
+
       await refreshUser();
-      addNotification("Propiedad creada con éxito!", "success");
-      onHide();
+      if (onUpdateSuccess) {
+        onUpdateSuccess();
+      } else {
+        onHide();
+      }
     } catch (error) {
-      console.error("Error al crear la propiedad:", error);
-      addNotification("Hubo un error al crear la propiedad.", "danger");
+      console.error(
+        `Error al ${isEditing ? "actualizar" : "crear"} la propiedad:`,
+        error
+      );
+      addNotification(
+        `Hubo un error al ${
+          isEditing ? "actualizar" : "crear"
+        } la propiedad.`,
+        "danger"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -402,45 +510,47 @@ const PropertyFormModal = ({ show, onHide, property }) => {
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
-          {!isEditing && (
-            <Form.Group controlId="propertyTypeSelector" className="mb-4">
-              <Form.Label>
-                Selecciona el tipo de propiedad que deseas crear
-              </Form.Label>
-              <Select
-                name="propertyType"
-                options={propertyTypeOptions}
-                value={
-                  propertyTypeOptions.find(
-                    (option) => option.value === propertyType
-                  ) || null
-                }
-                onChange={handlePropertyTypeChange}
-                components={animatedComponents}
-                styles={customSelectStyles}
-                placeholder="-- Elige una opción --"
-                className="property-type-selector-responsive"
-                classNamePrefix="property-type-select"
-                isClearable={true}
-              />
-            </Form.Group>
-          )}
+          <Form.Group controlId="propertyTypeSelector" className="mb-4">
+            <Form.Label>
+              Selecciona el tipo de propiedad que deseas{" "}
+              {isEditing ? "editar" : "crear"}
+            </Form.Label>
+            <Select
+              name="propertyType"
+              options={propertyTypeOptions}
+              value={
+                propertyTypeOptions.find(
+                  (option) => option.value === propertyType
+                ) || null
+              }
+              onChange={handlePropertyTypeChange}
+              components={animatedComponents}
+              styles={customSelectStyles}
+              placeholder="-- Elige una opción --"
+              className="property-type-selector-responsive"
+              classNamePrefix="property-type-select"
+              isClearable={!isEditing}
+              isDisabled={isEditing}
+            />
+          </Form.Group>
 
-          {propertyType && !isEditing && (
+          {propertyType && (
             <>
+              <hr className="centered-divider" />
               <CommonFields
                 formData={formData}
                 handleChange={handleChange}
                 handlePaymentMethodChange={handlePaymentMethodChange}
                 handleLevelConcurrenceChange={handleLevelConcurrenceChange}
-                handleRemoveImage={handleRemoveImage}
+                existingImages={existingImages}
+                newImageFiles={newImageFiles}
+                handleRemoveExistingImage={handleRemoveExistingImage}
+                handleRemoveNewImage={handleRemoveNewImage}
               />
-              <hr className="section-divider" />
+              <hr className="centered-divider" />
               {renderSpecificFields()}
             </>
           )}
-
-          {isEditing && <p>Aquí irá el formulario para editar la propiedad.</p>}
         </Modal.Body>
         <Modal.Footer className="modal-footer-custom">
           <Button variant="secondary" onClick={onHide}>
@@ -449,7 +559,7 @@ const PropertyFormModal = ({ show, onHide, property }) => {
           <Button
             type="submit"
             className="btn-create-property"
-            disabled={isSubmitting || (!isEditing && !isFormValid)}
+            disabled={isSubmitting || !isFormValid}
           >
             {isSubmitting ? (
               <>

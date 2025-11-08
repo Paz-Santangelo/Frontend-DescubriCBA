@@ -89,12 +89,13 @@
    ========================================================================== */
 
 /* --- Línea divisoria de secciones --- */
-.section-divider {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  border: 0;
-  border-top: 2px solid #39d8a8;
-  opacity: 0.75;
+.centered-divider {
+  margin: 1.1rem auto;
+  width: 80%;
+  border: none;
+  height: 1px;
+  background-color: #39d8a8;
+  opacity: 0.5;
 }
 
 /* --- Selector de tipo de propiedad --- */
@@ -235,7 +236,19 @@
 }
 
 /* ==========================================================================
-   5. Responsive Adjustments
+   5. Utility Classes
+   ========================================================================== */
+
+.title-text-aquamarine {
+  color: #39d8a8;
+}
+
+.subtitle-text-light-aquamarine {
+  color: #c8d8d3;
+}
+
+/* ==========================================================================
+   6. Responsive Adjustments
    ========================================================================== */
 
 @media (max-width: 983px) {
