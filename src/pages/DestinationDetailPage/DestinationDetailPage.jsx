@@ -42,6 +42,7 @@ import bodyOfWaterService from "../../services/bodyOfWaterService";
 import emergencyService from "../../services/emergencyService";
 import restaurantService from "../../services/restaurantService";
 import ConfirmationModal from "../../components/confirmationModal/ConfirmationModal";
+import PropertyFormModal from "../../components/propertyFormModal/PropertyFormModal";
 import { useNotification } from "../../context/NotificationContext";
 import "./DestinationDetailPage.css";
 import { useUser } from "../../hooks/useUser";
@@ -60,6 +61,8 @@ const DestinationDetailPage = () => {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [propertyToEdit, setPropertyToEdit] = useState(null);
 
   const isLoggedIn = user && user.role;
 
@@ -70,33 +73,48 @@ const DestinationDetailPage = () => {
 
   const canEditOrDelete = user && user.id === destination?.ownerId;
 
-  useEffect(() => {
-    const fetchDestination = async () => {
-      try {
-        setLoading(true);
-        const data = await destinationService.getDestinationById(id);
-        setDestination(data);
-        if (data.cuisineType) {
-          setDestinationType("restaurant");
-        } else if (data.type) {
-          setDestinationType("accommodation");
-        } else if (data.typeBodyOfWater) {
-          setDestinationType("bodyOfWater");
-        } else if (data.typeOfEmergency) {
-          setDestinationType("emergencyService");
-        }
-        setError(null);
-      } catch (err) {
-        setError(
-          "No se pudieron cargar los detalles del destino. Por favor, intente más tarde."
-        );
-      } finally {
-        setLoading(false);
+  const fetchDestination = async () => {
+    try {
+      setLoading(true);
+      const data = await destinationService.getDestinationById(id);
+      setDestination(data);
+      if (data.cuisineType) {
+        setDestinationType("restaurant");
+      } else if (data.type) {
+        setDestinationType("accommodation");
+      } else if (data.typeBodyOfWater) {
+        setDestinationType("bodyOfWater");
+      } else if (data.typeOfEmergency) {
+        setDestinationType("emergencyService");
       }
-    };
+      setError(null);
+    } catch (err) {
+      setError(
+        "No se pudieron cargar los detalles del destino. Por favor, intente más tarde."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchDestination();
   }, [id]);
+
+  const handleEdit = () => {
+    setPropertyToEdit(destination);
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setPropertyToEdit(null);
+  };
+
+  const handleUpdateSuccess = () => {
+    handleCloseEditModal();
+    fetchDestination();
+  };
 
   const handleCancelDelete = () => {
     setShowConfirmation(false);
@@ -292,9 +310,7 @@ const DestinationDetailPage = () => {
             <Button
               className="back-button me-2"
               style={{ "--service-color": "#44b4ffff" }} // Azul pastel para editar
-              onClick={() => {
-                /* Lógica para editar */
-              }}
+              onClick={handleEdit}
             >
               <PencilFill size={16} className="me-2" />
               Editar
@@ -324,6 +340,13 @@ const DestinationDetailPage = () => {
           }
           body={`¿Estás seguro de que deseas eliminar la propiedad "${propertyToDelete?.name}"? Esta acción no se puede deshacer.`}
           confirmButtonVariant="danger"
+        />
+
+        <PropertyFormModal
+          show={showEditModal}
+          onHide={handleCloseEditModal}
+          property={propertyToEdit}
+          onUpdateSuccess={handleUpdateSuccess}
         />
 
         <Row className="justify-content-center">

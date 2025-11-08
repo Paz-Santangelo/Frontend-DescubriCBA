@@ -38,7 +38,6 @@ const EmergencyServiceFields = ({ formData, handleEmergencyTypeChange }) => {
         ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)"
         : null,
       "&:hover": { borderColor: "#39d8a8" },
-      width: "50%",
     }),
     singleValue: (provided) => ({ ...provided, color: "white" }),
     placeholder: (provided) => ({
@@ -48,7 +47,6 @@ const EmergencyServiceFields = ({ formData, handleEmergencyTypeChange }) => {
     menu: (provided) => ({
       ...provided,
       backgroundColor: "#344944",
-      width: "50%",
     }),
     menuList: (provided) => ({ ...provided, maxHeight: "120px" }),
     clearIndicator: (provided) => ({
@@ -81,9 +79,11 @@ const EmergencyServiceFields = ({ formData, handleEmergencyTypeChange }) => {
 
   return (
     <>
-      <h5 className="my-4">Datos Específicos de Servicio de Emergencia</h5>
-      <Row>
-        <Form.Group as={Col} md="6" className="mb-3">
+      <h3 className="mb-4 title-text-aquamarine text-center">
+        Datos Específicos de Servicio de Emergencia
+      </h3>
+      <Row className="justify-content-center">
+        <Form.Group as={Col} md="6" className="mb-3 mx-auto">
           <Form.Label>Tipo de Servicio de Emergencia</Form.Label>
           <Select
             name="typeOfEmergency"

@@ -11,19 +11,22 @@ const BodyOfWaterFields = ({
   handleCleaningLevelChange,
 }) => {
   const [bodyOfWaterTypes, setBodyOfWaterTypes] = useState([]);
-  const cleaningLevelsList = ["EXCELENTE", "BUENO", "REGULAR", "MALO"];
+  const [cleaningLevels, setCleaningLevels] = useState([]);
 
   useEffect(() => {
-    const fetchBodyOfWaterTypes = async () => {
+    const fetchInitialData = async () => {
       try {
         const types = await bodyOfWaterService.getBodiesOfWaterTypes();
         setBodyOfWaterTypes(types);
+
+        const levels = await bodyOfWaterService.getCleaningLevels();
+        setCleaningLevels(levels);
       } catch (error) {
-        console.error("Error fetching body of water types:", error);
+        console.error("Error fetching initial data for body of water:", error);
       }
     };
 
-    fetchBodyOfWaterTypes();
+    fetchInitialData();
   }, []);
 
   const bodyOfWaterTypeOptions = bodyOfWaterTypes.map((type) => ({
@@ -31,7 +34,7 @@ const BodyOfWaterFields = ({
     label: type,
   }));
 
-  const cleaningLevelOptions = cleaningLevelsList.map((level) => ({
+  const cleaningLevelOptions = cleaningLevels.map((level) => ({
     value: level,
     label: level,
   }));
@@ -92,8 +95,11 @@ const BodyOfWaterFields = ({
 
   return (
     <>
-      <h5 className="my-4">Datos Específicos de Cuerpo de Agua</h5>
+      <h3 className="mb-4 title-text-aquamarine text-center">
+        Datos Específicos de Cuerpo de Agua
+      </h3>
 
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Características</h5>
       <Row>
         {/* Tipo de Cuerpo de Agua */}
         <Form.Group as={Col} md="6" className="mb-3">
@@ -136,9 +142,12 @@ const BodyOfWaterFields = ({
         </Form.Group>
       </Row>
 
-      <Row>
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Admisión y Precios</h5>
+      <Row className="justify-content-start">
         {/* Admisión Gratuita */}
-        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+        <Form.Group as={Col} md="auto" className="d-flex align-items-center mb-3 me-md-5">
           <Form.Check
             type="switch"
             id="free-admission-switch"
@@ -150,7 +159,7 @@ const BodyOfWaterFields = ({
         </Form.Group>
 
         {/* Precio de Entrada */}
-        <Form.Group as={Col} md="6" className="mb-3">
+        <Form.Group as={Col} md="auto" className="mb-3">
           <Form.Label>Precio de Entrada</Form.Label>
           <InputGroup className="form-control-medium">
             <InputGroup.Text>$</InputGroup.Text>

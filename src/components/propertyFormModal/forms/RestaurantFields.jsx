@@ -122,10 +122,14 @@ const RestaurantFields = ({
 
   return (
     <>
-      <h5 className="my-4">Datos Específicos de Restaurante</h5>
+      <h3 className="mb-4 title-text-aquamarine text-center">
+        Datos Específicos de Restaurante
+      </h3>
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Gastronomía</h5>
       <Row className="justify-content-start">
         {/* Tipos de Cocina */}
-        <Form.Group as={Col} md={8} lg={7} className="mb-3">
+        <Form.Group as={Col} md={8} lg={5} className="mb-3">
           <Form.Label>Tipos de Cocina</Form.Label>
           <Select
             isMulti
@@ -145,9 +149,12 @@ const RestaurantFields = ({
         </Form.Group>
       </Row>
 
-      <Row>
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Servicios</h5>
+      <Row className="justify-content-start">
         {/* Delivery */}
-        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+        <Form.Group as={Col} md="auto" className="d-flex align-items-center mb-3 me-md-5">
           <Form.Check
             type="switch"
             id="delivery-switch"
@@ -159,7 +166,7 @@ const RestaurantFields = ({
         </Form.Group>
 
         {/* Reservas */}
-        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+        <Form.Group as={Col} md="auto" className="d-flex align-items-center mb-3">
           <Form.Check
             type="switch"
             id="reservations-switch"
