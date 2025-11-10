@@ -41,17 +41,46 @@ const RegistroForm = ({ onSuccess }) => {
   useEffect(() => {
     const validate = () => {
       const newErrors = {};
-      if (!form.nombre.trim() || form.nombre.trim().length < 2) newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
-      if (!form.apellido.trim() || form.apellido.trim().length < 2) newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
-      if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) newErrors.email = "Correo inválido.";
-      if (!form.password || form.password.length < 8 || !/[A-Z]/.test(form.password) || !/[0-9]/.test(form.password)) newErrors.password = "La contraseña debe tener 8+ caracteres, una mayúscula y un número.";
-      if (!form.confirmPassword || form.password !== form.confirmPassword) newErrors.confirmPassword = "Las contraseñas no coinciden.";
+      if (!form.nombre.trim() || form.nombre.trim().length < 2)
+        newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
+      if (!form.apellido.trim() || form.apellido.trim().length < 2)
+        newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
+      if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email))
+        newErrors.email = "Correo inválido.";
+
+      // Validación de la contraseña en tiempo real
+      if (form.password) {
+        const passwordErrors = [];
+        if (form.password.length < 8) {
+          passwordErrors.push("8+ caracteres");
+        }
+        if (!/[A-Z]/.test(form.password)) {
+          passwordErrors.push("una mayúscula");
+        }
+        if (!/[0-9]/.test(form.password)) {
+          passwordErrors.push("un número");
+        }
+
+        if (passwordErrors.length > 0) {
+          newErrors.password = `Debe contener: ${passwordErrors.join(", ")}.`;
+        }
+      }
+
+      if (form.confirmPassword && form.password !== form.confirmPassword) {
+        newErrors.confirmPassword = "Las contraseñas no coinciden.";
+      }
       return newErrors;
     };
 
     const validationErrors = validate();
-    const allFieldsFilled = Object.values(form).every(field => field.trim() !== '');
-    setIsFormValid(Object.keys(validationErrors).length === 0 && allFieldsFilled);
+    setErrors(validationErrors); // Actualizar los errores para mostrarlos en la UI
+
+    const allFieldsFilled = Object.values(form).every(
+      (field) => field.trim() !== ""
+    );
+    setIsFormValid(
+      Object.keys(validationErrors).length === 0 && allFieldsFilled
+    );
   }, [form]);
 
   // Manejar envío del formulario
@@ -67,10 +96,24 @@ const RegistroForm = ({ onSuccess }) => {
       else if (form.apellido.trim().length < 2) newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
       if (!form.email.trim()) newErrors.email = "El correo es obligatorio.";
       else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) newErrors.email = "Correo inválido.";
-      if (!form.password) newErrors.password = "La contraseña es obligatoria.";
-      else if (form.password.length < 8) newErrors.password = "Mínimo 8 caracteres.";
-      else if (!/[A-Z]/.test(form.password)) newErrors.password = "Debe tener una mayúscula.";
-      else if (!/[0-9]/.test(form.password)) newErrors.password = "Debe tener un número.";
+      if (!form.password) {
+        newErrors.password = "La contraseña es obligatoria.";
+      } else {
+        const passwordErrors = [];
+        if (form.password.length < 8) {
+          passwordErrors.push("8+ caracteres");
+        }
+        if (!/[A-Z]/.test(form.password)) {
+          passwordErrors.push("una mayúscula");
+        }
+        if (!/[0-9]/.test(form.password)) {
+          passwordErrors.push("un número");
+        }
+
+        if (passwordErrors.length > 0) {
+          newErrors.password = `Debe contener: ${passwordErrors.join(", ")}.`;
+        }
+      }
       if (!form.confirmPassword) newErrors.confirmPassword = "Confirme la contraseña.";
       else if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Las contraseñas no coinciden.";
       return newErrors;
@@ -159,7 +202,9 @@ const RegistroForm = ({ onSuccess }) => {
         <label className={form.nombre ? "floating active" : "floating"}>
           Nombre
         </label>
-        {errors.nombre && <span className="error">{errors.nombre}</span>}
+        <div className="error-container">
+          {errors.nombre && <span className="error">{errors.nombre}</span>}
+        </div>
       </div>
 
       {/* Campo Apellido */}
@@ -173,7 +218,9 @@ const RegistroForm = ({ onSuccess }) => {
         <label className={form.apellido ? "floating active" : "floating"}>
           Apellido
         </label>
-        {errors.apellido && <span className="error">{errors.apellido}</span>}
+        <div className="error-container">
+          {errors.apellido && <span className="error">{errors.apellido}</span>}
+        </div>
       </div>
 
       {/* Campo Email */}
@@ -188,7 +235,9 @@ const RegistroForm = ({ onSuccess }) => {
         <label className={form.email ? "floating active" : "floating"}>
           Correo electrónico
         </label>
-        {errors.email && <span className="error">{errors.email}</span>}
+        <div className="error-container">
+          {errors.email && <span className="error">{errors.email}</span>}
+        </div>
       </div>
 
       {/* Campo Contraseña */}
@@ -203,7 +252,9 @@ const RegistroForm = ({ onSuccess }) => {
         <label className={form.password ? "floating active" : "floating"}>
           Contraseña
         </label>
-        {errors.password && <span className="error">{errors.password}</span>}
+        <div className="error-container">
+          {errors.password && <span className="error">{errors.password}</span>}
+        </div>
       </div>
 
       {/* Campo Confirmar Contraseña */}
@@ -220,9 +271,11 @@ const RegistroForm = ({ onSuccess }) => {
         >
           Confirmar contraseña
         </label>
-        {errors.confirmPassword && (
-          <span className="error">{errors.confirmPassword}</span>
-        )}
+        <div className="error-container">
+          {errors.confirmPassword && (
+            <span className="error">{errors.confirmPassword}</span>
+          )}
+        </div>
       </div>
 
       {/* Botón de envío */}

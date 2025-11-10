@@ -1,11 +1,26 @@
 import { Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useEffect, useState } from "react";
+import accommodationService from "../../../services/accommodationService";
 
 const AccommodationFields = ({ formData, handleAccommodationTypeChange }) => {
-  const accommodationTypesList = ["HOTEL", "HOSTEL", "CAMPING", "CABAÑA"];
+  const [accommodationTypes, setAccommodationTypes] = useState([]);
 
-  const accommodationTypeOptions = accommodationTypesList.map((type) => ({
+  useEffect(() => {
+    const fetchAccommodationTypes = async () => {
+      try {
+        const types = await accommodationService.getAccommodationTypes();
+        setAccommodationTypes(types);
+      } catch (error) {
+        console.error("Error fetching accommodation types:", error);
+      }
+    };
+
+    fetchAccommodationTypes();
+  }, []);
+
+  const accommodationTypeOptions = accommodationTypes.map((type) => ({
     value: type,
     label: type,
   }));
@@ -23,7 +38,6 @@ const AccommodationFields = ({ formData, handleAccommodationTypeChange }) => {
         ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)"
         : null,
       "&:hover": { borderColor: "#39d8a8" },
-      width: "50%",
     }),
     singleValue: (provided) => ({
       ...provided,
@@ -36,7 +50,6 @@ const AccommodationFields = ({ formData, handleAccommodationTypeChange }) => {
     menu: (provided) => ({
       ...provided,
       backgroundColor: "#344944",
-      width: "50%",
     }),
     menuList: (provided) => ({
       ...provided,
@@ -75,12 +88,14 @@ const AccommodationFields = ({ formData, handleAccommodationTypeChange }) => {
 
   return (
     <>
-      <h5 className="my-4">Datos Específicos de Alojamiento</h5>
-      <Row>
-        <Form.Group as={Col} md="6" className="mb-3">
+      <h3 className="my-4 title-text-aquamarine text-center">
+        Datos Específicos de Alojamiento
+      </h3>
+      <Row className="justify-content-center">
+        <Form.Group as={Col} md="6" className="mb-3 mx-auto">
           <Form.Label>Tipo de Alojamiento</Form.Label>
           <Select
-            name="type" // Nombre para el formulario
+            name="type"
             options={accommodationTypeOptions}
             value={
               accommodationTypeOptions.find(

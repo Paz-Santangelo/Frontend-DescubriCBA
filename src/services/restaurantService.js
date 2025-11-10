@@ -81,6 +81,16 @@ const restaurantService = {
       throw error;
     }
   },
+
+  /* Obtiene todos los tipos de cocina disponibles. */
+  getCuisineTypes: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/cuisine-types`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default restaurantService;

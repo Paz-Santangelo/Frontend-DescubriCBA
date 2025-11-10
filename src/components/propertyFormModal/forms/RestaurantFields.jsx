@@ -1,28 +1,32 @@
 import { Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useState, useEffect } from "react";
+import restaurantService from "../../../services/restaurantService";
 
 const RestaurantFields = ({
   formData,
   handleChange,
   handleCuisineTypeChange,
 }) => {
-  const cuisineTypeOptionsList = [
-    "PARRILLA",
-    "PASTA",
-    "MINUTAS",
-    "VEGANO",
-    "VEGETARIANO",
-    "INTERNACIONAL",
-    "REGIONAL",
-    "PESCADOS_Y_MARISCOS",
-    "COMIDA_RAPIDA",
-    "ASIATICA",
-    "MEXICANA",
-    "ITALIANA",
-    "FRANCESA",
-    "MEDITERRANEA",
-  ];
+  const [cuisineTypeOptionsList, setCuisineTypeOptionsList] = useState([]);
+
+  useEffect(() => {
+    const fetchCuisineTypes = async () => {
+      try {
+        const types = await restaurantService.getCuisineTypes();
+        setCuisineTypeOptionsList(types);
+      } catch (error) {
+        console.error(
+          "Error al cargar los tipos de cocina desde el backend:",
+          error
+        );
+        // Opcional: manejar el error en la UI
+      }
+    };
+
+    fetchCuisineTypes();
+  }, []); // El array vacío asegura que se ejecute solo una vez al montar el componente
 
   const cuisineTypeOptions = cuisineTypeOptionsList.map((type) => ({
     value: type,
@@ -118,10 +122,14 @@ const RestaurantFields = ({
 
   return (
     <>
-      <h5 className="my-4">Datos Específicos de Restaurante</h5>
-      <Row>
+      <h3 className="mb-4 title-text-aquamarine text-center">
+        Datos Específicos de Restaurante
+      </h3>
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Gastronomía</h5>
+      <Row className="justify-content-start">
         {/* Tipos de Cocina */}
-        <Form.Group as={Col} md={6} className="mb-3">
+        <Form.Group as={Col} md={8} lg={5} className="mb-3">
           <Form.Label>Tipos de Cocina</Form.Label>
           <Select
             isMulti
@@ -141,9 +149,12 @@ const RestaurantFields = ({
         </Form.Group>
       </Row>
 
-      <Row>
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Servicios</h5>
+      <Row className="justify-content-start">
         {/* Delivery */}
-        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+        <Form.Group as={Col} md="auto" className="d-flex align-items-center mb-3 me-md-5">
           <Form.Check
             type="switch"
             id="delivery-switch"
@@ -155,7 +166,7 @@ const RestaurantFields = ({
         </Form.Group>
 
         {/* Reservas */}
-        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+        <Form.Group as={Col} md="auto" className="d-flex align-items-center mb-3">
           <Form.Check
             type="switch"
             id="reservations-switch"

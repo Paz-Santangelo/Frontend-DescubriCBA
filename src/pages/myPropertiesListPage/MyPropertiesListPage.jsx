@@ -1,8 +1,14 @@
+/* eslint-disable no-unused-vars */
 import "../serviceListPage/ServiceListPage.css";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Container, Row, Col, Card, Alert, Button } from "react-bootstrap";
-import { StarFill, StarHalf, Star, PlusCircleFill } from "react-bootstrap-icons";
+import {
+  StarFill,
+  StarHalf,
+  Star,
+  PlusCircleFill,
+} from "react-bootstrap-icons";
 import { useUser } from "../../hooks/useUser";
 import { Link } from "react-router-dom";
 import PropertyFormModal from "../../components/propertyFormModal/PropertyFormModal";
@@ -58,7 +64,10 @@ const MyPropertiesListPage = () => {
           <Button
             className="back-button"
             style={{ "--service-color": "#39d8a8" }}
-            onClick={() => { setSelectedProperty(null); setShowPropertyModal(true); }}
+            onClick={() => {
+              setSelectedProperty(null);
+              setShowPropertyModal(true);
+            }}
           >
             <PlusCircleFill size={20} className="me-2" />
             Agregar Propiedad

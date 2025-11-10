@@ -89,12 +89,13 @@
    ========================================================================== */
 
 /* --- Línea divisoria de secciones --- */
-.section-divider {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  border: 0;
-  border-top: 2px solid #39d8a8;
-  opacity: 0.75;
+.centered-divider {
+  margin: 1.1rem auto;
+  width: 80%;
+  border: none;
+  height: 1px;
+  background-color: #39d8a8;
+  opacity: 0.5;
 }
 
 /* --- Selector de tipo de propiedad --- */
@@ -131,6 +132,16 @@
   transition: opacity 0.2s ease-in-out;
 }
 
+.payment-method-check {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.payment-method-check .form-check-input {
+  margin: 0 0.5rem;
+}
+
 /* --- Input de hora con ícono blanco --- */
 .time-input-white-icon {
   color-scheme: dark;
@@ -145,7 +156,7 @@
 }
 
 .btn-create-property:hover {
-  background-color: #2dbb90 !important; 
+  background-color: #2dbb90 !important;
   border-color: #2dbb90;
   color: white;
 }
@@ -225,7 +236,19 @@
 }
 
 /* ==========================================================================
-   5. Responsive Adjustments
+   5. Utility Classes
+   ========================================================================== */
+
+.title-text-aquamarine {
+  color: #39d8a8;
+}
+
+.subtitle-text-light-aquamarine {
+  color: #c8d8d3;
+}
+
+/* ==========================================================================
+   6. Responsive Adjustments
    ========================================================================== */
 
 @media (max-width: 983px) {
@@ -239,7 +262,8 @@
   }
 
   /* Hacemos que los botones compartan el espacio en pantallas pequeñas */
-  .modal-footer-custom .btn, .property-type-selector-responsive {
+  .modal-footer-custom .btn,
+  .property-type-selector-responsive {
     flex-grow: 1;
     width: 100% !important;
   }

@@ -44,7 +44,7 @@ const emergencyService = {
     }
   },
 
-  deleteService: async (id) => {
+  deleteEmergency: async (id) => {
     try {
       const response = await apiClient.delete(`${BASE}/delete/${id}`);
       return response.data;
@@ -65,6 +65,16 @@ const emergencyService = {
   dynamicFilterEmergencyServices: async (params) => {
     try {
       const response = await apiClient.get(`${BASE}/dinamicFilter`, { params });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /* Obtiene todos los tipos de servicios de emergencia. */
+  getEmergencyServicesTypes: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/obtener/tipos`);
       return response.data;
     } catch (error) {
       throw error;

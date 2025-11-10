@@ -23,6 +23,12 @@
   border-radius: 2px;
 }
 
+.save-changes-btn .update-spinner.spinner-border-sm {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-width: 0.18em;
+}
+
 /* Estilos para la página de gestión de usuarios */
 
 .user-management-container {
@@ -106,22 +112,55 @@
 }
 
 .save-changes-btn {
-  background-color: #39d8a8;
+  background-color: #39d8a8 !important;
   color: white;
-  border-color: #39d8a8;
+  border-color: #39d8a8 !important;
 }
 
 .save-changes-btn:hover {
-  background-color: #2dbb90; 
-  border-color: #2dbb90;
+  background-color: #2dbb90 !important;
+  border-color: #2dbb90 !important;
   color: white;
 }
 
 .save-changes-btn:disabled {
-  background-color: #39d8a8;
-  border-color: #39d8a8;
+  background-color: #39d8a8 !important;
+  border-color: #39d8a8 !important;
   color: white;
   opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Estilos para el campo de búsqueda (estilo DestinationList) */
+.user-search-input-group {
+  width: 400px;
+  transition: all 0.3s ease-in-out;
+}
+
+.user-search-input-group .input-group-text {
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-right: none;
+  color: #39d8a8;
+}
+
+.user-search-input {
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-left: none;
+  color: #212529;
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.user-search-input::placeholder {
+  color: #6c757d;
+}
+
+.user-search-input:focus {
+  background-color: white;
+  color: #212529;
+  border-color: #39d8a8;
+  box-shadow: 0 0 0 0.2rem rgba(57, 216, 168, 0.25);
 }
 
 /* Responsive */

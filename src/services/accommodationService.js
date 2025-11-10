@@ -80,6 +80,16 @@ const accommodationService = {
       throw error;
     }
   },
+
+  /* Obtiene todos los tipos de alojamientos. */
+  getAccommodationTypes: async () => {
+    try {
+      const response = await apiClient.get(`${BASE}/types`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default accommodationService;

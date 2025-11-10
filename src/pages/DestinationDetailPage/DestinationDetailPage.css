@@ -50,7 +50,7 @@
 }
 
 .carousel-image {
-  height: 500px;
+  height: 400px;
   object-fit: cover;
 }
 
@@ -88,7 +88,18 @@
 /* Media query para pantallas más pequeñas */
 @media (max-width: 991px) {
   .carousel-image {
-    height: 400px;
+    height: 300px;
+  }
+
+  .details-card .list-group-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .details-card .detail-icon {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
   }
 }
 

@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Container,
   Spinner,
@@ -36,6 +37,13 @@ import {
   TrashFill,
 } from "react-bootstrap-icons";
 import destinationService from "../../services/DestinationService";
+import accommodationService from "../../services/accommodationService";
+import bodyOfWaterService from "../../services/bodyOfWaterService";
+import emergencyService from "../../services/emergencyService";
+import restaurantService from "../../services/restaurantService";
+import ConfirmationModal from "../../components/confirmationModal/ConfirmationModal";
+import PropertyFormModal from "../../components/propertyFormModal/PropertyFormModal";
+import { useNotification } from "../../context/NotificationContext";
 import "./DestinationDetailPage.css";
 import { useUser } from "../../hooks/useUser";
 
@@ -43,10 +51,18 @@ import { useUser } from "../../hooks/useUser";
 const DestinationDetailPage = () => {
   const { id } = useParams();
   const [destination, setDestination] = useState(null);
+  const [destinationType, setDestinationType] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useUser();
+  const { user, refreshUser } = useUser();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { addNotification } = useNotification();
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [propertyToEdit, setPropertyToEdit] = useState(null);
 
   const isLoggedIn = user && user.role;
 
@@ -57,24 +73,87 @@ const DestinationDetailPage = () => {
 
   const canEditOrDelete = user && user.id === destination?.ownerId;
 
-  useEffect(() => {
-    const fetchDestination = async () => {
-      try {
-        setLoading(true);
-        const data = await destinationService.getDestinationById(id);
-        setDestination(data);
-        setError(null);
-      } catch (err) {
-        setError(
-          "No se pudieron cargar los detalles del destino. Por favor, intente más tarde."
-        );
-      } finally {
-        setLoading(false);
+  const fetchDestination = async () => {
+    try {
+      setLoading(true);
+      const data = await destinationService.getDestinationById(id);
+      setDestination(data);
+      if (data.cuisineType) {
+        setDestinationType("restaurant");
+      } else if (data.type) {
+        setDestinationType("accommodation");
+      } else if (data.typeBodyOfWater) {
+        setDestinationType("bodyOfWater");
+      } else if (data.typeOfEmergency) {
+        setDestinationType("emergencyService");
       }
-    };
+      setError(null);
+    } catch (err) {
+      setError(
+        "No se pudieron cargar los detalles del destino. Por favor, intente más tarde."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchDestination();
   }, [id]);
+
+  const handleEdit = () => {
+    setPropertyToEdit(destination);
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setPropertyToEdit(null);
+  };
+
+  const handleUpdateSuccess = () => {
+    handleCloseEditModal();
+    fetchDestination();
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
+    setPropertyToDelete(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!propertyToDelete) return;
+
+    let deleteFunction;
+    switch (destinationType) {
+      case "restaurant":
+        deleteFunction = restaurantService.deleteRestaurant;
+        break;
+      case "accommodation":
+        deleteFunction = accommodationService.deleteAccommodation;
+        break;
+      case "bodyOfWater":
+        deleteFunction = bodyOfWaterService.deleteBody;
+        break;
+      case "emergencyService":
+        deleteFunction = emergencyService.deleteEmergency;
+        break;
+      default:
+        addNotification("Error al determinar el tipo de propiedad.", "error");
+        return;
+    }
+
+    try {
+      await deleteFunction(propertyToDelete.id);
+      await refreshUser();
+      addNotification("Propiedad eliminada con éxito.", "success");
+      navigate("/mis-propiedades"); // Redirige a la lista de propiedades
+    } catch (error) {
+      addNotification("Error al eliminar la propiedad.", "error");
+    } finally {
+      handleCancelDelete();
+    }
+  };
 
   if (loading) {
     return (
@@ -83,14 +162,14 @@ const DestinationDetailPage = () => {
         style={{ height: "80vh" }}
       >
         <Spinner animation="border" style={{ color: "#39d8a8" }} />
-        <p className="ms-3">Cargando propiedad...</p>
+        <p className="ms-3 mb-0">Cargando propiedad...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <Container className="mt-5">
+      <Container className="mt-5 text-center">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
@@ -231,9 +310,7 @@ const DestinationDetailPage = () => {
             <Button
               className="back-button me-2"
               style={{ "--service-color": "#44b4ffff" }} // Azul pastel para editar
-              onClick={() => {
-                /* Lógica para editar */
-              }}
+              onClick={handleEdit}
             >
               <PencilFill size={16} className="me-2" />
               Editar
@@ -242,7 +319,8 @@ const DestinationDetailPage = () => {
               className="back-button delete-button"
               style={{ "--service-color": "#ff6767ff" }} // Rojo pastel para eliminar
               onClick={() => {
-                /* Lógica para eliminar */
+                setPropertyToDelete(destination);
+                setShowConfirmation(true);
               }}
             >
               <TrashFill size={16} className="me-2" />
@@ -250,6 +328,26 @@ const DestinationDetailPage = () => {
             </Button>
           </div>
         )}
+
+        <ConfirmationModal
+          show={showConfirmation}
+          onHide={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          title={
+            <>
+              <TrashFill className="me-2 text-danger" /> Confirmar Eliminación
+            </>
+          }
+          body={`¿Estás seguro de que deseas eliminar la propiedad "${propertyToDelete?.name}"? Esta acción no se puede deshacer.`}
+          confirmButtonVariant="danger"
+        />
+
+        <PropertyFormModal
+          show={showEditModal}
+          onHide={handleCloseEditModal}
+          property={propertyToEdit}
+          onUpdateSuccess={handleUpdateSuccess}
+        />
 
         <Row className="justify-content-center">
           {/* Sección del Carrusel de Imágenes */}

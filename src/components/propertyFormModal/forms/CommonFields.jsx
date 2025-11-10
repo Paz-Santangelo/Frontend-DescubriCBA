@@ -1,22 +1,41 @@
-import { Form, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
+import { Form, Row, Col } from "react-bootstrap";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import { useEffect, useState } from "react";
+import DestinationService from "../../../services/DestinationService";
 
-const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handleRemoveImage, handleLevelConcurrenceChange }) => {
-  const concurrenceLevels = ['BAJA', 'MEDIA', 'ALTA'];
+const CommonFields = ({
+  formData,
+  handleChange,
+  handlePaymentMethodChange,
+  handleLevelConcurrenceChange,
+  existingImages,
+  newImageFiles,
+  handleRemoveExistingImage,
+  handleRemoveNewImage,
+}) => {
+  const [concurrenceLevels, setConcurrenceLevels] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
 
-  const paymentMethodOptions = [
-    'EFECTIVO',
-    'TARJETA_DE_CREDITO',
-    'TARJETA_DE_DEBITO',
-    'TRANSFERENCIA_BANCARIA',
-    'MERCADO_PAGO',
-    'MODO',
-  ];
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const levels = await DestinationService.getlevelsConcurrenceTypes();
+        setConcurrenceLevels(levels);
 
-  const concurrenceLevelOptions = concurrenceLevels.map(level => ({
+        const methods = await DestinationService.getPaymentMethods();
+        setPaymentMethods(methods);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  const concurrenceLevelOptions = concurrenceLevels.map((level) => ({
     value: level,
-    label: level
+    label: level,
   }));
 
   const animatedComponents = makeAnimated();
@@ -28,7 +47,9 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
       backgroundColor: "rgba(255, 255, 255, 0.1)",
       borderColor: state.isFocused ? "#39d8a8" : "rgba(255, 255, 255, 0.2)",
       color: "white",
-      boxShadow: state.isFocused ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)" : null,
+      boxShadow: state.isFocused
+        ? "0 0 0 0.2rem rgba(57, 216, 168, 0.25)"
+        : null,
       "&:hover": { borderColor: "#39d8a8" },
       minWidth: "220px",
     }),
@@ -66,7 +87,11 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? "#39d8a8" : state.isFocused ? "rgba(57, 216, 168, 0.3)" : "transparent",
+      backgroundColor: state.isSelected
+        ? "#39d8a8"
+        : state.isFocused
+        ? "rgba(57, 216, 168, 0.3)"
+        : "transparent",
       color: state.isSelected ? "#151a19" : "white",
       "&:active": { backgroundColor: "#39d8a8" },
     }),
@@ -77,23 +102,57 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
   };
 
   const TrashIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3-fill" viewBox="0 0 16 16">
-      <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m3 0a.5.5 0 0 0-1 0v8.5a.5.5 0 0 0 1 0zM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      className="bi bi-trash3-fill"
+      viewBox="0 0 16 16"
+    >
+      <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m3 0a.5.5 0 0 0-1 0v8.5a.5.5 0 0 0 1 0zM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
     </svg>
   );
 
+  const totalImages =
+    (existingImages?.length || 0) + (newImageFiles?.length || 0);
+
   return (
     <>
-      <h4 className="mb-3">Datos Generales</h4>
+      <h3 className="mb-3 title-text-aquamarine text-center">
+        Datos Generales
+      </h3>
 
-      {/* Sección de Previsualización de imágenes seleccionadas */}
-      {formData.files && formData.files.length > 0 && (
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Imágenes de tu propiedad</h5>
+
+      {/* Image Preview Section */}
+      {(existingImages?.length > 0 || newImageFiles?.length > 0) && (
         <Form.Group as={Row} className="mb-4">
-          <Form.Label column sm={12}>Imágenes seleccionadas</Form.Label>
+          <Form.Label column sm={12}>
+            Imágenes seleccionadas
+          </Form.Label>
           <Col sm={12}>
             <div className="image-preview-container">
-              {Array.from(formData.files).map((file, index) => (
-                <div key={index} className="image-preview-item">
+              {/* Existing Images */}
+              {existingImages.map((url, index) => (
+                <div key={`existing-${index}`} className="image-preview-item">
+                  <img
+                    src={url}
+                    alt={`Preview ${index}`}
+                    className="image-preview-img"
+                  />
+                  <button
+                    type="button"
+                    className="image-remove-btn"
+                    onClick={() => handleRemoveExistingImage(index)}
+                  >
+                    <TrashIcon />
+                  </button>
+                </div>
+              ))}
+              {/* New Images */}
+              {newImageFiles.map((file, index) => (
+                <div key={`new-${index}`} className="image-preview-item">
                   <img
                     src={URL.createObjectURL(file)}
                     alt={`Preview ${index}`}
@@ -102,7 +161,7 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
                   <button
                     type="button"
                     className="image-remove-btn"
-                    onClick={() => handleRemoveImage(index)}
+                    onClick={() => handleRemoveNewImage(index)}
                   >
                     <TrashIcon />
                   </button>
@@ -113,25 +172,27 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         </Form.Group>
       )}
 
-      {/* Selector de Imágenes Personalizado */}
+      {/* Custom Image Selector */}
       <Form.Group as={Row} className="mb-4">
-        <Form.Label column sm={12}>Imágenes del lugar</Form.Label>
         <Col sm={12} className="d-flex align-items-center">
           <Form.Label htmlFor="file-upload" className="custom-file-upload-btn">
             Elegir archivos
           </Form.Label>
-          {formData.files && formData.files.length > 0 && (
+          {totalImages > 0 && (
             <span className="file-counter-text ms-3">
-              {formData.files.length} {formData.files.length === 1 ? "archivo seleccionado" : "archivos seleccionados"}
+              {totalImages}{" "}
+              {totalImages === 1
+                ? "archivo seleccionado"
+                : "archivos seleccionados"}
             </span>
           )}
-          <Form.Control 
+          <Form.Control
             id="file-upload"
-            type="file" 
-            name="files" 
-            multiple 
-            onChange={handleChange} 
-            style={{ display: 'none' }} // Oculta el input nativo
+            type="file"
+            name="files"
+            multiple
+            onChange={handleChange}
+            style={{ display: "none" }}
           />
         </Col>
         <Col sm={12}>
@@ -139,6 +200,9 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         </Col>
       </Form.Group>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Información Principal</h5>
       <Row>
         {/* Nombre */}
         <Form.Group as={Col} md="6" className="mb-4">
@@ -191,9 +255,17 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         </Form.Group>
       </Row>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Horarios y Contacto</h5>
       {/* Horario Apertura y Cierre - Fila Centrada */}
       <Row className="justify-content-center">
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Horario de Apertura</Form.Label>
           <Form.Control
             type="time"
@@ -204,7 +276,12 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
             className="time-input-white-icon form-control-medium"
           />
         </Form.Group>
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Horario de Cierre</Form.Label>
           <Form.Control
             type="time"
@@ -219,7 +296,12 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
 
       {/* Teléfono y Celular - Fila Centrada */}
       <Row className="justify-content-center">
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Teléfono Fijo</Form.Label>
           <Form.Control
             type="tel"
@@ -229,7 +311,12 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
             className="form-control-medium"
           />
         </Form.Group>
-        <Form.Group as={Col} md={5} lg={4} className="mb-4 d-flex flex-column align-items-center">
+        <Form.Group
+          as={Col}
+          md={5}
+          lg={4}
+          className="mb-4 d-flex flex-column align-items-center"
+        >
           <Form.Label>Celular</Form.Label>
           <Form.Control
             type="tel"
@@ -242,6 +329,9 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         </Form.Group>
       </Row>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Ubicación en Mapa</h5>
       {/* URL Google Maps */}
       <Form.Group className="mb-4">
         <Form.Label>URL de Google Maps</Form.Label>
@@ -254,14 +344,21 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         />
       </Form.Group>
 
-      <Row>
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Detalles Adicionales</h5>
+      <Row className="justify-content-center align-items-end mb-4">
         {/* Nivel de Concurrencia */}
-        <Form.Group as={Col} md="auto" className="mb-4">
+        <Form.Group as={Col} md="auto">
           <Form.Label>Nivel de Concurrencia</Form.Label>
           <Select
             name="levelConcurrence"
             options={concurrenceLevelOptions}
-            value={concurrenceLevelOptions.find(option => option.value === formData.levelConcurrence) || null}
+            value={
+              concurrenceLevelOptions.find(
+                (option) => option.value === formData.levelConcurrence
+              ) || null
+            }
             onChange={handleLevelConcurrenceChange}
             components={animatedComponents}
             styles={customConcurrenceSelectStyles}
@@ -272,7 +369,7 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         </Form.Group>
 
         {/* Accesibilidad */}
-        <Form.Group as={Col} md="auto" className="d-flex align-items-end mb-4">
+        <Form.Group as={Col} md="auto" className="ms-4 mt-3">
           <Form.Check
             type="switch"
             id="disabled-accessibility-switch"
@@ -284,13 +381,16 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
         </Form.Group>
       </Row>
 
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Sitios Web y Pagos</h5>
       {/* Sitios Web */}
       <Form.Group className="mb-4">
         <Form.Label>Sitios Web</Form.Label>
         <Form.Control
           type="text"
           name="website"
-          value={formData.website.join(', ')}
+          value={formData.website.join(", ")}
           onChange={handleChange}
           placeholder="www.ejemplo.com, www.otro.com"
         />
@@ -301,16 +401,16 @@ const CommonFields = ({ formData, handleChange, handlePaymentMethodChange, handl
       <Form.Group className="mb-4 payment-methods-group">
         <Form.Label>Métodos de Pago</Form.Label>
         <Row>
-          {paymentMethodOptions.map((method) => (
+          {paymentMethods.map((method) => (
             <Col md={4} sm={6} xs={12} key={method}>
               <Form.Check
                 type="checkbox"
                 id={`payment-${method}`}
-                label={method.replace(/_/g, ' ')}
+                label={method.replace(/_/g, " ")}
                 value={method}
                 checked={formData.paymentMethods.includes(method)}
                 onChange={handlePaymentMethodChange}
-                className="mb-2"
+                className="mb-1 payment-method-check"
                 disabled={formData.freeAdmission}
               />
             </Col>

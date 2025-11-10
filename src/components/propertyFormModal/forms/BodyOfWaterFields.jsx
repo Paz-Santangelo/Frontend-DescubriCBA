@@ -1,6 +1,8 @@
 import { Form, Row, Col, InputGroup } from "react-bootstrap";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useEffect, useState } from "react";
+import bodyOfWaterService from "../../../services/bodyOfWaterService";
 
 const BodyOfWaterFields = ({
   formData,
@@ -8,24 +10,31 @@ const BodyOfWaterFields = ({
   handleBodyOfWaterTypeChange,
   handleCleaningLevelChange,
 }) => {
-  const bodyOfWaterTypesList = [
-    "RIO",
-    "LAGUNA",
-    "ARROYO",
-    "CASCADA",
-    "BALNEARIO",
-    "LAGO",
-    "EMBALSE",
-    "DIQUE",
-  ];
-  const cleaningLevelsList = ["EXCELENTE", "BUENO", "REGULAR", "MALO"];
+  const [bodyOfWaterTypes, setBodyOfWaterTypes] = useState([]);
+  const [cleaningLevels, setCleaningLevels] = useState([]);
 
-  const bodyOfWaterTypeOptions = bodyOfWaterTypesList.map((type) => ({
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const types = await bodyOfWaterService.getBodiesOfWaterTypes();
+        setBodyOfWaterTypes(types);
+
+        const levels = await bodyOfWaterService.getCleaningLevels();
+        setCleaningLevels(levels);
+      } catch (error) {
+        console.error("Error fetching initial data for body of water:", error);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  const bodyOfWaterTypeOptions = bodyOfWaterTypes.map((type) => ({
     value: type,
     label: type,
   }));
 
-  const cleaningLevelOptions = cleaningLevelsList.map((level) => ({
+  const cleaningLevelOptions = cleaningLevels.map((level) => ({
     value: level,
     label: level,
   }));
@@ -73,7 +82,11 @@ const BodyOfWaterFields = ({
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? "#39d8a8" : state.isFocused ? "rgba(57, 216, 168, 0.3)" : "transparent",
+      backgroundColor: state.isSelected
+        ? "#39d8a8"
+        : state.isFocused
+        ? "rgba(57, 216, 168, 0.3)"
+        : "transparent",
       color: state.isSelected ? "#151a19" : "white",
       "&:active": { backgroundColor: "#39d8a8" },
     }),
@@ -82,8 +95,11 @@ const BodyOfWaterFields = ({
 
   return (
     <>
-      <h5 className="my-4">Datos Específicos de Cuerpo de Agua</h5>
+      <h3 className="mb-4 title-text-aquamarine text-center">
+        Datos Específicos de Cuerpo de Agua
+      </h3>
 
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Características</h5>
       <Row>
         {/* Tipo de Cuerpo de Agua */}
         <Form.Group as={Col} md="6" className="mb-3">
@@ -91,7 +107,11 @@ const BodyOfWaterFields = ({
           <Select
             name="typeBodyOfWater"
             options={bodyOfWaterTypeOptions}
-            value={bodyOfWaterTypeOptions.find(option => option.value === formData.typeBodyOfWater) || null}
+            value={
+              bodyOfWaterTypeOptions.find(
+                (option) => option.value === formData.typeBodyOfWater
+              ) || null
+            }
             onChange={handleBodyOfWaterTypeChange}
             components={animatedComponents}
             styles={customSelectStyles}
@@ -107,7 +127,11 @@ const BodyOfWaterFields = ({
           <Select
             name="cleaningLevel"
             options={cleaningLevelOptions}
-            value={cleaningLevelOptions.find(option => option.value === formData.cleaningLevel) || null}
+            value={
+              cleaningLevelOptions.find(
+                (option) => option.value === formData.cleaningLevel
+              ) || null
+            }
             onChange={handleCleaningLevelChange}
             components={animatedComponents}
             styles={customSelectStyles}
@@ -118,9 +142,12 @@ const BodyOfWaterFields = ({
         </Form.Group>
       </Row>
 
-      <Row>
+      <hr className="centered-divider" />
+
+      <h5 className="mb-3 subtitle-text-light-aquamarine">Admisión y Precios</h5>
+      <Row className="justify-content-start">
         {/* Admisión Gratuita */}
-        <Form.Group as={Col} md="6" className="d-flex align-items-center mb-3">
+        <Form.Group as={Col} md="auto" className="d-flex align-items-center mb-3 me-md-5">
           <Form.Check
             type="switch"
             id="free-admission-switch"
@@ -132,7 +159,7 @@ const BodyOfWaterFields = ({
         </Form.Group>
 
         {/* Precio de Entrada */}
-        <Form.Group as={Col} md="6" className="mb-3">
+        <Form.Group as={Col} md="auto" className="mb-3">
           <Form.Label>Precio de Entrada</Form.Label>
           <InputGroup className="form-control-medium">
             <InputGroup.Text>$</InputGroup.Text>

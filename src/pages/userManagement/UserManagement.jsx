@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useRef } from "react";
 import {
   Container,
@@ -10,8 +12,9 @@ import {
   Modal,
   Form,
   Spinner,
+  InputGroup,
 } from "react-bootstrap";
-import { ArrowClockwise } from "react-bootstrap-icons";
+import { ArrowClockwise, Search } from "react-bootstrap-icons";
 import Select from "react-select";
 import { useUser } from "../../hooks/useUser";
 import { useNotification } from "../../context/NotificationContext";
@@ -77,103 +80,105 @@ const UserManagement = () => {
   const [newRole, setNewRole] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
   const initialLoadDone = useRef(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleRoleChange = (selectedOption) => {
     setNewRole(selectedOption.value);
   };
 
-  // Capturar errores globales que puedan causar página en blanco
+  // Manejar errores no capturados
   useEffect(() => {
-    const originalError = console.error;
-    console.error = (...args) => {
-      originalError(...args);
-    };
-
-    // Manejar errores no capturados
     const handleError = (event) => {
-      addNotification(
-        "Error crítico detectado: " + event.error?.message,
-        "danger"
-      );
+      addNotification("Error crítico detectado: " + event.error?.message, "danger");
       event.preventDefault();
     };
-
     window.addEventListener("error", handleError);
-
     return () => {
-      console.error = originalError;
       window.removeEventListener("error", handleError);
     };
-  }, []);
+  }, [addNotification]);
 
-  // Cargar usuarios desde el backend
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-
-        const usersData = await userService.getAllUsers();
-
-        if (usersData && usersData.length > 0) {
-          setUsers(usersData);
-          if (!initialLoadDone.current) {
-            addNotification(
-              `Se cargaron ${usersData.length} usuarios correctamente`,
-              "success"
-            );
-          }
-        } else {
-          setUsers([]);
-          if (!initialLoadDone.current) {
-            addNotification(
-              "No se encontraron usuarios en la base de datos.",
-              "warning"
-            );
-          }
-        }
-      } catch (error) {
-        // El error es lanzado por el servicio y capturado aquí.
-        const errorMessage =
-          error.response?.data?.message ||
-          "Error de conexión al cargar usuarios.";
-        addNotification(errorMessage, "danger");
-      } finally {
-        setLoading(false);
-        initialLoadDone.current = true;
-      }
-    };
-
-    fetchUsers();
-  }, [user]);
-
-  // Función para recargar usuarios
-  const handleReloadUsers = async () => {
+  const fetchUsers = async () => {
     try {
       setLoading(true);
       const usersData = await userService.getAllUsers();
       setUsers(usersData);
-      addNotification(
-        `Usuarios recargados exitosamente. Total: ${usersData?.length || 0}`,
-        "success"
-      );
+      if (!initialLoadDone.current) {
+        addNotification(`Se cargaron ${usersData.length} usuarios`, "success");
+      }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Error de conexión al recargar usuarios.";
+      const errorMessage = error.response?.data?.message || "Error al cargar usuarios.";
       addNotification(errorMessage, "danger");
     } finally {
       setLoading(false);
+      initialLoadDone.current = true;
     }
   };
 
-  // Manejar edición de rol
+  // Carga inicial de usuarios
+  useEffect(() => {
+    if (!initialLoadDone.current) {
+        fetchUsers();
+    }
+  }, [user]);
+
+  // Búsqueda con debounce
+  useEffect(() => {
+    const performSearch = async (query) => {
+      if (query.trim() === "") {
+        if (initialLoadDone.current) {
+            await fetchUsers();
+        }
+        return;
+      }
+      try {
+        setLoading(true);
+        let results = [];
+        if (query.includes("@")) {
+          try {
+            const userByEmail = await userService.getUserByEmail(query);
+            if (userByEmail) results = [userByEmail];
+          } catch {
+            results = await userService.searchUsers(query);
+          }
+        } else {
+          results = await userService.searchUsers(query);
+        }
+        setUsers(results);
+        addNotification(`Se encontraron ${results.length} resultados`, "info");
+      } catch (error) {
+        setUsers([]);
+        addNotification(error.response?.data?.message || "Error en la búsqueda", "warning");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      if (initialLoadDone.current) {
+        performSearch(searchQuery);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const handleReloadUsers = async () => {
+    // Si hay una búsqueda activa, la limpia y el useEffect se encarga de recargar.
+    // Si no, fuerza la recarga.
+    if (searchQuery) {
+      setSearchQuery("");
+    } else {
+      await fetchUsers();
+    }
+  };
+
   const handleEditRole = (userData) => {
     setSelectedUser(userData);
     setNewRole(userData.role);
     setShowEditModal(true);
   };
 
-  // Guardar cambios de rol
   const handleSaveRole = async () => {
     if (!selectedUser || newRole === selectedUser.role) {
       setShowEditModal(false);
@@ -182,36 +187,26 @@ const UserManagement = () => {
 
     try {
       setUpdateLoading(true);
-      const updatedUser = await userService.updateUserRole(
-        selectedUser.id,
-        newRole
-      );
-
-      // Actualizar en la lista local inmediatamente
+      await userService.updateUserRole(selectedUser.id, newRole);
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
-          u.id === selectedUser.id
-            ? { ...u, role: newRole }
-            : u
+          u.id === selectedUser.id ? { ...u, role: newRole } : u
         )
       );
-
       addNotification(
-        `Rol actualizado exitosamente para ${selectedUser.name} ${selectedUser.lastname}`,
+        `Rol actualizado para ${selectedUser.name} ${selectedUser.lastname}`,
         "success"
       );
       setShowEditModal(false);
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message ||
-        "Error de conexión al actualizar el rol.";
+        error.response?.data?.message || "Error al actualizar el rol.";
       addNotification(errorMessage, "danger");
     } finally {
       setUpdateLoading(false);
     }
   };
 
-  // Obtener badge variant según el rol
   const getRoleBadgeVariant = (role) => {
     switch (role) {
       case "ADMIN":
@@ -227,13 +222,15 @@ const UserManagement = () => {
     }
   };
 
-  if (loading) {
+  if (loading && !initialLoadDone.current) {
     return (
-      <Container className="mt-5 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando usuarios...</span>
-        </div>
-      </Container>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "80vh" }}
+      >
+        <Spinner animation="border" style={{ color: "#34b890" }} />
+        <p className="ms-3 mb-0">Cargando usuarios...</p>
+      </div>
     );
   }
 
@@ -242,18 +239,37 @@ const UserManagement = () => {
       {/* Título principal con el estilo unificado */}
       <h1 className="text-center section-title">Gestión de Usuarios</h1>
 
-      {/* Contenedor para el botón de recarga, alineado a la derecha */}
-      <div className="d-flex justify-content-end mb-3">
-        <Button
-          className="back-button"
-          onClick={handleReloadUsers}
-          disabled={loading}
-          style={{ "--service-color": "#007bff" }}
-        >
-          {/* El icono de recarga de Bootstrap */}
-          <ArrowClockwise className="me-2" size={20} />
-          {loading ? "Cargando..." : "Recargar"}
-        </Button>
+      {/* Contenedor para controles de búsqueda y recarga */}
+      <div className="position-relative mb-3" style={{ minHeight: "38px" }}>
+        
+        {/* Campo de búsqueda centrado */}
+        <div className="d-flex justify-content-center">
+          <InputGroup className="user-search-input-group">
+            <InputGroup.Text>
+              <Search />
+            </InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Buscar por nombre, apellido o email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="user-search-input"
+            />
+          </InputGroup>
+        </div>
+
+        {/* Botón de recarga a la derecha */}
+        <div className="position-absolute" style={{ top: 0, right: 0 }}>
+          <Button
+            className="back-button"
+            onClick={handleReloadUsers}
+            disabled={loading}
+            style={{ "--service-color": "#007bff" }}
+          >
+            <ArrowClockwise size={20} />
+            {loading && searchQuery === "" ? "Cargando..." : "Recargar"}
+          </Button>
+        </div>
       </div>
 
       <Row>
@@ -394,7 +410,11 @@ const UserManagement = () => {
           >
             {updateLoading ? (
               <>
-                <Spinner animation="border" size="sm" className="me-2" />
+                <Spinner
+                  animation="border"
+                  size="sm"
+                  className="me-2 update-spinner"
+                />
                 Actualizando...
               </>
             ) : (
