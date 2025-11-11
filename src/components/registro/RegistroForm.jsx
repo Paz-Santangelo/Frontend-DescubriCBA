@@ -18,6 +18,7 @@ const RegistroForm = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [touched, setTouched] = useState({});
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -28,6 +29,10 @@ const RegistroForm = ({ onSuccess }) => {
         duration: 0.5,
       },
     },
+  };
+
+  const handleBlur = (e) => {
+    setTouched({ ...touched, [e.target.name]: true });
   };
 
   // Manejar cambios en los inputs
@@ -123,6 +128,13 @@ const RegistroForm = ({ onSuccess }) => {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setTouched({
+        nombre: true,
+        apellido: true,
+        email: true,
+        password: true,
+        confirmPassword: true,
+      });
       return;
     }
 
@@ -197,13 +209,14 @@ const RegistroForm = ({ onSuccess }) => {
           name="nombre"
           value={form.nombre}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
         />
         <label className={form.nombre ? "floating active" : "floating"}>
           Nombre
         </label>
         <div className="error-container">
-          {errors.nombre && <span className="error">{errors.nombre}</span>}
+          {touched.nombre && errors.nombre && <span className="error">{errors.nombre}</span>}
         </div>
       </div>
 
@@ -213,13 +226,14 @@ const RegistroForm = ({ onSuccess }) => {
           name="apellido"
           value={form.apellido}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
         />
         <label className={form.apellido ? "floating active" : "floating"}>
           Apellido
         </label>
         <div className="error-container">
-          {errors.apellido && <span className="error">{errors.apellido}</span>}
+          {touched.apellido && errors.apellido && <span className="error">{errors.apellido}</span>}
         </div>
       </div>
 
@@ -230,13 +244,14 @@ const RegistroForm = ({ onSuccess }) => {
           type="email"
           value={form.email}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
         />
         <label className={form.email ? "floating active" : "floating"}>
           Correo electrónico
         </label>
         <div className="error-container">
-          {errors.email && <span className="error">{errors.email}</span>}
+          {touched.email && errors.email && <span className="error">{errors.email}</span>}
         </div>
       </div>
 
@@ -247,13 +262,14 @@ const RegistroForm = ({ onSuccess }) => {
           name="password"
           value={form.password}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
         />
         <label className={form.password ? "floating active" : "floating"}>
           Contraseña
         </label>
         <div className="error-container">
-          {errors.password && <span className="error">{errors.password}</span>}
+          {touched.password && errors.password && <span className="error">{errors.password}</span>}
         </div>
       </div>
 
@@ -264,6 +280,7 @@ const RegistroForm = ({ onSuccess }) => {
           name="confirmPassword"
           value={form.confirmPassword}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
         />
         <label
@@ -272,7 +289,7 @@ const RegistroForm = ({ onSuccess }) => {
           Confirmar contraseña
         </label>
         <div className="error-container">
-          {errors.confirmPassword && (
+          {touched.confirmPassword && errors.confirmPassword && (
             <span className="error">{errors.confirmPassword}</span>
           )}
         </div>
