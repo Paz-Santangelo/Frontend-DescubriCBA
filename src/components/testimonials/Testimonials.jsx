@@ -23,7 +23,7 @@ const testimonialsData = [
 
 const Testimonials = () => {
   return (
-    <section className="testimonials-section">
+    <section className="testimonials-section mb-3">
       <Container>
         <h2 className="text-center fw-semibold section-title">Testimonios</h2>
         <Carousel indicators={false} interval={3000}>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
@@ -509,13 +510,13 @@ const DestinationDetailPage = () => {
                       <div className="comment-body">
                         <div className="comment-header">
                           <strong className="comment-user">
-                            {comment.user.name} {comment.user.lastname}
+                            {comment.username}
                           </strong>
                           <span className="comment-date">
-                            {new Date(comment.commentDate).toLocaleDateString()}
+                            {new Date(comment.date).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="comment-text mb-0">{comment.comment}</p>
+                        <p className="comment-text mb-0">{comment.content}</p>
                       </div>
                     </ListGroup.Item>
                   ))}
