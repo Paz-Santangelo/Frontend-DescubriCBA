@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
-
 import { motion } from "framer-motion";
-import "./ServiceListPage.css"; // Usaremos un CSS unificado
+import "./ServiceListPage.css";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Select from "react-select";
@@ -215,7 +214,7 @@ const ServiceListPage = () => {
 
         const data = await config.fetchData(queryParams);
         setItems(data);
-        setCurrentPage(1); // Resetear a la primera página con cada nueva búsqueda
+        setCurrentPage(1);
       } catch (err) {
         setError(
           `No se pudieron cargar los ${config.title.toLowerCase()} para esta localidad.`
@@ -236,7 +235,7 @@ const ServiceListPage = () => {
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
-
+  
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   // Variantes de animación para el contenedor y las tarjetas

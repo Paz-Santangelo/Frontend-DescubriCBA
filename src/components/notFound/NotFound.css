@@ -1,0 +1,51 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 92vh;
+  text-align: center;
+  margin-top: 3rem;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.lottie-animation {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.not-found-title {
+  font-size: 2.5rem;
+  color: #06c58c;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.not-found-text {
+  font-size: 1.2rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.not-found-button {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  border: 2px solid #39d8a8;
+  color: #39d8a8;
+}
+
+.not-found-button:hover {
+  color: white !important;
+  background-color: #39d8a8;
+  text-decoration: none;
+  transform: translateX(-5px);
+}
