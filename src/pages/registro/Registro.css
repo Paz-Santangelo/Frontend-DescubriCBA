@@ -1,0 +1,28 @@
+.registro-bg {
+	min-height: 100vh;
+	background: url('../../assets/Fondo_Registro.jpg') no-repeat center center;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+}
+
+.registro-main {
+	width: 100%;
+	max-width: 600px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Mobile */
+@media (max-width: 500px) {
+	.registro-bg {
+		background-attachment: scroll;
+	}
+
+	.registro-main {
+		padding: 1rem;
+	}
+}

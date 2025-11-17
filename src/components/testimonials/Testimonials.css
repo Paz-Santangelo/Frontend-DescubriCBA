@@ -1,0 +1,27 @@
+.testimonials-section {
+  padding: 20px 0;
+  background-color: #f8f9fa;
+}
+
+.testimonial-card {
+  margin: 0 auto;
+  max-width: 600px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 2rem;
+  border-radius: 15px;
+  background-color: #fff;
+}
+
+.testimonial-card .card-text {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #555;
+}
+
+.testimonial-card .blockquote-footer {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #39d8a8;
+  font-weight: bold;
+}

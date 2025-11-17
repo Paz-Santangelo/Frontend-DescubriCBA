@@ -1,0 +1,17 @@
+.login-bg {
+  min-height: 100vh;
+  width: 100%;
+  background: url('../../assets/Fondo_Login.png') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  box-sizing: border-box;
+}
+
+/* Restauramos login-main para que controle el ancho del contenido */
+.login-main {
+  width: 100%;
+  padding: 1rem;
+}

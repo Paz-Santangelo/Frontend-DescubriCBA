@@ -1,0 +1,155 @@
+.registro-form {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  width: 100%;
+  max-width: 600px;
+  padding: 1.2rem 2rem;
+  transition: box-shadow 0.3s;
+  margin: 7rem 0 3rem;
+}
+
+.registro-form h2 {
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #024635;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+}
+
+.form-group.floating-group {
+  margin-top: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-top: -0.5rem;
+  margin-bottom: 0.6rem;
+  color: #222;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Reducimos un poco los inputs */
+.form-group input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.85);
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.04);
+}
+
+.registro-form .form-group input {
+  font-size: .9rem;
+}
+
+.form-group input:focus {
+  border: 1.5px solid #40a189;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.10);
+}
+
+.error-container {
+  min-height: 1.2rem;
+}
+
+.error {
+  color: #771800;
+  font-size: 0.91rem;
+  display: block;
+  letter-spacing: 0.1px;
+}
+
+.help-text {
+  display: block;
+  color: #666;
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Botón un poco más compacto */
+button[type="submit"] {
+  width: 100%;
+  padding: 0.5rem;
+  background: #40a189;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.10);
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.2px;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background: #024635;
+}
+
+button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 0.7rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.98rem;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+}
+
+.message.success {
+  background: #e0f7fa;
+  color: #00796b;
+  border: 1px solid #b2ebf2;
+}
+
+.message.error {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+@media (max-width: 500px) {
+
+  .registro-form {
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .registro-form {
+    padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+  }
+
+  .registro-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.7rem;
+  }
+
+  .form-group input {
+    font-size: 0.85rem;
+  }
+
+  button[type="submit"] {
+    font-size: 0.97rem;
+    padding: 0.5rem;
+  }
+}

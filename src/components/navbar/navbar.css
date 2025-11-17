@@ -1,0 +1,193 @@
+/* Estilos de la barra de navegación personalizada */
+.custom-navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(36, 49, 47, 1) 0%, rgba(36, 49, 47, 0.85) 50%, rgba(36, 49, 47, 0.7) 100%);
+  transition: background 0.3s ease-in-out;
+  padding-bottom: 1rem;
+}
+
+.custom-navbar.navbar-solid {
+  background: #24312f;
+  position: static;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand-text {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: bold;
+  margin-left: 10px;
+  color: white;
+}
+
+.brand-highlight {
+  color: #39d8a8;
+}
+
+.custom-navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(218, 112, 13, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-nav .nav-link {
+  letter-spacing: clamp(0.05em, 1vw, 0.13em);
+  font-size: clamp(0.9rem, 1.8vw, 1.08rem);
+}
+
+/* Estilos para los links del NAV PRINCIPAL (pantallas grandes) */
+.custom-navbar .navbar-nav .nav-link {
+  position: relative;
+  color: white !important;
+  transition: color 0.3s ease;
+  padding-bottom: 5px;
+}
+
+.custom-navbar .navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #39d8a8;
+  transition: width 0.3s ease-in-out;
+}
+
+.custom-navbar .navbar-nav .nav-link:hover::after,
+.custom-navbar .navbar-nav .nav-link.active::after {
+  width: 80%;
+}
+
+.custom-navbar .navbar-nav .nav-link:hover {
+  color: #39d8a8 !important;
+}
+
+.custom-navbar .navbar-nav .nav-link.active {
+  color: #39d8a8 !important;
+}
+
+.custom-navbar .nav-link.dropdown-toggle {
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+}
+
+.custom-navbar .nav-link.dropdown-toggle::after {
+  display: none;
+}
+
+.user-profile-dropdown .dropdown-item:hover,
+.user-profile-dropdown .dropdown-item:focus,
+.user-profile-dropdown .dropdown-item.active {
+  background-color: #24312f;
+  color: white !important;
+}
+
+.user-profile-dropdown .dropdown-menu {
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 8px !important;
+}
+
+.user-profile-dropdown.show .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Estilos para el menú Offcanvas */
+.offcanvas {
+  background-color: #24312f;
+  --bs-offcanvas-width: 300px;
+}
+
+.offcanvas-header .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.offcanvas-body .nav-link {
+  color: white;
+  /* Color claro para el fondo oscuro */
+  position: relative;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.offcanvas-body .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #39d8a8;
+  transition: width 0.3s ease-in-out;
+}
+
+.offcanvas-body .nav-link:hover {
+  color: #39d8a8 !important;
+}
+
+.offcanvas-body .nav-link.active {
+  color: #39d8a8 !important;
+}
+
+.offcanvas-body .nav-link:hover::after,
+.offcanvas-body .nav-link.active::after {
+  width: 60%;
+}
+
+.offcanvas-body .user-profile-dropdown .dropdown-toggle::after {
+  display: none;
+}
+
+.offcanvas-body .navbar-nav {
+  align-items: center;
+}
+
+.offcanvas-body .navbar-nav .nav-link:not(:last-child) {
+  margin-right: 0;
+}
+
+.sidebar-toggle-button {
+  display: none;
+  /* Hidden by default */
+  background: none;
+  border: none;
+  color: white;
+  margin-right: 15px;
+}
+
+
+/* Styles for large screens (navbar expanded) */
+@media (min-width: 992px) {
+  .user-profile-dropdown {
+    margin-left: 10px;
+  }
+
+  .nav-link {
+    margin: 0 10px
+  }
+}
+
+@media (max-width: 991px) {
+  .sidebar-toggle-button {
+    display: block;
+  }
+
+  .offcanvas-body .navbar-nav {
+    align-items: center;
+  }
+
+  .offcanvas-body .user-profile-dropdown {
+    margin-top: 1rem;
+  }
+}

@@ -1,0 +1,204 @@
+/* =============================
+   Estilos base
+============================= */
+body,
+.quienes-bg {
+  background-color: #f8f9fa;
+}
+
+.quienes-container {
+  padding-top: 100px;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* =============================
+   Títulos principales
+============================= */
+.quienes-title,
+.equipo-title {
+  display: block;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #111;
+  text-align: center;
+  margin-top: 20px;
+  position: relative;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.quienes-title::after,
+.equipo-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: #39d8a8;
+  border-radius: 2px;
+}
+
+/* =============================
+   Sección Instituto / Equipo Fondo
+============================= */
+.descripcion-instituto,
+.equipo-foto-fondo {
+  position: relative;
+  background: center center / cover no-repeat;
+  min-height: 400px;
+  /* dinámico */
+  height: auto;
+  /* se adapta al contenido */
+  border-radius: 10px;
+  margin: 40px auto 60px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  overflow: hidden;
+  padding: 40px 20px;
+  /* aire interno */
+}
+
+.descripcion-instituto .overlay,
+.equipo-foto-fondo .overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+  padding: 40px 20px;
+  border-radius: 10px;
+  color: #fff;
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.descripcion-instituto .overlay {
+  background-color: rgba(62, 67, 62, 0.55);
+  /* tono gris propio */
+}
+
+/* =============================
+   Equipo: tarjetas y carrusel
+============================= */
+.equipo-card {
+  padding: 20px;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.equipo-card img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+
+.equipo-card .nombre {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 10px;
+  color: #fff;
+}
+
+.equipo-card .descripcion {
+  font-size: 17px;
+  color: #ddd;
+  margin-bottom: 6px;
+}
+
+.equipo-carousel .carousel-inner,
+.equipo-carousel .carousel-item {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* =============================
+   Carrusel: indicadores
+============================= */
+.carousel-indicators {
+  position: absolute;
+  bottom: -25px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+.carousel-indicators button {
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  background: #064420 !important;
+  border: 2px solid #b0b0b0 !important;
+  margin: 0 4px !important;
+}
+
+.carousel-indicators button.active {
+  background: #39d8a8 !important;
+  border-color: #064420 !important;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(183, 108, 248, 0.18);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  display: none;
+}
+
+/* =============================
+   Responsividad
+============================= */
+@media (max-width: 768px) {
+
+  .quienes-title,
+  .equipo-title {
+    font-size: 24px;
+    padding: 8px 15px;
+  }
+
+  .equipo-title {
+    margin-bottom: 2rem;
+    /* corregido */
+  }
+
+  .equipo-card img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .quienes-title::after,
+  .equipo-title::after {
+    width: 50px;
+    height: 3px;
+    background-color: #05a081;
+    margin: 8px auto 0 auto;
+  }
+}
+
+@media (max-width: 935px) {
+  .overlay {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}

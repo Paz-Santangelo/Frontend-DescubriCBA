@@ -1,0 +1,321 @@
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+
+.hero-container {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-content {
+  text-align: center;
+  color: white;
+}
+
+.hero-content h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.5rem;
+}
+
+.highlight {
+  color: #39d8a8;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.hero-button {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #39d8a8;
+  border-color: #39d8a8;
+  color: #fff;
+}
+
+/* ==========================================================================
+   Destinos Destacados Section
+   ========================================================================== */
+
+.destinos-destacados-section {
+  padding: 20px 0;
+}
+
+.destinos-destacados-section .card {
+  border: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.destinos-destacados-section .card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.destinos-destacados-section .card-img-top {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.destinos-destacados-section .card:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+.destinos-destacados-section .card-img-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.destinos-destacados-section .card:hover .card-img-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.destinos-destacados-section .card-img-overlay .card-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.destinos-destacados-section .btn-primary {
+  background-color: #39d8a8;
+  border-color: #39d8a8;
+}
+
+.destinos-destacados-section .btn-primary:hover {
+  background-color: #2dbd9b;
+  border-color: #2dbd9b;
+}
+
+/* ==========================================================================
+   Beneficios Section
+   ========================================================================== */
+
+.beneficios-section {
+  padding: 20px 0;
+  background-color: #f8f9fa;
+}
+
+.beneficios-section .card {
+  border: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.beneficios-section .card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.beneficios-section .benefit-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.beneficios-section .card-title {
+  font-weight: bold;
+  color: #343a40;
+  font-size: 1.1rem;
+}
+
+.beneficios-section .card-text {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   CTA Section
+   ========================================================================== */
+
+.cta-section {
+  padding: 60px 0;
+  background: linear-gradient(to bottom, #4a5e5a, #344944);
+  color: white;
+}
+
+.cta-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background-color: #39d8a8;
+  border-color: #39d8a8;
+  font-weight: bold;
+  padding: 0.8rem 2rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #2dbd9b;
+  border-color: #2dbd9b;
+}
+
+/* ==========================================================================
+   General / Shared Styles
+   ========================================================================== */
+
+.section-title {
+  font-size: 3rem;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 30px !important;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: #39d8a8;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+
+  .hero-content p {
+    font-size: 1.2rem;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+  }
+
+  .cta-title {
+    font-size: 2rem;
+  }
+
+  .cta-button {
+    font-size: 1rem;
+    padding: 0.7rem 1.8rem;
+  }
+
+  .destinos-destacados-section .card-img-overlay {
+    opacity: 1;
+    visibility: visible;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .destinos-destacados-section .card-img-overlay .card-title {
+    font-size: 1.4rem;
+    text-align: left;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .destinos-destacados-section .card-img-overlay .card-title {
+    font-size: 1.2rem;
+  }
+
+  .destinos-destacados-section .card-img-top {
+    height: 150px;
+  }
+
+  .destinos-destacados-section .card {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .beneficios-section .card {
+    max-width: 250px;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-title::after {
+    width: 60px;
+  }
+
+  .cta-title {
+    font-size: 1.5rem !important;
+  }
+
+  .cta-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .destinos-destacados-section .card-img-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .destinos-destacados-section .card-img-overlay .card-title {
+    text-align: center;
+    margin-bottom: 0;
+  }
+}

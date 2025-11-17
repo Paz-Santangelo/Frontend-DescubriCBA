@@ -1,0 +1,121 @@
+.destinations-container {
+	/* Espaciado para la vista pública (no logueado) */
+	padding-top: 8rem;
+	padding-bottom: 2.5rem;
+}
+
+.destinations-container.logged-in {
+	/* Mantenemos el espaciado original para la vista privada (logueado) */
+	padding-top: 3rem;
+}
+
+/* Título principal */
+.section-title {
+	font-size: 2.5rem;
+	letter-spacing: 2px;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+	position: relative;
+	padding-bottom: 10px;
+	margin-bottom: 30px !important;
+	text-align: center;
+	color: #111;
+	font-weight: 700;
+}
+
+.section-title::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	transform: translateX(-50%);
+	width: 80px;
+	height: 4px;
+	background-color: #39d8a8;
+	border-radius: 2px;
+}
+
+/* Cards de destinos */
+.destination-card {
+	border: none;
+	border-radius: 15px;
+	overflow: hidden;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	position: relative;
+}
+
+.destination-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.destination-card-img {
+	height: 250px;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.destination-card:hover .destination-card-img {
+	transform: scale(1.05);
+}
+
+.destination-card .card-img-overlay {
+	background: linear-gradient(to bottom,
+			rgba(0, 0, 0, 0.1) 0%,
+			rgba(0, 0, 0, 0.7) 100%);
+	display: flex;
+	align-items: flex-end;
+	padding: 1.5rem;
+}
+
+.destination-card:hover .card-img-overlay {
+	background: linear-gradient(to bottom,
+			rgba(0, 0, 0, 0.2) 0%,
+			rgba(0, 0, 0, 0.8) 100%);
+}
+
+.destination-card .card-img-overlay .card-title {
+	font-size: 1.5rem;
+	font-weight: 700;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+	margin-bottom: 0;
+}
+
+.destination-description {
+	color: #666;
+	font-size: 0.95rem;
+	line-height: 1.5;
+}
+
+/* Estilos para el input de búsqueda */
+.search-input-group .input-group-text {
+	background-color: white;
+	border-right: none;
+	border-color: #ced4da;
+}
+
+/* Cambia el color del resplandor y el borde al hacer foco */
+.search-input-group .form-control:focus {
+	border-color: #39d8a8;
+	box-shadow: 0 0 0 0.25rem rgba(57, 216, 168, 0.25);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+	.destinations-container {
+		padding-top: 5rem;
+	}
+
+	.section-title {
+		font-size: 2rem;
+	}
+
+	.destination-card-img {
+		height: 200px;
+	}
+
+	.destination-card .card-img-overlay .card-title {
+		font-size: 1.25rem;
+	}
+}
