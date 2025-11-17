@@ -125,7 +125,7 @@ const initialFormData = {
 
 const PropertyFormModal = ({ show, onHide, property, onUpdateSuccess }) => {
   const isEditing = !!property;
-  const { user, refreshUser } = useUser();
+  const { user } = useUser();
   const { addNotification } = useNotification();
   const [propertyType, setPropertyType] = useState("");
   const [formData, setFormData] = useState(initialFormData);
@@ -434,11 +434,8 @@ const PropertyFormModal = ({ show, onHide, property, onUpdateSuccess }) => {
         addNotification("Propiedad creada con éxito!", "success");
       }
 
-      await refreshUser();
       if (onUpdateSuccess) {
         onUpdateSuccess();
-      } else {
-        onHide();
       }
     } catch (error) {
       console.error(

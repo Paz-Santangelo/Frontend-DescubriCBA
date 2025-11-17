@@ -14,13 +14,19 @@ import { Link } from "react-router-dom";
 import PropertyFormModal from "../../components/propertyFormModal/PropertyFormModal";
 
 const MyPropertiesListPage = () => {
-  const { user } = useUser();
+  const { user, refreshUser } = useUser();
   const [showPropertyModal, setShowPropertyModal] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const properties = user?.ownedDestinations || [];
 
   const handleCloseModal = () => {
     setShowPropertyModal(false);
+    setSelectedProperty(null);
+  };
+
+  const handleUpdateSuccess = async () => {
+    await refreshUser();
+    handleCloseModal();
   };
 
   // Variante para cada tarjeta individual
@@ -125,6 +131,7 @@ const MyPropertiesListPage = () => {
         show={showPropertyModal}
         onHide={handleCloseModal}
         property={selectedProperty}
+        onUpdateSuccess={handleUpdateSuccess}
       />
     </div>
   );
