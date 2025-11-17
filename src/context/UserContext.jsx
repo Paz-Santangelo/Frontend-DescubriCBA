@@ -62,9 +62,12 @@ export const UserProvider = ({ children }) => {
     if (user && user.id) {
       try {
         const updatedUserData = await userService.getUserById(user.id);
+        console.log("Datos de usuario actualizados:", updatedUserData); // Log para depuración
         localStorage.setItem("user_data", JSON.stringify(updatedUserData));
         setUser(updatedUserData);
-      } catch (error) {}
+      } catch (error) {
+        console.error("Error al refrescar los datos del usuario:", error); // Log de error
+      }
     }
   };
 
