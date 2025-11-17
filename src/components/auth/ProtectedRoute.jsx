@@ -1,17 +1,18 @@
 import { useUser } from "../../hooks/useUser";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ 
   children, 
   requiredRole, 
-  fallbackPath = "/", 
+  fallbackPath = "*", 
   fallbackComponent = null 
 }) => {
   const userContext = useUser();
+  const location = useLocation(); // 1. Obtenemos la ubicación actual
   
   // Verificación segura del contexto
   if (!userContext) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
   
   const { user, hasRole, hasAnyRole, isLoading } = userContext;
@@ -29,7 +30,7 @@ const ProtectedRoute = ({
   
   // Si no está logueado, redirigir al login
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
   
   // Verificar roles
