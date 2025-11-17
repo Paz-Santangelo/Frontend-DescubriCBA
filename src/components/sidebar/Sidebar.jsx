@@ -16,7 +16,7 @@ import { useRef } from "react";
 import { useLogout } from "../../hooks/useLogout";
 
 function AppSidebar({ collapsed, setCollapsed, toggled, setToggled }) {
-  const { user, canManageUsers, hasAnyRole } = useUser();
+  const { canManageUsers, hasAnyRole } = useUser();
   const location = useLocation();
   const sidebarContainerRef = useRef(null);
   const logout = useLogout();

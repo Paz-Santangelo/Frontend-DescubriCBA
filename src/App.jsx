@@ -30,6 +30,7 @@ import { NotificationProvider } from "./context/NotificationContext";
 import NotificationContainer from "./components/notifications/NotificationContainer";
 import { useState, useEffect } from "react";
 import MyPropertiesListPage from "./pages/myPropertiesListPage/MyPropertiesListPage.jsx";
+import NotFound from "./components/notFound/NotFound.jsx";
 import { useUser } from './hooks/useUser';
 
 function AppContent() {
@@ -148,20 +149,8 @@ function AppContent() {
               {/* Agrega aquí cualquier otra ruta privada que necesites */}
             </Route>
           )}
-
-          {/* Ruta catch-all para manejar rutas no encontradas */}
-          <Route 
-            path="*" 
-            element={
-              <div className="container mt-5 text-center">
-                <h2>Página no encontrada</h2>
-                <p>La ruta que buscas no existe o requiere autenticación.</p>
-                <a href={isLoggedIn ? "/mi-perfil" : "/login"} className="btn btn-primary">
-                  {isLoggedIn ? "Ir a Mi Perfil" : "Ir a Login"}
-                </a>
-              </div>
-            } 
-          />
+          {/* Ruta para páginas no encontradas */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
@@ -172,7 +161,6 @@ function AppContent() {
 // Componente principal que provee el contexto
 function App() {
   return (
-    // El Router debe envolver al componente que usa los hooks de navegación (useNavigate, etc.)
     <UserProvider>
       <NotificationProvider>
         <Router>
