@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import authService from "../../services/authService";
 import "./RegistroForm.css";
+import { useNotification } from "../../context/NotificationContext"; // Importar el hook de notificación
 
 const initialState = {
   nombre: "",
@@ -16,9 +17,13 @@ const RegistroForm = ({ onSuccess }) => {
   const [form, setForm] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
   const [isFormValid, setIsFormValid] = useState(false);
   const [touched, setTouched] = useState({});
+  const { addNotification, removeNotification } = useNotification();
+
+  // Estado para almacenar el ID de la notificación persistente
+  const [persistentNotificationId, setPersistentNotificationId] =
+    useState(null);
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -39,107 +44,111 @@ const RegistroForm = ({ onSuccess }) => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: undefined });
-    setMessage(null);
   };
-  
-    // Efecto para validar el formulario en tiempo real y actualizar el estado del botón
+
+  // Efecto para mostrar la alerta persistente al cargar el componente
   useEffect(() => {
-    const validate = () => {
-      const newErrors = {};
-      if (!form.nombre.trim() || form.nombre.trim().length < 2)
-        newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
-      if (!form.apellido.trim() || form.apellido.trim().length < 2)
-        newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
-      if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email))
-        newErrors.email = "Correo inválido.";
+    const adminEmail = "admin@descubricba.com"; // Puedes cambiar esto o moverlo a una variable de entorno
+    const emailSubject = "Solicitud de rol Dueño";
 
-      // Validación de la contraseña en tiempo real
-      if (form.password) {
-        const passwordErrors = [];
-        if (form.password.length < 8) {
-          passwordErrors.push("8+ caracteres");
-        }
-        if (!/[A-Z]/.test(form.password)) {
-          passwordErrors.push("una mayúscula");
-        }
-        if (!/[0-9]/.test(form.password)) {
-          passwordErrors.push("un número");
-        }
+    const id = addNotification(
+      <>
+        <strong>¿Quieres ser Dueño y publicar tus propiedades?</strong>
+        <br />
+        Por favor{" "}
+        <a href={`mailto:${adminEmail}?subject=${emailSubject}`}>
+          contacta al administrador
+        </a>{" "}
+        para que apruebe tu solicitud y se te responderá por correo a la
+        brevedad.
+        <br />
+        ¡Gracias por tu interés en formar parte de nuestra comunidad!
+      </>,
+      "info",
+      null
+    );
+    setPersistentNotificationId(id);
 
-        if (passwordErrors.length > 0) {
-          newErrors.password = `Debe contener: ${passwordErrors.join(", ")}.`;
-        }
-      }
-
-      if (form.confirmPassword && form.password !== form.confirmPassword) {
-        newErrors.confirmPassword = "Las contraseñas no coinciden.";
-      }
-      return newErrors;
+    // Función de limpieza para remover la notificación cuando el componente se desmonte
+    return () => {
+      removeNotification(id);
     };
+  }, [addNotification, removeNotification]);
 
-    const validationErrors = validate();
+  // Función de validación reutilizable
+  const validate = useCallback((isSubmitting = false, currentTouched = {}) => {
+    const newErrors = {};
+    const { nombre, apellido, email, password, confirmPassword } = form;
+
+    // Validación de Nombre
+    if ((isSubmitting || currentTouched.nombre) && !nombre.trim()) {
+      newErrors.nombre = "El nombre es obligatorio.";
+    } else if (nombre.trim() && nombre.trim().length < 2) {
+      newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
+    }
+
+    // Validación de Apellido
+    if ((isSubmitting || currentTouched.apellido) && !apellido.trim()) {
+      newErrors.apellido = "El apellido es obligatorio.";
+    } else if (apellido.trim() && apellido.trim().length < 2) {
+      newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
+    }
+
+    // Validación de Email
+    if ((isSubmitting || currentTouched.email) && !email.trim()) {
+      newErrors.email = "El correo es obligatorio.";
+    } else if (email.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      newErrors.email = "Correo inválido.";
+    }
+
+    // Validación de Contraseña
+    if ((isSubmitting || currentTouched.password) && !password) {
+      newErrors.password = "La contraseña es obligatoria.";
+    } else if (password) { // Solo validar formato si hay algo escrito
+      const passwordErrors = [];
+      if (password.length < 8) passwordErrors.push("8+ caracteres");
+      if (!/[A-Z]/.test(password)) passwordErrors.push("una mayúscula");
+      if (!/[0-9]/.test(password)) passwordErrors.push("un número");
+      if (passwordErrors.length > 0) newErrors.password = `Debe contener: ${passwordErrors.join(", ")}.`;
+    }
+
+    // Validación de Confirmar Contraseña
+    if ((isSubmitting || currentTouched.confirmPassword) && !confirmPassword) {
+      newErrors.confirmPassword = "Confirme la contraseña.";
+    } else if (confirmPassword && password !== confirmPassword) { // Solo validar coincidencia si hay algo escrito
+      newErrors.confirmPassword = "Las contraseñas no coinciden.";
+    }
+
+    return newErrors;
+  }, [form]);
+
+  // Efecto para validar el formulario en tiempo real y actualizar el estado del botón
+  useEffect(() => {
+    const validationErrors = validate(false, touched); // Validar considerando los campos tocados
     setErrors(validationErrors); // Actualizar los errores para mostrarlos en la UI
 
     const allFieldsFilled = Object.values(form).every(
       (field) => field.trim() !== ""
     );
-    setIsFormValid(
-      Object.keys(validationErrors).length === 0 && allFieldsFilled
-    );
-  }, [form]);
+    setIsFormValid(Object.keys(validationErrors).length === 0 && allFieldsFilled);
+  }, [form, touched, validate]);
 
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Re-definimos la función de validación aquí también para el envío.
-    const validate = () => {
-      const newErrors = {};
-      if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio.";
-      else if (form.nombre.trim().length < 2) newErrors.nombre = "El nombre debe tener al menos 2 caracteres.";
-      if (!form.apellido.trim()) newErrors.apellido = "El apellido es obligatorio.";
-      else if (form.apellido.trim().length < 2) newErrors.apellido = "El apellido debe tener al menos 2 caracteres.";
-      if (!form.email.trim()) newErrors.email = "El correo es obligatorio.";
-      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) newErrors.email = "Correo inválido.";
-      if (!form.password) {
-        newErrors.password = "La contraseña es obligatoria.";
-      } else {
-        const passwordErrors = [];
-        if (form.password.length < 8) {
-          passwordErrors.push("8+ caracteres");
-        }
-        if (!/[A-Z]/.test(form.password)) {
-          passwordErrors.push("una mayúscula");
-        }
-        if (!/[0-9]/.test(form.password)) {
-          passwordErrors.push("un número");
-        }
-
-        if (passwordErrors.length > 0) {
-          newErrors.password = `Debe contener: ${passwordErrors.join(", ")}.`;
-        }
-      }
-      if (!form.confirmPassword) newErrors.confirmPassword = "Confirme la contraseña.";
-      else if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Las contraseñas no coinciden.";
-      return newErrors;
-    };
-
     // Validar formulario antes de enviar
-    const validationErrors = validate();
+    // Al enviar, consideramos que todos los campos han sido "tocados" para mostrar todos los errores.
+    const allFieldsTouched = Object.keys(form).reduce((acc, key) => ({ ...acc, [key]: true }), {});
+    setTouched(allFieldsTouched); // Actualizar el estado 'touched' para que se muestren todos los errores
+
+    const validationErrors = validate(true, allFieldsTouched); // Validar para el envío
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      setTouched({
-        nombre: true,
-        apellido: true,
-        email: true,
-        password: true,
-        confirmPassword: true,
-      });
       return;
     }
 
     setLoading(true);
-    setMessage(null);
 
     try {
       // Preparar datos para enviar al backend
@@ -154,14 +163,15 @@ const RegistroForm = ({ onSuccess }) => {
       const successMessage = await authService.register(userData);
 
       // Éxito: el backend devolvió un mensaje de éxito.
-      setMessage({
-        type: "success",
-        text: `${successMessage} Redirigiendo al login...`,
-      });
+      addNotification(`${successMessage} Redirigiendo al login...`, "success");
 
       setForm(initialState);
 
       setTimeout(() => {
+        // Remover la notificación persistente antes de redirigir
+        if (persistentNotificationId) {
+          removeNotification(persistentNotificationId);
+        }
         if (onSuccess) {
           onSuccess();
         }
@@ -172,7 +182,7 @@ const RegistroForm = ({ onSuccess }) => {
 
       if (error.response && error.response.data) {
         const errorData = error.response.data;
-        // Si el backend devuelve un objeto con un campo "message" (de CustomException)
+        // Si el backend devuelve un objeto con un campo "message" (de CustomException) o un string
         if (typeof errorData.message === "string") {
           errorMessage = errorData.message;
         }
@@ -183,10 +193,7 @@ const RegistroForm = ({ onSuccess }) => {
         }
       }
 
-      setMessage({
-        type: "error",
-        text: errorMessage,
-      });
+      addNotification(errorMessage, "danger");
     } finally {
       setLoading(false);
     }
@@ -216,7 +223,9 @@ const RegistroForm = ({ onSuccess }) => {
           Nombre
         </label>
         <div className="error-container">
-          {touched.nombre && errors.nombre && <span className="error">{errors.nombre}</span>}
+          {touched.nombre && errors.nombre && (
+            <span className="error">{errors.nombre}</span>
+          )}
         </div>
       </div>
 
@@ -233,7 +242,9 @@ const RegistroForm = ({ onSuccess }) => {
           Apellido
         </label>
         <div className="error-container">
-          {touched.apellido && errors.apellido && <span className="error">{errors.apellido}</span>}
+          {touched.apellido && errors.apellido && (
+            <span className="error">{errors.apellido}</span>
+          )}
         </div>
       </div>
 
@@ -251,7 +262,9 @@ const RegistroForm = ({ onSuccess }) => {
           Correo electrónico
         </label>
         <div className="error-container">
-          {touched.email && errors.email && <span className="error">{errors.email}</span>}
+          {touched.email && errors.email && (
+            <span className="error">{errors.email}</span>
+          )}
         </div>
       </div>
 
@@ -269,7 +282,9 @@ const RegistroForm = ({ onSuccess }) => {
           Contraseña
         </label>
         <div className="error-container">
-          {touched.password && errors.password && <span className="error">{errors.password}</span>}
+          {touched.password && errors.password && (
+            <span className="error">{errors.password}</span>
+          )}
         </div>
       </div>
 
@@ -299,11 +314,6 @@ const RegistroForm = ({ onSuccess }) => {
       <button type="submit" disabled={!isFormValid || loading}>
         {loading ? "Registrando..." : "Registrarse"}
       </button>
-
-      {/* Mensaje de estado */}
-      {message && (
-        <div className={`message ${message.type}`}>{message.text}</div>
-      )}
     </motion.form>
   );
 };

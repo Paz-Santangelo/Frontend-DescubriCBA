@@ -270,7 +270,7 @@ const ModalMyProfile = ({ show, onHide, user: initialUser }) => {
               </Col>
                <Col md={6}>
                 <Form.Group className="mb-3" controlId="formNewPassword">
-                  <Form.Label>Nueva Contraseña (opcional)</Form.Label>
+                  <Form.Label>Modificar Contraseña (opcional)</Form.Label>
                   <Form.Control
                     type="password"
                     name="password"

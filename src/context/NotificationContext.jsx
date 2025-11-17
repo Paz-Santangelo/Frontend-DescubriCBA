@@ -9,18 +9,21 @@ export const useNotification = () => {
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
 
+  const removeNotification = useCallback((id) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  }, []);
+
   const addNotification = useCallback((message, variant = 'info', duration = 5000) => {
     const id = new Date().getTime();
     setNotifications((prev) => [...prev, { id, message, variant }]);
 
-    setTimeout(() => {
-      removeNotification(id);
-    }, duration);
-  }, []);
-
-  const removeNotification = useCallback((id) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-  }, []);
+    if (duration !== null) {
+      setTimeout(() => {
+        removeNotification(id);
+      }, duration);
+    }
+    return id;
+  }, [removeNotification]);
 
   const value = {
     notifications,
