@@ -164,8 +164,6 @@ const UserManagement = () => {
   }, [searchQuery]);
 
   const handleReloadUsers = async () => {
-    // Si hay una búsqueda activa, la limpia y el useEffect se encarga de recargar.
-    // Si no, fuerza la recarga.
     if (searchQuery) {
       setSearchQuery("");
     } else {

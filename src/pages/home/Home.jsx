@@ -58,6 +58,8 @@ const Home = () => {
               Tu <span className="highlight">aventura</span> comienza aquí
             </p>
             <Button
+              as={Link}
+              to="/destinos"
               variant="outline-light"
               size="lg"
               className="mt-4 hero-button"
@@ -131,7 +133,7 @@ const Home = () => {
 
       <section className="beneficios-section">
         <Container>
-          <h1 className="text-center my-4 fw-semibold section-title">
+          <h1 className="text-center fw-semibold section-title">
             Beneficios para vos
           </h1>
           <Row className="justify-content-center">

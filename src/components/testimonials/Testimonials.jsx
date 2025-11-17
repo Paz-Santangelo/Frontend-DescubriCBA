@@ -23,9 +23,9 @@ const testimonialsData = [
 
 const Testimonials = () => {
   return (
-    <section className="testimonials-section">
+    <section className="testimonials-section mb-3">
       <Container>
-        <h2 className="text-center my-4 fw-semibold section-title">Testimonios</h2>
+        <h2 className="text-center fw-semibold section-title">Testimonios</h2>
         <Carousel indicators={false} interval={3000}>
           {testimonialsData.map((testimonial, index) => (
             <Carousel.Item key={index}>

@@ -22,6 +22,10 @@
   text-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
 }
 
+.form-group {
+  margin-bottom: 0.8rem;
+}
+
 .form-group label {
   display: block;
   margin-top: -0.5rem;
@@ -54,17 +58,14 @@
 }
 
 .error-container {
-  min-height: 2em;
-  margin-top: 0.12rem;
+  min-height: 1.2rem;
 }
 
 .error {
-  color: #fdd3d3;
+  color: #771800;
   font-size: 0.91rem;
   display: block;
-  font-weight: 600;
   letter-spacing: 0.1px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .help-text {
