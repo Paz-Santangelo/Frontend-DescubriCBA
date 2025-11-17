@@ -33,6 +33,7 @@
   justify-content: center;
   margin-bottom: 20px;
 }
+
 .profile-image,
 .profile-placeholder-icon {
   width: 120px;
@@ -60,7 +61,7 @@
   padding-bottom: 0.75rem;
   margin-bottom: 1.5rem;
   border-bottom: 2px solid #f0f0f0;
-  text-align: center; 
+  text-align: center;
 }
 
 .list-group-item {
@@ -86,15 +87,6 @@
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
-}
-
-/* Media Query para pantallas pequeñas */
-@media (max-width: 576px) {
-  .profile-data-item {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
 }
 
 .profile-buttons {
@@ -138,4 +130,17 @@
 /* Asegura que el texto del botón de eliminar sea blanco en hover */
 .delete-button:hover {
   color: white !important;
+}
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 985px) {
+  .profile-data-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .detail-icon {
+    margin: 0 .2rem 0 0 !important;
+  }
 }
