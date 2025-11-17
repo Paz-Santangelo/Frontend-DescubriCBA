@@ -136,7 +136,7 @@ const MyProfile = () => {
           onClick={() => setShowDeleteModal(true)}
         >
           <TrashFill size={16} className="me-2" />
-          Eliminar
+          Darse de baja
         </Button>
       </div>
 
